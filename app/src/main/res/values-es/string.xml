@@ -3,4 +3,6 @@
     <string name="lists">Listas</string>
     <string name="products">Productos</string>
     <string name="friends">Amigos</string>
+    <string name="profile">Perfil</string>
+    <string name="generic_description">Descripcion</string>
 </resources>

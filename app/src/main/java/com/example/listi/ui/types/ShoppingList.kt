@@ -1,4 +1,4 @@
-package com.example.listi.ui.screens.shoppingLists
+package com.example.listi.ui.types
 
 data class ShoppingList(
     val name: String,

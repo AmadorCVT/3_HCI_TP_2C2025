@@ -3,4 +3,6 @@
     <string name="lists">Lists</string>
     <string name="products">Products</string>
     <string name="friends">Friends</string>
+    <string name="profile">Profile</string>
+    <string name="generic_description">Description</string>
 </resources>

@@ -1,8 +1,5 @@
 package com.example.listi.ui.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -12,11 +9,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import com.example.listi.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar() {
+fun AppTopBar() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     CenterAlignedTopAppBar(
@@ -30,7 +29,7 @@ fun TopAppBar() {
         navigationIcon = {
             IconButton(onClick = { /* handle back */ }) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack,
+                    painterResource(R.drawable.arrow_back_foreground),
                     contentDescription = "Back"
                 )
             }
@@ -38,7 +37,7 @@ fun TopAppBar() {
         actions = {
             IconButton(onClick = { /* handle menu */ }) {
                 Icon(
-                    imageVector = Icons.Filled.Menu,
+                    painterResource(R.drawable.menu_foreground),
                     contentDescription = "Menu"
                 )
             }
