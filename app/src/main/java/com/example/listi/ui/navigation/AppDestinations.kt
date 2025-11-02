@@ -11,5 +11,8 @@ enum class AppDestinations(
 ) {
     LISTS(R.string.lists, R.drawable.list_foreground, R.string.generic_description),
     PRODUCTS(R.string.products, R.drawable.store_front_foreground, R.string.generic_description),
+
+    FRIENDS(R.string.friends, R.drawable.person_foreground, R.string.generic_description),
+
     PROFILE(R.string.profile, R.drawable.person_foreground, R.string.generic_description)
 }

@@ -18,12 +18,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.listi.ui.components.AppTopBar
 import com.example.listi.ui.navigation.AppDestinations
 import com.example.listi.ui.screens.ProductsScreen
 import com.example.listi.ui.screens.ProfileScreen
 import com.example.listi.ui.screens.ShoppingListsScreen
+import com.example.listi.ui.screens.FriendsScreen
 import com.example.listi.ui.theme.ListiTheme
 
 @Composable
@@ -59,6 +58,7 @@ fun ListiApp(modifier: Modifier = Modifier) {
             when(currentDestination) {
                 AppDestinations.LISTS -> ShoppingListsScreen()
                 AppDestinations.PRODUCTS -> ProductsScreen()
+                AppDestinations.FRIENDS -> FriendsScreen()
                 AppDestinations.PROFILE -> ProfileScreen()
             }
         }
