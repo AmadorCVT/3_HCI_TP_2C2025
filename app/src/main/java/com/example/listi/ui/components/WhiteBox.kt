@@ -17,7 +17,7 @@ import com.example.listi.ui.theme.White
 fun WhiteBoxWithText(
     text: String = "",
     modifier: Modifier = Modifier,
-    content: @Composable (() -> Unit)? = null // 👈 permite pasar un bloque de contenido opcional
+    content: @Composable (() -> Unit)? = null
 ) {
     Box(
         modifier = modifier

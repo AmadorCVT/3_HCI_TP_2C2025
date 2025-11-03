@@ -1,19 +1,11 @@
 package com.example.listi.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,10 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.listi.R
-import com.example.listi.ui.theme.DarkGrey
-import com.example.listi.ui.theme.LightGreen
-import com.example.listi.ui.theme.ListiTheme
-import com.example.listi.ui.theme.Typography
+import com.example.listi.ui.theme.*
 
 @Composable
 fun ShoppingListCard(
@@ -34,27 +23,32 @@ fun ShoppingListCard(
     collaborators: Array<String>,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    Surface(
         modifier = modifier
             .fillMaxWidth()
-            .border(
-            border = BorderStroke(4.dp, DarkGrey), // Thicker border
-            shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius))      // Rounded corners
-        )
-            .background(
-                color = LightGreen,
-                shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius))
-            )
-            .padding(dimensionResource(R.dimen.medium_padding))
+            .padding(4.dp), // margen exterior para que se vea la sombra
+        shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius)),
+        shadowElevation = 6.dp, // 🔥 sombra real
+        tonalElevation = 2.dp, // opcional: da un pequeño relieve
+        color = White // color base del fondo
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = White,
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius))
+                )
+                .padding(dimensionResource(R.dimen.medium_padding))
+        ) {
+            // List name and collaborators names
+            ShoppingListData(name, collaborators)
 
-        // List name and collaborators names
-        ShoppingListData(name, collaborators, modifier)
+            Spacer(Modifier.weight(1f))
 
-        Spacer(Modifier.weight(1f))
-
-        // Options button
-        OptionsButton({})
+            // Options button
+            OptionsButton({})
+        }
     }
 }
 
@@ -64,8 +58,7 @@ fun ShoppingListData(
     collaborators: Array<String>,
     modifier: Modifier = Modifier
 ) {
-
-    Column (
+    Column(
         modifier = modifier,
         horizontalAlignment = Alignment.Start
     ) {
@@ -76,9 +69,7 @@ fun ShoppingListData(
             overflow = TextOverflow.Ellipsis
         )
 
-        LazyRow(
-            modifier = modifier,
-        ) {
+        LazyRow {
             items(items = collaborators) { item ->
                 Text(
                     "$item, ",
@@ -96,7 +87,7 @@ fun OptionsButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    IconButton(onClick = { onClick() }) {
+    IconButton(onClick = onClick) {
         Icon(
             painterResource(R.drawable.more_vert_foreground),
             contentDescription = "Button"
@@ -113,6 +104,5 @@ fun ShoppingListCardPreview() {
             arrayOf("humano 1", "humano 2", "humano 3", "animal 1"),
             modifier = Modifier.padding(10.dp)
         )
-
     }
 }

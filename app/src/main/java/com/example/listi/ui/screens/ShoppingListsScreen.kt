@@ -30,8 +30,8 @@ fun ShoppingListsScreen(
     val padding = dimensionResource(R.dimen.medium_padding)
 
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(padding),
-        contentPadding = PaddingValues(horizontal = padding),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.small_padding)/4),
+        contentPadding = PaddingValues(horizontal = padding, vertical = padding*4),
         modifier = modifier.fillMaxSize()
     ) {
         items(items = shoppingLists) { item ->
