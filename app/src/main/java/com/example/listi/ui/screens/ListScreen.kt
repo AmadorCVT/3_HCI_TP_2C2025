@@ -22,7 +22,7 @@ fun ListScreenView() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp,64.dp),
         verticalArrangement = Arrangement.Top
     ) {
         // === Caja de texto arriba del todo ===
