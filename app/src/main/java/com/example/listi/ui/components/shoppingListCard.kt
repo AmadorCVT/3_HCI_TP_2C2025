@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.listi.R
 import com.example.listi.ui.theme.*
+import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.User
 import java.util.Date
 
@@ -24,10 +25,18 @@ private val user1 = User(1, "Ama", "Doe", "ama@mail.com", Date(), Date());
 private val user2 = User(2, "Lucas", "Doe", "ama@mail.com", Date(), Date());
 private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", Date(), Date());
 
+private val previewList = ShoppingList(1,
+    "Lista Resi",
+    "Una lista",
+    false,
+    user1,
+    arrayOf(user1, user2, user3),
+    Date(), Date(), Date());
+
+
 @Composable
 fun ShoppingListCard(
-    name: String,
-    collaborators: Array<User>,
+    shoppingList: ShoppingList,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -49,7 +58,7 @@ fun ShoppingListCard(
                 .padding(dimensionResource(R.dimen.medium_padding))
         ) {
             // List name and collaborators names
-            ShoppingListData(name, collaborators)
+            ShoppingListData(shoppingList.name, shoppingList.sharedWith)
 
             Spacer(Modifier.weight(1f))
 
@@ -62,7 +71,7 @@ fun ShoppingListCard(
 @Composable
 fun ShoppingListData(
     name: String,
-    collaborators: Array<User>,
+    sharedWith: Array<User>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -77,7 +86,7 @@ fun ShoppingListData(
         )
 
         LazyRow {
-            items(items = collaborators) { item ->
+            items(items = sharedWith) { item ->
                 Text(
                     "${item.name}, ",
                     maxLines = 1,
@@ -107,8 +116,7 @@ fun OptionsButton(
 fun ShoppingListCardPreview() {
     ListiTheme {
         ShoppingListCard(
-            "Lista Resi",
-            arrayOf(user1, user2, user3),
+            previewList,
             modifier = Modifier.padding(10.dp)
         )
     }

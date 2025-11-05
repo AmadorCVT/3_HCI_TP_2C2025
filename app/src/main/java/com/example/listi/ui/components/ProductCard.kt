@@ -26,4 +26,46 @@ import com.example.listi.R
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.theme.Typography
 import com.example.listi.ui.theme.White
+import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.User
+
+@Composable
+fun ProductCard(
+    product: Product,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(4.dp), // margen exterior para que se vea la sombra
+        shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius)),
+        shadowElevation = 6.dp, // 🔥 sombra real
+        tonalElevation = 2.dp, // opcional: da un pequeño relieve
+        color = MaterialTheme.colorScheme.surface // color base del fondo
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius))
+                )
+                .padding(dimensionResource(R.dimen.medium_padding))
+        ) {
+            Spacer(Modifier.weight(1f))
+
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProductCardPreview() {
+//    ListiTheme {
+//        ProductCard(
+//            "Lista Resi",
+//            arrayOf(user1, user2, user3),
+//            modifier = Modifier.padding(10.dp)
+//        )
+//    }
+}
