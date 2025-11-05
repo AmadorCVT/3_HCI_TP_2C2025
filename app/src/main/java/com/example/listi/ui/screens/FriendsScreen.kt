@@ -6,7 +6,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.listi.ui.theme.ListiTheme
@@ -40,9 +43,10 @@ fun FriendsScreen(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo de búsqueda
+        Spacer(modifier = Modifier.height(60.dp))
+
+        // --- CAMBIO 1: Personalización de colores del TextField ---
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
@@ -54,7 +58,25 @@ fun FriendsScreen(modifier: Modifier = Modifier) {
                     contentDescription = "Icono de búsqueda"
                 )
             },
-            singleLine = true
+            singleLine = true,
+            //TODO: Usar el color posta
+            colors = TextFieldDefaults.colors(
+                // Fondo del campo de texto
+                focusedContainerColor = Color(0xFF388E3C), // Verde oscuro al hacer foco
+                unfocusedContainerColor = Color(0xFF4CAF50), // Verde estándar
+                disabledContainerColor = Color.Gray,
+
+                // Color del texto y los iconos
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = Color.White.copy(alpha = 0.8f),
+                focusedLeadingIconColor = Color.White,
+                unfocusedLeadingIconColor = Color.White.copy(alpha = 0.8f),
+
+                // Color del cursor
+                cursorColor = Color.White
+            )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -71,6 +93,9 @@ fun FriendsScreen(modifier: Modifier = Modifier) {
                     .fillMaxSize()
                     .padding(vertical = 8.dp)
             ) {
+                // NOTA: Usar LazyColumn es más eficiente para listas largas
+                // que forEach, ya que solo renderiza los elementos visibles.
+                // Si la lista de amigos puede crecer, considera cambiar esto.
                 filteredFriends.forEach { friend ->
                     FriendCard(
                         friendName = friend.name,
@@ -91,3 +116,4 @@ fun FriendsScreenPreview() {
         FriendsScreen()
     }
 }
+
