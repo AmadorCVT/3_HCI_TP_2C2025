@@ -16,11 +16,38 @@ import com.example.listi.ui.components.AppTopBar
 import com.example.listi.ui.components.ShoppingListCard
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.types.ShoppingList
+import com.example.listi.ui.types.User
+import java.util.Date
 
+
+private val user1 = User(1, "Ama", "Doe", "ama@mail.com", Date(), Date());
+private val user2 = User(2, "Lucas", "Doe", "ama@mail.com", Date(), Date());
+private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", Date(), Date());
 private val shoppingLists = listOf(
-    ShoppingList("Lista resi", arrayOf("Ama", "Lucas")),
-    ShoppingList("Lista super", arrayOf("Bauti", "Lucas", "Jaime")),
-    ShoppingList("Juntada", arrayOf("Bauti", "Lucas", "Jaime", "Ama"))
+    ShoppingList(1, "Lista resi",
+        "Una lista",
+        false,
+        user1,
+        arrayOf(user1, user2),
+        Date(),
+        Date(),
+        Date()),
+    ShoppingList(2,"Lista super",
+        "Una lista",
+        false,
+        user1,
+        arrayOf(user3, user2),
+        Date(),
+        Date(),
+        Date()),
+    ShoppingList(3, "Juntada",
+        "Una lista",
+        false,
+        user1,
+        arrayOf(user1, user3),
+        Date(),
+        Date(),
+        Date())
 )
 
 @Composable
@@ -35,7 +62,7 @@ fun ShoppingListsScreen(
         modifier = modifier.fillMaxSize()
     ) {
         items(items = shoppingLists) { item ->
-            ShoppingListCard(item.name, item.collaborators, Modifier.padding(10.dp))
+            ShoppingListCard(item.name, item.sharedWith, Modifier.padding(10.dp))
         }
     }
 }

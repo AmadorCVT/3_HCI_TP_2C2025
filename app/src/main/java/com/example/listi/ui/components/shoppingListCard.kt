@@ -16,11 +16,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.listi.R
 import com.example.listi.ui.theme.*
+import com.example.listi.ui.types.User
+import java.util.Date
+
+// For preview
+private val user1 = User(1, "Ama", "Doe", "ama@mail.com", Date(), Date());
+private val user2 = User(2, "Lucas", "Doe", "ama@mail.com", Date(), Date());
+private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", Date(), Date());
 
 @Composable
 fun ShoppingListCard(
     name: String,
-    collaborators: Array<String>,
+    collaborators: Array<User>,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -30,7 +37,7 @@ fun ShoppingListCard(
         shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius)),
         shadowElevation = 6.dp, // 🔥 sombra real
         tonalElevation = 2.dp, // opcional: da un pequeño relieve
-        color = White // color base del fondo
+        color = MaterialTheme.colorScheme.surface // color base del fondo
     ) {
         Row(
             modifier = Modifier
@@ -55,7 +62,7 @@ fun ShoppingListCard(
 @Composable
 fun ShoppingListData(
     name: String,
-    collaborators: Array<String>,
+    collaborators: Array<User>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -72,7 +79,7 @@ fun ShoppingListData(
         LazyRow {
             items(items = collaborators) { item ->
                 Text(
-                    "$item, ",
+                    "${item.name}, ",
                     maxLines = 1,
                     style = Typography.labelMedium,
                     overflow = TextOverflow.Ellipsis
@@ -101,7 +108,7 @@ fun ShoppingListCardPreview() {
     ListiTheme {
         ShoppingListCard(
             "Lista Resi",
-            arrayOf("humano 1", "humano 2", "humano 3", "animal 1"),
+            arrayOf(user1, user2, user3),
             modifier = Modifier.padding(10.dp)
         )
     }

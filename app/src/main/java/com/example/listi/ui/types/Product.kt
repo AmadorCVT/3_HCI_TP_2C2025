@@ -2,14 +2,18 @@ package com.example.listi.ui.types
 
 import java.util.Date
 
-data class ShoppingList(
+data class Category(
+    val id: Int,
+    val name: String,
+    val createdAt: Date,
+    val updatedAt: Date
+)
+
+data class Product(
     val id: Int,
     val name: String,
     val description: String,
-    val recurring: Boolean,
-    val owner: User,
-    val sharedWith: Array<User>,
-    val lastPurchasedAt: Date,
     val createdAt: Date,
     val updatedAt: Date,
+    val category: Category,
 )
