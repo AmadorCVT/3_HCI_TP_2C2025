@@ -24,7 +24,7 @@ import com.example.listi.ui.theme.White
 
 @Composable
 fun LoginScreen(
-    onLoginClick: (() -> Unit)? = null,
+    onLoginClick: ((String, String) -> Unit)? = null,
     onCreateAccountClick: (() -> Unit)? = null,
     onForgotPasswordClick: (() -> Unit)? = null
 ) {
@@ -39,7 +39,6 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        // === Título ===
         Text(
             text = "Listi",
             style = TextStyle(
@@ -51,7 +50,6 @@ fun LoginScreen(
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
-        // === Campo Email ===
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -64,7 +62,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // === Campo Contraseña ===
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -77,9 +74,8 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // === Botón Iniciar Sesión ===
         Button(
-            onClick = { onLoginClick?.invoke() },
+            onClick = { onLoginClick?.invoke(email, password) },
             colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,7 +92,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // === Texto "Olvidaste tu contraseña" ===
         TextButton(onClick = { onForgotPasswordClick?.invoke() }) {
             Text(
                 text = "¿Olvidaste tu contraseña?",
@@ -108,7 +103,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // === Botón Crear Cuenta Nueva ===
         OutlinedButton(
             onClick = { onCreateAccountClick?.invoke() },
             border = BorderStroke(1.dp, DarkGreen),

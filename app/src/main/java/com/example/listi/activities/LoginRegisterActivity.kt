@@ -14,10 +14,9 @@ class MainActivity : ComponentActivity() {
             ListiTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     LoginScreen(
-                        onLoginClick = {
-
-                            println("Botón 'Iniciar sesión' presionado")
-
+                        onLoginClick = { email, password ->
+                            // Acá hacés la llamada real, ejemplo:
+                            println("S")
                         },
                         onCreateAccountClick = {
                             println("Botón 'Crear cuenta nueva' presionado")

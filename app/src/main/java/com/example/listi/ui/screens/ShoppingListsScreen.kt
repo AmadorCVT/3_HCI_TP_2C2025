@@ -62,7 +62,7 @@ fun ShoppingListsScreen(
         modifier = modifier.fillMaxSize()
     ) {
         items(items = shoppingLists) { item ->
-            ShoppingListCard(item.name, item.sharedWith, Modifier.padding(10.dp))
+            ShoppingListCard(item, Modifier.padding(10.dp))
         }
     }
 }
