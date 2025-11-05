@@ -4,5 +4,7 @@
     <string name="products">Products</string>
     <string name="friends">Friends</string>
     <string name="profile">Profile</string>
+    <string name="registration">Registration</string>
     <string name="generic_description">Description</string>
+    <string name="login">Login</string>
 </resources>

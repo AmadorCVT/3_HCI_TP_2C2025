@@ -23,6 +23,8 @@ import com.example.listi.ui.screens.ProductsScreen
 import com.example.listi.ui.screens.ProfileScreen
 import com.example.listi.ui.screens.ShoppingListsScreen
 import com.example.listi.ui.screens.FriendsScreen
+import com.example.listi.ui.screens.LoginScreen
+import com.example.listi.ui.screens.RegisterScreen
 import com.example.listi.ui.theme.ListiTheme
 
 @Composable
@@ -35,12 +37,15 @@ fun ListiApp(modifier: Modifier = Modifier) {
         NavigationSuiteScaffold(
             navigationSuiteItems = {
                 AppDestinations.entries.forEach {
+                    // saltar los que no tienen ícono (como REGISTER)
+                    if (it.icon == null) return@forEach
+
                     item(
                         icon = {
                             Icon(
                                 painterResource(it.icon),
                                 contentDescription = stringResource(it.contentDescription),
-                                modifier = Modifier.size(dimensionResource(R.dimen.medium_icon_size ))
+                                modifier = Modifier.size(dimensionResource(R.dimen.medium_icon_size))
                             )
                         },
                         label = { Text(stringResource(it.label)) },
@@ -48,6 +53,7 @@ fun ListiApp(modifier: Modifier = Modifier) {
                         onClick = { currentDestination = it },
                     )
                 }
+
             },
             layoutType = NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(adaptiveInfo),
             navigationSuiteColors = NavigationSuiteDefaults.colors(
@@ -60,6 +66,8 @@ fun ListiApp(modifier: Modifier = Modifier) {
                 AppDestinations.PRODUCTS -> ProductsScreen()
                 AppDestinations.FRIENDS -> FriendsScreen()
                 AppDestinations.PROFILE -> ProfileScreen()
+                AppDestinations.REGISTER -> RegisterScreen()
+                AppDestinations.LOGIN -> LoginScreen()
             }
         }
     }
