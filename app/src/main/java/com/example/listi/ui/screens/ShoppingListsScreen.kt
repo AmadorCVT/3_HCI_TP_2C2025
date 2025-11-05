@@ -1,18 +1,31 @@
 package com.example.listi.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.listi.R
-import com.example.listi.ui.components.AppTopBar
 import com.example.listi.ui.components.ShoppingListCard
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.types.ShoppingList
@@ -34,7 +47,7 @@ private val shoppingLists = listOf(
         Date()),
     ShoppingList(2,"Lista super",
         "Una lista",
-        false,
+        true,
         user1,
         arrayOf(user3, user2),
         Date(),
@@ -42,7 +55,7 @@ private val shoppingLists = listOf(
         Date()),
     ShoppingList(3, "Juntada",
         "Una lista",
-        false,
+        true,
         user1,
         arrayOf(user1, user3),
         Date(),
@@ -55,14 +68,51 @@ fun ShoppingListsScreen(
     modifier: Modifier = Modifier
 ) {
     val padding = dimensionResource(R.dimen.medium_padding)
+    var selectedButton by remember { mutableStateOf("Activas") }
 
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.small_padding)/4),
-        contentPadding = PaddingValues(horizontal = padding, vertical = padding*4),
-        modifier = modifier.fillMaxSize()
-    ) {
-        items(items = shoppingLists) { item ->
-            ShoppingListCard(item, Modifier.padding(10.dp))
+    val filteredLists = shoppingLists.filter {
+        if (selectedButton == "Activas") {
+            !it.recurring
+        } else {
+            it.recurring
+        }
+    }
+
+    Column(modifier = modifier.fillMaxSize()) {
+
+        Spacer(modifier = Modifier.height(80.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = padding),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Button(
+                onClick = { selectedButton = "Activas" },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (selectedButton == "Activas") Color(0xFF006400) else Color.Transparent,
+                    contentColor = if (selectedButton == "Activas") Color.White else Color.Black
+                )
+            ) {
+                Text(stringResource(R.string.active_lists))
+            }
+            Button(
+                onClick = { selectedButton = "Guardadas" },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (selectedButton == "Guardadas") Color(0xFF006400) else Color.Transparent,
+                    contentColor = if (selectedButton == "Guardadas") Color.White else Color.Black
+                )
+            ) {
+                Text(stringResource(R.string.saved_lists))
+            }
+        }
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.small_padding) / 4),
+            contentPadding = PaddingValues(horizontal = padding, vertical = padding),
+        ) {
+            items(items = filteredLists) { item ->
+                ShoppingListCard(item, Modifier.padding(10.dp))
+            }
         }
     }
 }

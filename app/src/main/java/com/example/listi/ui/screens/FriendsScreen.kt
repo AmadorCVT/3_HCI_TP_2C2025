@@ -46,7 +46,6 @@ fun FriendsScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(60.dp))
 
-        // --- CAMBIO 1: Personalización de colores del TextField ---
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
