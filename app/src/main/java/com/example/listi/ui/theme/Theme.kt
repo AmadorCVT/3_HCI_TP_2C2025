@@ -24,12 +24,12 @@ private val LightColorScheme = lightColorScheme(
     secondary = DarkGrey,
     tertiary = DarkGreen,
     background = Color(0xFFF0F4C3),
-    surface = Color(0xFFFFE1C9),
+    surface = White,
     onPrimary = DarkGreen,
     onSecondary = White,
     onTertiary = White,
     onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
+    onSurface = DarkGrey,
 )
 
 @Composable

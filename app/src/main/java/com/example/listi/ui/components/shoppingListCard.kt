@@ -36,7 +36,7 @@ fun ShoppingListCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = White,
+                    color = MaterialTheme.colorScheme.surface,
                     shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius))
                 )
                 .padding(dimensionResource(R.dimen.medium_padding))
