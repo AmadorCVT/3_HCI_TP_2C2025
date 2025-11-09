@@ -14,6 +14,6 @@ enum class AppDestinations(
     FRIENDS(R.string.friends, R.drawable.person_foreground, R.string.generic_description),
     PROFILE(R.string.profile, R.drawable.person_foreground, R.string.generic_description),
     REGISTER(R.string.registration, null, R.string.generic_description),
-    LOGIN(R.string.login,null,R.string.generic_description)
+    LOGIN(R.string.login,null,  R.string.generic_description)
 
 }
