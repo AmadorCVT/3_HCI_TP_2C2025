@@ -16,4 +16,6 @@ data class Product(
     val createdAt: Date,
     val updatedAt: Date,
     val category: Category,
+    val quantity: Int,
+    val unit: String
 )

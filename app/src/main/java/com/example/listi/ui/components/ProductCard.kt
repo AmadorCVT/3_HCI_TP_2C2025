@@ -1,33 +1,21 @@
 package com.example.listi.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.listi.R
-import com.example.listi.ui.theme.ListiTheme
-import com.example.listi.ui.theme.Typography
-import com.example.listi.ui.theme.White
+import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
-import com.example.listi.ui.types.User
+import java.util.*
 
 @Composable
 fun ProductCard(
@@ -37,23 +25,43 @@ fun ProductCard(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(4.dp), // margen exterior para que se vea la sombra
-        shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius)),
-        shadowElevation = 6.dp, // 🔥 sombra real
-        tonalElevation = 2.dp, // opcional: da un pequeño relieve
-        color = MaterialTheme.colorScheme.surface // color base del fondo
+            .padding(horizontal = 8.dp),
+        shape = RoundedCornerShape(16.dp),
+        shadowElevation = 6.dp,
+        color = MaterialTheme.colorScheme.surface
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius))
-                )
-                .padding(dimensionResource(R.dimen.medium_padding))
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(16.dp)
         ) {
-            Spacer(Modifier.weight(1f))
+            // 🔹 Nombre del producto
+            Text(
+                text = product.name,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurface
+            )
 
+            // 🔹 Descripción
+            Text(
+                text = product.description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+
+            // 🔹 Categoría
+            Text(
+                text = "Categoría: ${product.category.name}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(top = 8.dp)
+            )
         }
     }
 }
@@ -61,11 +69,19 @@ fun ProductCard(
 @Preview(showBackground = true)
 @Composable
 fun ProductCardPreview() {
-//    ListiTheme {
-//        ProductCard(
-//            "Lista Resi",
-//            arrayOf(user1, user2, user3),
-//            modifier = Modifier.padding(10.dp)
-//        )
-//    }
+    val sampleProduct = Product(
+        id = 1,
+        name = "Coca-Cola",
+        description = "Gaseosa de 500ml",
+        category = Category(
+            id = 1,
+            name = "Bebidas",
+            createdAt = Date(),
+            updatedAt = Date()
+        ),
+        createdAt = Date(),
+        updatedAt = Date()
+    )
+
+    ProductCard(product = sampleProduct)
 }

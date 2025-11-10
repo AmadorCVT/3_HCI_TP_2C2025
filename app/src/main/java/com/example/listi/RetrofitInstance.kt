@@ -19,7 +19,7 @@ object RetrofitInstance {
 
     private val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("https://TU_API_BASE_URL.com/") // Cambiá esto por tu URL real
+            .baseUrl("http://localhost:8080/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

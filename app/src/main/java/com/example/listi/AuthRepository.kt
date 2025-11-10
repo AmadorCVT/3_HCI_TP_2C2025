@@ -2,9 +2,10 @@ package com.example.listi
 
 
 import android.content.Context
-import com.example.listi.LoginRequest
 import com.example.listi.RetrofitInstance
 import com.example.listi.TokenManager
+import com.example.listi.ui.types.LoginRequest
+import com.example.listi.ui.types.RegisterRequest
 
 class AuthRepository(private val context: Context) {
 
@@ -24,4 +25,11 @@ class AuthRepository(private val context: Context) {
     suspend fun getSavedToken(): String? {
         return tokenManager.getToken()
     }
+    suspend fun register(firstName: String, lastName: String, email: String, password: String): Boolean {
+        val response = RetrofitInstance.loginService.registerUser(
+            RegisterRequest(firstName, lastName, email, password)
+        )
+        return response.isSuccessful
+    }
 }
+

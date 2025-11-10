@@ -1,6 +1,5 @@
 package com.example.listi.ui.screens
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -16,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listi.ui.theme.DarkGreen
@@ -26,8 +24,8 @@ import com.example.listi.R
 
 @Composable
 fun RegisterScreen(
-    onRegisterClick: (() -> Unit)? = null,
-    onLoginClick: (() -> Unit)? = null,
+    onRegisterClick: ((String, String, String, String) -> Unit)? = null, // <--- ahora recibe datos
+    onGoLoginClick: (() -> Unit)? = null,
     onVerifyClick: (() -> Unit)? = null
 ) {
     var firstName by remember { mutableStateOf("") }
@@ -44,7 +42,6 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        // === Título ===
         Text(
             text = "Listi",
             style = TextStyle(
@@ -56,7 +53,6 @@ fun RegisterScreen(
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        // === Subtítulo ===
         Text(
             text = "Registrate para arrancar a gestionar tus listas de compras",
             style = TextStyle(
@@ -67,7 +63,6 @@ fun RegisterScreen(
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
-        // === Nombre ===
         OutlinedTextField(
             value = firstName,
             onValueChange = { firstName = it },
@@ -80,7 +75,6 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // === Apellido ===
         OutlinedTextField(
             value = lastName,
             onValueChange = { lastName = it },
@@ -93,7 +87,6 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // === Email ===
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -106,7 +99,6 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // === Contraseña ===
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -119,7 +111,6 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // === Repetir Contraseña ===
         OutlinedTextField(
             value = repeatPassword,
             onValueChange = { repeatPassword = it },
@@ -132,9 +123,12 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // === Botón Crear Cuenta ===
         Button(
-            onClick = { onRegisterClick?.invoke() },
+            onClick = {
+                if (password == repeatPassword && password.isNotEmpty()) {
+                    onRegisterClick?.invoke(firstName, lastName, email, password)
+                }
+            },
             colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
             modifier = Modifier
                 .fillMaxWidth()
@@ -151,8 +145,7 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // === Texto "¿Ya tienes cuenta?" ===
-        TextButton(onClick = { onLoginClick?.invoke() }) {
+        TextButton(onClick = { onGoLoginClick?.invoke() }) {
             Text(
                 text = "¿Ya tienes cuenta? Iniciar sesión",
                 color = DarkGreen,
@@ -163,7 +156,6 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // === Texto "¿Ya te registraste?" ===
         TextButton(onClick = { onVerifyClick?.invoke() }) {
             Text(
                 text = "¿Ya te registraste? Verificar",
@@ -173,10 +165,4 @@ fun RegisterScreen(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RegisterScreenPreview() {
-    RegisterScreen()
 }
