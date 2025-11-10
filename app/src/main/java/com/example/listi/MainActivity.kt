@@ -18,29 +18,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            ListiTheme {
-                Scaffold(
-                    topBar = { AppTopBar() },
-                ) { innerPadding ->
-                    ListiApp(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainPreview(modifier: Modifier = Modifier) {
-    ListiTheme {
-        Scaffold(
-            topBar = { AppTopBar() },
-        ) { innerPadding ->
-            ListiApp(
-                modifier = Modifier.padding(innerPadding)
-            )
+            ListiApp()
         }
     }
 }

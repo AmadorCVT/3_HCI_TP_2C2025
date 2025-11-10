@@ -9,4 +9,5 @@
     <string name="login">Login</string>
     <string name="active_lists">Activas</string>
     <string name="saved_lists">Guardadas</string>
+    <string name="filter">Filters</string>
 </resources>

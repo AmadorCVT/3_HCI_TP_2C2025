@@ -9,6 +9,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -20,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.LightGreen
 import com.example.listi.ui.theme.White
+import com.example.listi.R
 
 @Composable
 fun RegisterScreen(
@@ -83,7 +86,7 @@ fun RegisterScreen(
             onValueChange = { lastName = it },
             label = { Text("Apellido") },
             singleLine = true,
-            leadingIcon = { Icon(Icons.Default.Badge, contentDescription = "Apellido") },
+            leadingIcon = { Icon(ImageVector.vectorResource(R.drawable.badge), contentDescription = "Apellido") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth()
         )
@@ -122,7 +125,7 @@ fun RegisterScreen(
             onValueChange = { repeatPassword = it },
             label = { Text("Repetir Contraseña") },
             singleLine = true,
-            leadingIcon = { Icon(Icons.Default.LockReset, contentDescription = "Repetir contraseña") },
+            leadingIcon = { Icon(ImageVector.vectorResource(R.drawable.lock_reset), contentDescription = "Repetir contraseña") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )

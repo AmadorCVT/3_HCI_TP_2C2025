@@ -7,4 +7,7 @@
     <string name="registration">Registro</string>
     <string name="generic_description">Descripcion</string>
     <string name="login">Inicio</string>
+    <string name="active_lists">Active</string>
+    <string name="saved_lists">Stored</string>
+    <string name="filter">Filtros</string>
 </resources>

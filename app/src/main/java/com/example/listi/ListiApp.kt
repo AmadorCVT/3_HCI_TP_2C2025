@@ -1,80 +1,60 @@
 package com.example.listi
 
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
+import android.annotation.SuppressLint
+import androidx.compose.material3.Scaffold
+import com.example.listi.ui.navigation.AppNavGraph
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
+import com.example.listi.ui.components.BottomBar
 import com.example.listi.ui.navigation.AppDestinations
-import com.example.listi.ui.screens.ProductsScreen
-import com.example.listi.ui.screens.ProfileScreen
-import com.example.listi.ui.screens.ShoppingListsScreen
-import com.example.listi.ui.screens.FriendsScreen
-import com.example.listi.ui.screens.LoginScreen
-import com.example.listi.ui.screens.RegisterScreen
+import com.example.listi.ui.navigation.Lists
 import com.example.listi.ui.theme.ListiTheme
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ListiApp(modifier: Modifier = Modifier) {
+fun ListiApp() {
     ListiTheme {
-        val adaptiveInfo = currentWindowAdaptiveInfo()
+        val navController = rememberNavController()
+        val currentRoute by rememberSaveable { mutableStateOf(AppDestinations.LISTS) }
+        Scaffold(
+            bottomBar = {
+                BottomBar(
+                    currentRoute = currentRoute
+                ) { route ->
+                    var navOptions: NavOptions? = null
+                    if (route == Lists) {
+                        navOptions = navOptions {
+                            popUpTo<Lists> { inclusive = true }
+                        }
+                    }
 
-        var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.LISTS) }
+                    /*
+                    navOptions = navOptions {
+                        popUpTo<T> { saveState = true }
+                            restoreState = true
+                        }
+                    */
 
-        NavigationSuiteScaffold(
-            navigationSuiteItems = {
-                AppDestinations.entries.forEach {
-                    // saltar los que no tienen ícono (como REGISTER)
-                    if (it.icon == null) return@forEach
-
-                    item(
-                        icon = {
-                            Icon(
-                                painterResource(it.icon),
-                                contentDescription = stringResource(it.contentDescription),
-                                modifier = Modifier.size(dimensionResource(R.dimen.medium_icon_size))
-                            )
-                        },
-                        label = { Text(stringResource(it.label)) },
-                        selected = it == currentDestination,
-                        onClick = { currentDestination = it },
-                    )
+                    navController.navigate(
+                        route = route,
+                        navOptions = navOptions)
                 }
-
-            },
-            layoutType = NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(adaptiveInfo),
-            navigationSuiteColors = NavigationSuiteDefaults.colors(
-                navigationBarContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                navigationBarContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            ),
-        ) {
-            when(currentDestination) {
-                AppDestinations.LISTS -> ShoppingListsScreen()
-                AppDestinations.PRODUCTS -> ProductsScreen()
-                AppDestinations.FRIENDS -> FriendsScreen()
-                AppDestinations.PROFILE -> ProfileScreen()
-                AppDestinations.REGISTER -> RegisterScreen()
-                AppDestinations.LOGIN -> LoginScreen()
             }
+        ) {
+            AppNavGraph(navController = navController)
         }
     }
 }
 
 
-@Preview(device = "spec:width=411dp,height=891dp")
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp, height=891dp")
 @Composable
 fun ListiAppPreview() {
         ListiApp()
