@@ -1,5 +1,4 @@
-package com.example.listi
-
+package com.example.listi.repository
 
 import android.content.Context
 import com.example.listi.RetrofitInstance
@@ -32,4 +31,3 @@ class AuthRepository(private val context: Context) {
         return response.isSuccessful
     }
 }
-

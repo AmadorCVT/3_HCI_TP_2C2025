@@ -9,107 +9,76 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.ui.components.ProductCard
 import com.example.listi.ui.components.ScrollableFilterMenu
-import com.example.listi.ui.types.Category
-import com.example.listi.ui.types.Product
-import java.util.*
+import com.example.listi.viewModel.ProductViewModel
 
 @Composable
 fun ProductsScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ProductViewModel = viewModel() // 👈 obtiene el VM automáticamente
 ) {
-    // 🔹 Datos fijos (hardcodeados)
-    val categories = listOf("Todos", "Bebidas", "Lácteos", "Snacks", "Higiene")
-
-    val products = listOf(
-        Product(
-            id = 1,
-            name = "Coca-Cola",
-            description = "Gaseosa de 500ml",
-            category = Category(
-                id = 1,
-                name = "Bebidas",
-                createdAt = Date(),
-                updatedAt = Date()
-            ),
-            createdAt = Date(),
-            updatedAt = Date()
-        ),
-        Product(
-            id = 2,
-            name = "Leche La Serenísima",
-            description = "Entera 1L",
-            category = Category(
-                id = 2,
-                name = "Lácteos",
-                createdAt = Date(),
-                updatedAt = Date()
-            ),
-            createdAt = Date(),
-            updatedAt = Date()
-        ),
-        Product(
-            id = 3,
-            name = "Papas Lays",
-            description = "Sabor clásico",
-            category = Category(
-                id = 3,
-                name = "Snacks",
-                createdAt = Date(),
-                updatedAt = Date()
-            ),
-            createdAt = Date(),
-            updatedAt = Date()
-        ),
-        Product(
-            id = 4,
-            name = "Jabón Dove",
-            description = "Hidratante 90g",
-            category = Category(
-                id = 4,
-                name = "Higiene",
-                createdAt = Date(),
-                updatedAt = Date()
-            ),
-            createdAt = Date(),
-            updatedAt = Date()
-        )
-    )
+    // Estados observados del ViewModel
+    val products by viewModel.products.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
 
     var selectedCategory by remember { mutableStateOf<String?>(null) }
 
-    // 🔹 UI principal
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(vertical = 8.dp)
-    ) {
-        // 🔹 Menú de categorías arriba
-        ScrollableFilterMenu(
-            items = categories,
-            onItemClick = { category ->
-                selectedCategory = category
-            },
-            onFixedButtonClick = { /* Acción del botón filtro */ }
-        )
+    // 🔹 Cargar productos una sola vez cuando se abre la pantalla
+    LaunchedEffect(Unit) {
+        viewModel.loadProducts()
+    }
 
-        // 🔹 Filtrado dinámico
-        val filteredProducts = if (selectedCategory != null && selectedCategory != "Todos") {
-            products.filter { it.category.name == selectedCategory }
-        } else {
-            products
+    when {
+        isLoading -> Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
 
-        // 🔹 Lista de productos
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        errorMessage != null -> Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            items(filteredProducts) { product ->
-                ProductCard(product = product)
+            Text("Error: $errorMessage")
+        }
+
+        else -> {
+            val categories = listOf("Todos") + products.map { it.category.name }.distinct()
+
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(vertical = 8.dp)
+            ) {
+                // 🔹 Menú de categorías arriba
+                ScrollableFilterMenu(
+                    items = categories,
+                    onItemClick = { category -> selectedCategory = category },
+                    onFixedButtonClick = { /* TODO: filtros avanzados */ }
+                )
+
+                // 🔹 Filtrar productos según categoría seleccionada
+                val filteredProducts = if (selectedCategory != null && selectedCategory != "Todos") {
+                    products.filter { it.category.name == selectedCategory }
+                } else {
+                    products
+                }
+
+                // 🔹 Lista de productos
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(filteredProducts) { product ->
+                        ProductCard(product = product)
+                    }
+                }
             }
         }
     }

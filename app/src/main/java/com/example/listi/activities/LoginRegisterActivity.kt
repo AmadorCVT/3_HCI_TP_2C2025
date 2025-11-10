@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.example.listi.AuthRepository
+import com.example.listi.repository.AuthRepository
 import com.example.listi.ui.screens.LoginScreen
 import com.example.listi.ui.screens.RegisterScreen
 import com.example.listi.ui.theme.ListiTheme

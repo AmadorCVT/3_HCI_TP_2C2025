@@ -2,20 +2,33 @@ package com.example.listi.ui.types
 
 import java.util.Date
 
-data class Category(
-    val id: Int,
-    val name: String,
-    val createdAt: Date,
-    val updatedAt: Date
-)
 
 data class Product(
     val id: Int,
     val name: String,
-    val description: String,
     val createdAt: Date,
     val updatedAt: Date,
-    val category: Category,
-    val quantity: Int,
-    val unit: String
+    val category: Category
+)
+data class CreateProductRequest(
+    val name: String,
+    val category: CategoryReference,
+    val metadata: Map<String, Any> = emptyMap()
+)
+
+data class UpdateProductRequest(
+    val name: String,
+    val category: CategoryReference,
+    val metadata: Map<String, Any> = emptyMap()
+)
+
+
+data class CategoryReference(
+    val id: Int
+)
+
+
+data class ProductListResponse(
+    val data: List<Product>,
+    val pagination: Pagination
 )

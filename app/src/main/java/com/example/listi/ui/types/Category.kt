@@ -1,5 +1,7 @@
 package com.example.listi.ui.types
 
+import java.util.Date
+
 
 data class CreateCategoryRequest(
     val name: String,
@@ -18,21 +20,12 @@ data class CategoryResponse(
     val updatedAt: String,
     val createdAt: String
 )
-
-data class CategoryOwner(
-    val id: Int,
-    val name: String,
-    val surname: String,
-    val email: String
-)
-
-data class CategoryItem(
+data class Category(
     val id: Int,
     val name: String,
     val metadata: Map<String, Any>?,
-    val createdAt: String,
-    val updatedAt: String,
-    val owner: CategoryOwner
+    val createdAt: Date,
+    val updatedAt: Date,
 )
 
 data class Pagination(
@@ -45,6 +38,6 @@ data class Pagination(
 )
 
 data class CategoryListResponse(
-    val data: List<CategoryItem>,
+    val data: List<Category>,
     val pagination: Pagination
 )
