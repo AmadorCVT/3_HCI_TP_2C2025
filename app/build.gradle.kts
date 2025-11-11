@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.compose.runtime.saveable)
 
     // --- Tests ---
     testImplementation(libs.junit)

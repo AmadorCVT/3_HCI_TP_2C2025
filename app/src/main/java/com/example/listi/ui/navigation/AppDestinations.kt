@@ -22,13 +22,19 @@ enum class AppDestinations(
     @param:StringRes val label: Int,
     @param:DrawableRes val icon: Int,
     @param:StringRes val contentDescription: Int,
-    val route: Any
+    val route: String
 ) {
-    LISTS(R.string.lists, R.drawable.list_foreground, R.string.generic_description, Lists),
-    PRODUCTS(R.string.products, R.drawable.store_front_foreground, R.string.generic_description, Products),
-    FRIENDS(R.string.friends, R.drawable.person_foreground, R.string.generic_description, Friends),
-    PROFILE(R.string.profile, R.drawable.person_foreground, R.string.generic_description, Profile),
-    REGISTER(R.string.registration, R.drawable.person_foreground, R.string.generic_description, Register),
-    LOGIN(R.string.login,R.drawable.person_foreground,  R.string.generic_description, Login)
+    LISTS(R.string.lists, R.drawable.list_foreground, R.string.generic_description, ROUTE_LISTS),
+    PRODUCTS(R.string.products, R.drawable.store_front_foreground, R.string.generic_description, ROUTE_PRODUCTS),
+    FRIENDS(R.string.friends, R.drawable.person_foreground, R.string.generic_description, ROUTE_FRIENDS),
+    PROFILE(R.string.profile, R.drawable.person_foreground, R.string.generic_description, ROUTE_PROFILE),
+    REGISTER(R.string.registration, R.drawable.person_foreground, R.string.generic_description, ROUTE_REGISTER),
+    LOGIN(R.string.login,R.drawable.person_foreground,  R.string.generic_description, ROUTE_LOGIN)
 
 }
+const val ROUTE_LISTS = "lists"
+const val ROUTE_PRODUCTS = "products"
+const val ROUTE_PROFILE = "profile"
+const val ROUTE_REGISTER = "register"
+const val ROUTE_LOGIN = "login"
+const val ROUTE_FRIENDS = "friends"
