@@ -7,85 +7,95 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.listi.RetrofitInstance
+import com.example.listi.ui.components.AddCategoryDialog
 import com.example.listi.ui.components.ProductCard
 import com.example.listi.ui.components.ScrollableFilterMenu
 import com.example.listi.viewModel.ProductViewModel
+import com.example.listi.viewModel.ProductViewModelFactory
+import com.example.listi.viewModel.CategoryViewModel
+import com.example.listi.viewModel.CategoryViewModelFactory
+import com.example.listi.repository.CategoryRepository
+
 
 @Composable
 fun ProductsScreen(
     modifier: Modifier = Modifier,
-    viewModel: ProductViewModel = viewModel() // 👈 obtiene el VM automáticamente
+    viewModel: ProductViewModel = viewModel(factory = ProductViewModelFactory()),
+    categoryViewModel: CategoryViewModel = viewModel(
+        factory = CategoryViewModelFactory(CategoryRepository(RetrofitInstance.categoryService))
+    )
 ) {
-    // Estados observados del ViewModel
     val products by viewModel.products.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
 
+    val categories by categoryViewModel.categories.collectAsState()
+    val categoryError by categoryViewModel.errorMessage.collectAsState()
+
     var selectedCategory by remember { mutableStateOf<String?>(null) }
 
-    // 🔹 Cargar productos una sola vez cuando se abre la pantalla
+    var showAddCategoryDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         viewModel.loadProducts()
+        categoryViewModel.loadCategories() // ✅ Cargar categorías
     }
 
     when {
-        isLoading -> Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
+        isLoading -> Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
 
-        errorMessage != null -> Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
+        errorMessage != null -> Box(Modifier.fillMaxSize(), Alignment.Center) {
             Text("Error: $errorMessage")
         }
 
-        else -> {
-            val categories = listOf("Todos") + products.map { it.category.name }.distinct()
+        categoryError != null -> Box(Modifier.fillMaxSize(), Alignment.Center) {
+            Text("Error categorías: $categoryError")
+        }
 
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(vertical = 8.dp)
-            ) {
-                // 🔹 Menú de categorías arriba
+        else -> {
+            val categoryNames = listOf("Todos") + categories.map { it.name }
+
+            Column(Modifier.fillMaxSize()) {
+
                 ScrollableFilterMenu(
-                    items = categories,
-                    onItemClick = { category -> selectedCategory = category },
-                    onFixedButtonClick = { /* TODO: filtros avanzados */ }
+                    items = categoryNames,
+                    onItemClick = { selectedCategory = it },
+                    onFixedButtonClick = { showAddCategoryDialog = true } // ✅ Abrir diálogo
                 )
 
-                // 🔹 Filtrar productos según categoría seleccionada
-                val filteredProducts = if (selectedCategory != null && selectedCategory != "Todos") {
+                val filteredProducts = if (selectedCategory != null && selectedCategory != "Todos")
                     products.filter { it.category.name == selectedCategory }
-                } else {
-                    products
-                }
+                else products
 
-                // 🔹 Lista de productos
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     items(filteredProducts) { product ->
-                        ProductCard(product = product)
+                        ProductCard(
+                            product = product,
+                            categories = categories, // ✅ Ahora vienen del CategoryViewModel
+                            onCategoryChange = { prod, newCat ->
+                                viewModel.updateProductCategory(prod, newCat)
+                            },
+                            onMenuClick = {  }
+                        )
                     }
                 }
             }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun ProductScreenPreview() {
-    ProductsScreen()
+    if (showAddCategoryDialog) {
+        AddCategoryDialog(
+            onDismiss = { showAddCategoryDialog = false },
+            onConfirm = { newCategoryName ->
+                categoryViewModel.addCategory(newCategoryName) // ✅ Ahora se llama al CategoryViewModel
+                showAddCategoryDialog = false
+            }
+        )
+    }
 }

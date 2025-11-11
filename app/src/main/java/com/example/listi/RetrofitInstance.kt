@@ -27,7 +27,7 @@ object RetrofitInstance {
             .build()
 
         retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/") // ✅ usar para Android Emulator
+            .baseUrl("http://10.0.2.2:8080/") //
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

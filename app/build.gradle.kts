@@ -71,6 +71,8 @@ dependencies {
     implementation("androidx.datastore:datastore-core:1.1.1")
     implementation(libs.androidx.compose.adaptive)
     implementation(libs.androidx.ui)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     // --- Tests ---
     testImplementation(libs.junit)
