@@ -80,6 +80,7 @@ fun ListiAppPreview() {
         ) {
             AppNavGraph(
                 navController = navController
+                
             )
         }
     }
