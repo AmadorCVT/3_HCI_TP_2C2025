@@ -28,13 +28,8 @@ enum class AppDestinations(
     PRODUCTS(R.string.products, R.drawable.store_front_foreground, R.string.generic_description, ROUTE_PRODUCTS),
     FRIENDS(R.string.friends, R.drawable.person_foreground, R.string.generic_description, ROUTE_FRIENDS),
     PROFILE(R.string.profile, R.drawable.person_foreground, R.string.generic_description, ROUTE_PROFILE),
-    REGISTER(R.string.registration, R.drawable.person_foreground, R.string.generic_description, ROUTE_REGISTER),
-    LOGIN(R.string.login,R.drawable.person_foreground,  R.string.generic_description, ROUTE_LOGIN)
-
 }
 const val ROUTE_LISTS = "lists"
 const val ROUTE_PRODUCTS = "products"
 const val ROUTE_PROFILE = "profile"
-const val ROUTE_REGISTER = "register"
-const val ROUTE_LOGIN = "login"
 const val ROUTE_FRIENDS = "friends"

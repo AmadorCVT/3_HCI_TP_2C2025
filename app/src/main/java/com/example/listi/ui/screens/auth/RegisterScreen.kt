@@ -1,5 +1,6 @@
 package com.example.listi.ui.screens.auth
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -17,17 +18,24 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.LightGreen
 import com.example.listi.ui.theme.White
 import com.example.listi.R
+import com.example.listi.repository.AuthRepository
 
 @Composable
-fun RegisterScreen(
-    onRegisterClick: ((String, String, String, String) -> Unit)? = null, // <--- ahora recibe datos
-    onGoLoginClick: (() -> Unit)? = null,
-    onVerifyClick: (() -> Unit)? = null
-) {
+fun RegisterScreen(context: Context) {
+
+    // 🧠 ViewModel correctamente creado con Factory
+    val viewModel: AuthViewModel = viewModel(
+        factory = AuthViewModelFactory(AuthRepository(context))
+    )
+
+    // Estado de UI (para mostrar errores, loading, etc.)
+    val uiState = viewModel.uiState
+
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -80,7 +88,12 @@ fun RegisterScreen(
             onValueChange = { lastName = it },
             label = { Text("Apellido") },
             singleLine = true,
-            leadingIcon = { Icon(ImageVector.vectorResource(R.drawable.badge), contentDescription = "Apellido") },
+            leadingIcon = {
+                Icon(
+                    ImageVector.vectorResource(R.drawable.badge),
+                    contentDescription = "Apellido"
+                )
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth()
         )
@@ -116,7 +129,12 @@ fun RegisterScreen(
             onValueChange = { repeatPassword = it },
             label = { Text("Repetir Contraseña") },
             singleLine = true,
-            leadingIcon = { Icon(ImageVector.vectorResource(R.drawable.lock_reset), contentDescription = "Repetir contraseña") },
+            leadingIcon = {
+                Icon(
+                    ImageVector.vectorResource(R.drawable.lock_reset),
+                    contentDescription = "Repetir contraseña"
+                )
+            },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
@@ -126,7 +144,7 @@ fun RegisterScreen(
         Button(
             onClick = {
                 if (password == repeatPassword && password.isNotEmpty()) {
-                    onRegisterClick?.invoke(firstName, lastName, email, password)
+                    viewModel.register(firstName, lastName, email, password)
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
@@ -135,17 +153,23 @@ fun RegisterScreen(
                 .height(50.dp),
             shape = MaterialTheme.shapes.medium
         ) {
-            Text(
-                text = "Crear cuenta",
-                color = White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+            if (uiState.isLoading) {
+                CircularProgressIndicator(
+                    color = White,
+                    strokeWidth = 2.dp,
+                    modifier = Modifier.size(24.dp)
+                )
+            } else {
+                Text(
+                    text = "Crear cuenta",
+                    color = White,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextButton(onClick = { onGoLoginClick?.invoke() }) {
+        TextButton(onClick = {  }) {
             Text(
                 text = "¿Ya tienes cuenta? Iniciar sesión",
                 color = DarkGreen,
@@ -156,7 +180,7 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextButton(onClick = { onVerifyClick?.invoke() }) {
+        TextButton(onClick = {  }) {
             Text(
                 text = "¿Ya te registraste? Verificar",
                 color = DarkGreen,

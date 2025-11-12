@@ -15,7 +15,6 @@ import com.example.listi.ui.screens.auth.AuthViewModel
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
-    authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -26,15 +25,7 @@ fun AppNavGraph(
         composable(ROUTE_LISTS) { ShoppingListsScreen() }
         composable(ROUTE_PRODUCTS) { ProductsScreen() }
         composable(ROUTE_PROFILE) { ProfileScreen() }
-        composable(ROUTE_REGISTER) {
-            RegisterScreen(
-                onRegisterClick = { first, last, email, pass ->
-                    authViewModel.register(first, last, email, pass)
-                },
-                onGoLoginClick = { navController.navigate(ROUTE_LOGIN) },
-                onVerifyClick = { /* navegar a verify */ }
-            )
-        }
-        composable(ROUTE_LOGIN) { LoginScreen() }
+
+
     }
 }
