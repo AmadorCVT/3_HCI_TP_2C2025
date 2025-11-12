@@ -64,7 +64,7 @@ fun ListiApp(
         ) { innerPadding ->
             AppNavGraph(
                 navController = navController,
-                viewModel = authViewModel,
+                authViewModel = authViewModel,
             )
         }
     }
@@ -85,7 +85,7 @@ fun ListiAppPreview() {
         ) {
             AppNavGraph(
                 navController = navController,
-                viewModel = AuthViewModel(AuthRepository(navController.context))
+                authViewModel = AuthViewModel(AuthRepository(navController.context))
             )
         }
     }

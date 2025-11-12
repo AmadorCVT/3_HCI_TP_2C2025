@@ -24,6 +24,7 @@ import com.example.listi.ui.theme.White
 
 @Composable
 fun LoginScreen(
+    authViewModel: AuthViewModel,
     onLoginClick: ((String, String) -> Unit)? = null,
     onCreateAccountClick: (() -> Unit)? = null,
     onForgotPasswordClick: (() -> Unit)? = null
@@ -75,7 +76,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { onLoginClick?.invoke(email, password) },
+            onClick = { authViewModel.login(email, password) },
             colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
             modifier = Modifier
                 .fillMaxWidth()
@@ -123,5 +124,5 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+    //LoginScreen()
 }
