@@ -2,7 +2,7 @@ package com.example.listi
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -14,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.AuthRepository
+import com.example.listi.ui.components.AppTopBar
 import com.example.listi.ui.components.BottomBar
 import com.example.listi.ui.navigation.AppNavGraph
 import com.example.listi.ui.navigation.ROUTE_LISTS
@@ -27,7 +28,7 @@ fun ListiApp() {
     ListiTheme {
         val navController = rememberNavController()
 
-        // Backstack entry -> ruta actual (String)
+        // Backstack entry -> ruta actual
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route ?: ROUTE_LISTS
 
@@ -38,6 +39,9 @@ fun ListiApp() {
         )
 
         Scaffold(
+            topBar = {
+                AppTopBar()
+            },
             bottomBar = {
                 BottomBar(
                     currentRoute = currentRoute,
@@ -55,7 +59,6 @@ fun ListiApp() {
         ) { innerPadding ->
             AppNavGraph(
                 navController = navController,
-                authViewModel = authViewModel,
                 modifier = Modifier.padding(innerPadding)
             )
         }
@@ -71,10 +74,12 @@ fun ListiAppPreview() {
     )
     ListiTheme {
         val navController = rememberNavController()
-        Scaffold {
+        Scaffold(
+            topBar = { AppTopBar() },
+            bottomBar = { BottomBar(currentRoute = ROUTE_LISTS, onNavigateToRoute = {}) }
+        ) {
             AppNavGraph(
-                navController = navController,
-                authViewModel = AuthViewModel(AuthRepository(navController.context))
+                navController = navController
             )
         }
     }
