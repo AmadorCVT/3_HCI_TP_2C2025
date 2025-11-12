@@ -1,4 +1,4 @@
-package com.example.listi.viewModel
+package com.example.listi.ui.screens.auth
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.listi.repository.AuthRepository
-import com.example.listi.ui.types.*
 import kotlinx.coroutines.launch
 
 

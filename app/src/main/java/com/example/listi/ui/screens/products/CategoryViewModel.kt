@@ -1,4 +1,4 @@
-package com.example.listi.viewModel
+package com.example.listi.ui.screens.products
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

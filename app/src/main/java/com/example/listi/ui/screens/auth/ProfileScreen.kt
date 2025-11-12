@@ -1,4 +1,4 @@
-package com.example.listi.ui.screens
+package com.example.listi.ui.screens.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

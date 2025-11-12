@@ -16,8 +16,8 @@ import com.example.listi.ui.components.BottomBar
 import com.example.listi.ui.navigation.AppNavGraph
 import com.example.listi.ui.navigation.ROUTE_LISTS
 import com.example.listi.ui.theme.ListiTheme
-import com.example.listi.viewModel.AuthViewModel
-import com.example.listi.viewModel.AuthViewModelFactory
+import com.example.listi.ui.screens.auth.AuthViewModel
+import com.example.listi.ui.screens.auth.AuthViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

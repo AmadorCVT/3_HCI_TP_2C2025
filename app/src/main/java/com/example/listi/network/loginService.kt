@@ -1,4 +1,4 @@
-package com.example.listi.services
+package com.example.listi.network
 
 
 import com.example.listi.ui.types.LoginRequest

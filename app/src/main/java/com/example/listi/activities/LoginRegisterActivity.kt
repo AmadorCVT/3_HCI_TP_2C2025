@@ -8,8 +8,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.listi.repository.AuthRepository
 import com.example.listi.ui.navigation.AppNavGraph
 import com.example.listi.ui.theme.ListiTheme
-import com.example.listi.viewModel.AuthViewModel
-import com.example.listi.viewModel.AuthViewModelFactory
+import com.example.listi.ui.screens.auth.AuthViewModel
+import com.example.listi.ui.screens.auth.AuthViewModelFactory
 
 class MainActivity : ComponentActivity() {
 

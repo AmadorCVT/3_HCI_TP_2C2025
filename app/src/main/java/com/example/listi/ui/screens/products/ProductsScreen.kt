@@ -1,4 +1,4 @@
-package com.example.listi.ui.screens
+package com.example.listi.ui.screens.products
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,14 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.listi.RetrofitInstance
+import com.example.listi.network.RetrofitInstance
 import com.example.listi.ui.components.AddCategoryDialog
 import com.example.listi.ui.components.ProductCard
 import com.example.listi.ui.components.ScrollableFilterMenu
-import com.example.listi.viewModel.ProductViewModel
-import com.example.listi.viewModel.ProductViewModelFactory
-import com.example.listi.viewModel.CategoryViewModel
-import com.example.listi.viewModel.CategoryViewModelFactory
 import com.example.listi.repository.CategoryRepository
 
 

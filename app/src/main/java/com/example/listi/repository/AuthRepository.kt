@@ -1,7 +1,7 @@
 package com.example.listi.repository
 
 import android.content.Context
-import com.example.listi.RetrofitInstance
+import com.example.listi.network.RetrofitInstance
 import com.example.listi.TokenManager
 import com.example.listi.ui.types.*
 import retrofit2.Response

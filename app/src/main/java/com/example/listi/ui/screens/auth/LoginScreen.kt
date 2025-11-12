@@ -1,4 +1,4 @@
-package com.example.listi.ui.screens
+package com.example.listi.ui.screens.auth
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*

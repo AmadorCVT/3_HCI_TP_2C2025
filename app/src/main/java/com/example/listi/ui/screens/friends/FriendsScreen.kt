@@ -1,4 +1,4 @@
-package com.example.listi.ui.screens
+package com.example.listi.ui.screens.friends
 
 
 import androidx.compose.foundation.layout.*

@@ -1,4 +1,4 @@
-package com.example.listi.ui.screens
+package com.example.listi.ui.screens.list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

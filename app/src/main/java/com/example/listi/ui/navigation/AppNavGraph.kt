@@ -5,12 +5,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.listi.ui.screens.LoginScreen
-import com.example.listi.ui.screens.ProductsScreen
-import com.example.listi.ui.screens.ProfileScreen
-import com.example.listi.ui.screens.RegisterScreen
-import com.example.listi.ui.screens.ShoppingListsScreen
-import com.example.listi.viewModel.AuthViewModel
+import com.example.listi.ui.screens.auth.LoginScreen
+import com.example.listi.ui.screens.products.ProductsScreen
+import com.example.listi.ui.screens.auth.ProfileScreen
+import com.example.listi.ui.screens.auth.RegisterScreen
+import com.example.listi.ui.screens.shoppingLists.ShoppingListsScreen
+import com.example.listi.ui.screens.auth.AuthViewModel
 
 @Composable
 fun AppNavGraph(

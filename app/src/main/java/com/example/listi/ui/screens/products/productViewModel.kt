@@ -1,9 +1,9 @@
-package com.example.listi.viewModel
+package com.example.listi.ui.screens.products
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.listi.RetrofitInstance
+import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.CategoryRepository
 import com.example.listi.repository.ProductRepository
 import com.example.listi.ui.types.Category

@@ -1,6 +1,6 @@
 package com.example.listi.repository
 
-import com.example.listi.services.CategoryService
+import com.example.listi.network.CategoryService
 import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.CreateCategoryRequest
 import com.example.listi.ui.types.UpdateCategoryRequest
