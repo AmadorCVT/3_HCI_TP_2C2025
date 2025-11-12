@@ -17,16 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import androidx.compose.ui.draw.clip
-
+import com.example.listi.ui.types.ShoppingListItem
 @Composable
 fun ProductRow(
-    name: String,
-    quantity: String,
-    unit: String,
-    initiallyChecked: Boolean = false,
+    item: ShoppingListItem,
     onCheckedChange: ((Boolean) -> Unit)? = null
 ) {
-    var checked by remember { mutableStateOf(initiallyChecked) }
+    var checked by remember { mutableStateOf(item.purchased) }
 
     Column(
         modifier = Modifier
@@ -81,7 +78,7 @@ fun ProductRow(
 
             // Texto producto
             Text(
-                text = name,
+                text = item.product.name,
                 modifier = Modifier.weight(1f),
                 color = Color.Black,
                 style = MaterialTheme.typography.bodyMedium
@@ -89,7 +86,7 @@ fun ProductRow(
 
             // Cantidad
             Text(
-                text = quantity,
+                text = item.quantity.toString(),
                 modifier = Modifier.width(40.dp),
                 color = Color.DarkGray,
                 style = MaterialTheme.typography.bodyMedium
@@ -99,7 +96,7 @@ fun ProductRow(
 
             // Unidad
             Text(
-                text = unit,
+                text = item.unit,
                 color = Color.DarkGray,
                 style = MaterialTheme.typography.bodyMedium
             )

@@ -1,6 +1,8 @@
 package com.example.listi.ui.screens.list
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,9 +16,13 @@ import com.example.listi.ui.components.ProductRow
 import com.example.listi.ui.components.WhiteBoxWithText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import com.example.listi.ui.types.Category
+import com.example.listi.ui.types.Product
+import com.example.listi.ui.types.ShoppingListItem
+import java.util.Date
 
 @Composable
-fun ListScreenView() {
+fun ListScreenView(items: List<ShoppingListItem>) {
     var text by remember { mutableStateOf("") }
 
     Column(
@@ -49,10 +55,11 @@ fun ListScreenView() {
                 .weight(1f, fill = false)
         ) {
 
-            Column {
-                    HeaderRow()
-                ProductRow(name = "Pan", quantity = "1", unit = "Kg", initiallyChecked = true)
-                ProductRow(name = "Sal", quantity = "500", unit = "g")
+            LazyColumn {
+                item { HeaderRow() }
+                items(items) { item ->
+                    ProductRow(item = item)
+                }
             }
         }
     }
@@ -100,5 +107,28 @@ fun HeaderRow() {
 @Preview(showBackground = true)
 @Composable
 fun ListScreenPreview() {
-    ListScreenView()
+    val category1 = Category(1, "Panadería", null, Date(), Date())
+    val category2 = Category(2, "Almacén", null, Date(), Date())
+
+    val product1 = Product(
+        id = 1,
+        name = "Pan",
+        createdAt = Date(),
+        updatedAt = Date(),
+        category = category1
+    )
+
+    val product2 = Product(
+        id = 2,
+        name = "Sal",
+        createdAt = Date(),
+        updatedAt = Date(),
+        category = category2
+    )
+
+    val sampleItems = listOf(
+        ShoppingListItem(1, "Kg", 1, true, "Ayer", Date(), Date(), product1),
+        ShoppingListItem(2, "g", 500, false, "Hoy", Date(), Date(), product2),
+    )
+    ListScreenView(items = sampleItems)
 }
