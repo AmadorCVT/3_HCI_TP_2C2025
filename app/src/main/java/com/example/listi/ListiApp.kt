@@ -1,6 +1,7 @@
 package com.example.listi
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
@@ -24,7 +25,9 @@ import com.example.listi.ui.screens.auth.AuthViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ListiApp() {
+fun ListiApp(
+    context: Context
+) {
     ListiTheme {
         val navController = rememberNavController()
 
@@ -33,7 +36,7 @@ fun ListiApp() {
         val currentRoute = navBackStackEntry?.destination?.route ?: ROUTE_LISTS
 
         // ViewModel + Repository
-        val authRepository = AuthRepository(navController.context)
+        val authRepository = AuthRepository(context)
         val authViewModel: AuthViewModel = viewModel(
             factory = AuthViewModelFactory(authRepository)
         )
@@ -59,8 +62,7 @@ fun ListiApp() {
         ) { innerPadding ->
             AppNavGraph(
                 navController = navController,
-                authViewModel = authViewModel,
-                modifier = Modifier.padding(innerPadding)
+                viewModel = authViewModel,
             )
         }
     }
@@ -81,7 +83,7 @@ fun ListiAppPreview() {
         ) {
             AppNavGraph(
                 navController = navController,
-                authViewModel = AuthViewModel(AuthRepository(navController.context))
+                viewModel = AuthViewModel(AuthRepository(navController.context))
             )
         }
     }
