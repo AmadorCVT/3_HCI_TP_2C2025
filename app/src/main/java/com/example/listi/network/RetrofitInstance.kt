@@ -43,3 +43,4 @@ object RetrofitInstance {
 
     val categoryService: CategoryService by lazy { retrofit.create(CategoryService::class.java) }
 }
+
