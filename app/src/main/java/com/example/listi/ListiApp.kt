@@ -55,7 +55,6 @@ fun ListiApp() {
         ) { innerPadding ->
             AppNavGraph(
                 navController = navController,
-                authViewModel = authViewModel,
                 modifier = Modifier.padding(innerPadding)
             )
         }
@@ -74,7 +73,6 @@ fun ListiAppPreview() {
         Scaffold {
             AppNavGraph(
                 navController = navController,
-                authViewModel = AuthViewModel(AuthRepository(navController.context))
             )
         }
     }

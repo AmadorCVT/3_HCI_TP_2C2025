@@ -29,7 +29,6 @@ class MainActivity : ComponentActivity() {
                 // Le pasás el viewmodel al NavGraph
                 AppNavGraph(
                     navController = navController,
-                    authViewModel = authViewModel
                 )
             }
         }
