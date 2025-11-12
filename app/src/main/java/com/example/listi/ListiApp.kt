@@ -18,6 +18,7 @@ import com.example.listi.repository.AuthRepository
 import com.example.listi.ui.components.BottomBar
 import com.example.listi.ui.navigation.AppNavGraph
 import com.example.listi.ui.navigation.ROUTE_LISTS
+import com.example.listi.ui.navigation.ROUTE_LOGIN
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.screens.auth.AuthViewModel
 import com.example.listi.ui.screens.auth.AuthViewModelFactory
@@ -49,18 +50,19 @@ fun ListiApp(
 
         Scaffold(
             bottomBar = {
-                BottomBar(
-                    currentRoute = currentRoute,
-                    onNavigateToRoute = { route ->
-                        var options: NavOptions? = null
-                        if (route == ROUTE_LISTS) {
-                            options = navOptions {
-                                popUpTo(ROUTE_LISTS) { inclusive = true }
+                if (currentRoute != ROUTE_LOGIN)
+                    BottomBar(
+                        currentRoute = currentRoute,
+                        onNavigateToRoute = { route ->
+                            var options: NavOptions? = null
+                            if (route == ROUTE_LISTS) {
+                                options = navOptions {
+                                    popUpTo(ROUTE_LISTS) { inclusive = true }
+                                }
                             }
+                            navController.navigate(route, options)
                         }
-                        navController.navigate(route, options)
-                    }
-                )
+                    )
             }
         ) { innerPadding ->
             AppNavGraph(
