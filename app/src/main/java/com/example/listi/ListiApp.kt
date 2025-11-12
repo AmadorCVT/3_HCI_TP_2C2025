@@ -1,6 +1,7 @@
 package com.example.listi
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
@@ -23,7 +24,16 @@ import com.example.listi.ui.screens.auth.AuthViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ListiApp() {
+fun ListiApp(
+    context: Context
+) {
+
+    // Instancia el repositorio y el ViewModel usando la factory
+    val authRepository = AuthRepository(context)
+    val authViewModel: AuthViewModel = viewModel(
+        factory = AuthViewModelFactory(authRepository)
+    )
+
     ListiTheme {
         val navController = rememberNavController()
 
@@ -55,7 +65,7 @@ fun ListiApp() {
         ) { innerPadding ->
             AppNavGraph(
                 navController = navController,
-                authViewModel = authViewModel,
+                viewModel = authViewModel,
                 modifier = Modifier.padding(innerPadding)
             )
         }
@@ -66,16 +76,5 @@ fun ListiApp() {
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun ListiAppPreview() {
-    RetrofitInstance.init(
-        context = LocalContext.current
-    )
-    ListiTheme {
-        val navController = rememberNavController()
-        Scaffold {
-            AppNavGraph(
-                navController = navController,
-                authViewModel = AuthViewModel(AuthRepository(navController.context))
-            )
-        }
-    }
+    ListiApp(LocalContext.current)
 }

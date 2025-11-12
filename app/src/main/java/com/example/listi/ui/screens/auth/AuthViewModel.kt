@@ -23,7 +23,7 @@ class AuthViewModelFactory(
 }
 class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
-    var uiState by mutableStateOf(AuthUIState())
+    var uiState by mutableStateOf(AuthUiState())
         private set
 
     // --------------------------
@@ -137,21 +137,8 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
             } catch (_: Exception) {
                 // no importa mucho el error de logout en cliente
             } finally {
-                uiState = AuthUIState() // reinicia el estado
+                uiState = AuthUiState() // reinicia el estado
             }
         }
     }
 }
-
-// --------------------------
-// UI STATE
-// --------------------------
-data class AuthUIState(
-    val isLoading: Boolean = false,
-    val isLogged: Boolean = false,
-    val isVerified: Boolean = false,
-    val passwordChanged: Boolean = false,
-    val showVerification: Boolean = false,
-    val token: String? = null,
-    val errorMessage: String? = null
-)

@@ -19,7 +19,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         RetrofitInstance.init(applicationContext)
         setContent {
-            ListiApp()
+            ListiApp(
+                context = applicationContext
+            )
         }
     }
 }

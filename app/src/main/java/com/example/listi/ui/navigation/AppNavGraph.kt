@@ -15,17 +15,25 @@ import com.example.listi.ui.screens.auth.AuthViewModel
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
+    viewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
+
+    val destination =
+        if(viewModel.uiState.isLogged) {
+            ROUTE_LISTS
+        } else {
+            ROUTE_LOGIN
+        }
+
     NavHost(
         navController = navController,
-        startDestination = ROUTE_LISTS,
+        startDestination = destination,
         modifier = modifier
     ) {
         composable(ROUTE_LISTS) { ShoppingListsScreen() }
         composable(ROUTE_PRODUCTS) { ProductsScreen() }
         composable(ROUTE_PROFILE) { ProfileScreen() }
-
-
+        composable(ROUTE_LOGIN) { LoginScreen() }
     }
 }

@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 object RetrofitInstance {
-    private const val BASE_URL = "http://192.168.1.27/"
+    private const val BASE_URL = "http://192.168.0.96/"
 
     private lateinit var retrofit: Retrofit
 
