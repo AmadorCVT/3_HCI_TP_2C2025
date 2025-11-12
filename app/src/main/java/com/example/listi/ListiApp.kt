@@ -1,7 +1,6 @@
 package com.example.listi
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
@@ -15,26 +14,17 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.AuthRepository
+import com.example.listi.ui.components.AppTopBar
 import com.example.listi.ui.components.BottomBar
 import com.example.listi.ui.navigation.AppNavGraph
 import com.example.listi.ui.navigation.ROUTE_LISTS
-import com.example.listi.ui.navigation.ROUTE_LOGIN
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.screens.auth.AuthViewModel
 import com.example.listi.ui.screens.auth.AuthViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ListiApp(
-    context: Context
-) {
-
-    // Instancia el repositorio y el ViewModel usando la factory
-    val authRepository = AuthRepository(context)
-    val authViewModel: AuthViewModel = viewModel(
-        factory = AuthViewModelFactory(authRepository)
-    )
-
+fun ListiApp() {
     ListiTheme {
         val navController = rememberNavController()
 
@@ -49,25 +39,27 @@ fun ListiApp(
         )
 
         Scaffold(
+            topBar = {
+                AppTopBar()
+            },
             bottomBar = {
-                if (currentRoute != ROUTE_LOGIN)
-                    BottomBar(
-                        currentRoute = currentRoute,
-                        onNavigateToRoute = { route ->
-                            var options: NavOptions? = null
-                            if (route == ROUTE_LISTS) {
-                                options = navOptions {
-                                    popUpTo(ROUTE_LISTS) { inclusive = true }
-                                }
+                BottomBar(
+                    currentRoute = currentRoute,
+                    onNavigateToRoute = { route ->
+                        var options: NavOptions? = null
+                        if (route == ROUTE_LISTS) {
+                            options = navOptions {
+                                popUpTo(ROUTE_LISTS) { inclusive = true }
                             }
-                            navController.navigate(route, options)
                         }
-                    )
+                        navController.navigate(route, options)
+                    }
+                )
             }
         ) { innerPadding ->
             AppNavGraph(
                 navController = navController,
-                viewModel = authViewModel,
+                authViewModel = authViewModel,
                 modifier = Modifier.padding(innerPadding)
             )
         }
@@ -78,5 +70,19 @@ fun ListiApp(
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun ListiAppPreview() {
-    ListiApp(LocalContext.current)
+    RetrofitInstance.init(
+        context = LocalContext.current
+    )
+    ListiTheme {
+        val navController = rememberNavController()
+        Scaffold (
+            topBar = { AppTopBar() },
+            bottomBar = { BottomBar(currentRoute = ROUTE_LISTS, onNavigateToRoute = {}) }
+        ) {
+            AppNavGraph(
+                navController = navController,
+                authViewModel = AuthViewModel(AuthRepository(navController.context))
+            )
+        }
+    }
 }
