@@ -63,20 +63,19 @@ fun FriendsScreen(modifier: Modifier = Modifier) {
             //TODO: Usar el color posta
             colors = TextFieldDefaults.colors(
                 // Fondo del campo de texto
-                focusedContainerColor = Color(0xFF388E3C), // Verde oscuro al hacer foco
-                unfocusedContainerColor = Color(0xFF4CAF50), // Verde estándar
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant, // Verde oscuro al hacer foco
+                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary, // Verde estándar
                 disabledContainerColor = Color.Gray,
 
                 // Color del texto y los iconos
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedLabelColor = Color.White,
-                unfocusedLabelColor = Color.White.copy(alpha = 0.8f),
-                focusedLeadingIconColor = Color.White,
-                unfocusedLeadingIconColor = Color.White.copy(alpha = 0.8f),
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                focusedLabelColor = MaterialTheme.colorScheme.surface,
+                unfocusedLabelColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
+                focusedLeadingIconColor = MaterialTheme.colorScheme.surface,
+                unfocusedLeadingIconColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
 
                 // Color del cursor
-                cursorColor = Color.White
+                cursorColor = MaterialTheme.colorScheme.surface
             )
         )
 
