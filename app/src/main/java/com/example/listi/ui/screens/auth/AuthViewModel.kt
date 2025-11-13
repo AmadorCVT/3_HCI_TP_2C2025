@@ -30,6 +30,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     // LOGIN
     // --------------------------
     fun login(email: String, password: String) {
+        
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true, errorMessage = null)
             try {
