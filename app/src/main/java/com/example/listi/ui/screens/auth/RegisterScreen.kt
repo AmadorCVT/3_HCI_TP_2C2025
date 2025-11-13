@@ -1,6 +1,7 @@
 package com.example.listi.ui.screens.auth
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -41,6 +42,15 @@ fun RegisterScreen( authViewModel: AuthViewModel,
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
+
+
+    LaunchedEffect(uiState.showVerification) {
+        if (uiState.showVerification) {
+            if (goLogin != null) {
+                goLogin()
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -143,8 +153,10 @@ fun RegisterScreen( authViewModel: AuthViewModel,
 
         Button(
             onClick = {
+
                 if (password == repeatPassword && password.isNotEmpty()) {
                     viewModel.register(firstName, lastName, email, password)
+
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
