@@ -11,6 +11,7 @@ import com.example.listi.ui.screens.auth.ProfileScreen
 import com.example.listi.ui.screens.auth.RegisterScreen
 import com.example.listi.ui.screens.shoppingLists.ShoppingListsScreen
 import com.example.listi.ui.screens.auth.AuthViewModel
+import com.example.listi.ui.screens.friends.FriendsScreen
 
 @Composable
 fun AppNavGraph(
@@ -33,6 +34,10 @@ fun AppNavGraph(
     ) {
         composable(ROUTE_LISTS) { ShoppingListsScreen() }
         composable(ROUTE_PRODUCTS) { ProductsScreen() }
+        composable(ROUTE_FRIENDS) {
+            FriendsScreen(
+                authViewModel = authViewModel
+        ) }
         composable(ROUTE_PROFILE) { ProfileScreen() }
         composable(ROUTE_LOGIN) {
             LoginScreen(

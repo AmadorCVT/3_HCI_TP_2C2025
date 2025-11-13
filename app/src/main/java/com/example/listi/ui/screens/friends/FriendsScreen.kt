@@ -13,13 +13,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.components.FriendCard
 import com.example.listi.ui.types.Friend
 import com.example.listi.ui.components.WhiteBoxWithText
 import com.example.listi.R
+import com.example.listi.network.RetrofitInstance
+import com.example.listi.repository.CategoryRepository
+import com.example.listi.ui.screens.auth.AuthViewModel
+import com.example.listi.ui.screens.products.CategoryViewModel
+import com.example.listi.ui.screens.products.CategoryViewModelFactory
+import kotlinx.coroutines.flow.filter
+import kotlin.collections.filter
 
-private val friendList = listOf(
+private val friendListPreview = listOf(
     Friend("Lucas"),
     Friend("Ana"),
     Friend("Martín"),
@@ -31,7 +39,27 @@ private val friendList = listOf(
 )
 
 @Composable
-fun FriendsScreen(modifier: Modifier = Modifier) {
+fun FriendsScreen(
+    modifier: Modifier = Modifier,
+    authViewModel: AuthViewModel,
+    friendViewModel: FriendsViewModel = viewModel(factory = FriendsViewModelFactory(authViewModel)),
+) {
+    // Para que sea reactivo uso referencia
+    val friendList by friendViewModel.friends.collectAsState()
+
+    // Fetch friends
+    LaunchedEffect(Unit) {
+        friendViewModel.loadFriends()
+    }
+
+    FriendsCardList(modifier, friendList)
+}
+
+@Composable
+fun FriendsCardList(
+    modifier: Modifier = Modifier,
+    friendList: MutableList<Friend>
+) {
     var searchQuery by remember { mutableStateOf("") }
 
     val filteredFriends = if (searchQuery.isBlank()) {
@@ -60,7 +88,7 @@ fun FriendsScreen(modifier: Modifier = Modifier) {
                 )
             },
             singleLine = true,
-            //TODO: Usar el color posta
+
             colors = TextFieldDefaults.colors(
                 // Fondo del campo de texto
                 focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant, // Verde oscuro al hacer foco
@@ -81,7 +109,6 @@ fun FriendsScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🔲 Uso directo del componente WhiteBoxWithText
         WhiteBoxWithText(
             text = "",
             modifier = Modifier
@@ -109,11 +136,12 @@ fun FriendsScreen(modifier: Modifier = Modifier) {
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun FriendsScreenPreview() {
     ListiTheme {
-        FriendsScreen()
+        FriendsCardList(Modifier, friendListPreview as MutableList<Friend>)
     }
 }
 
