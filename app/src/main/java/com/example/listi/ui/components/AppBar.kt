@@ -11,6 +11,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.listi.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,8 +38,8 @@ fun AppTopBar() {
         actions = {
             IconButton(onClick = { /* handle menu */ }) {
                 Icon(
-                    painterResource(R.drawable.menu_foreground),
-                    contentDescription = "Menu"
+                    painterResource(R.drawable.person_foreground),
+                    contentDescription = "Profile"
                 )
             }
         },
@@ -48,4 +49,10 @@ fun AppTopBar() {
         ),
         scrollBehavior = scrollBehavior
     )
+}
+
+@Preview
+@Composable
+fun AppTopBarPreview() {
+    AppTopBar()
 }

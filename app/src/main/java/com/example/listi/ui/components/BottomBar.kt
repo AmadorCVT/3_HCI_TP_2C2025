@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.listi.ui.navigation.AppDestinations
 import com.example.listi.ui.navigation.ROUTE_LOGIN
 
@@ -35,4 +36,10 @@ fun BottomBar(
                 )
         }
     }
+}
+
+@Preview
+@Composable
+fun BottomBarPreview() {
+    BottomBar(currentRoute = AppDestinations.LISTS.route, onNavigateToRoute = {})
 }
