@@ -14,3 +14,5 @@
 .cxx
 local.properties
 API\ v1.0.2\ Installer/node_modules
+network_security_config.xml
+RetrofitInstance.kt
