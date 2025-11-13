@@ -6,9 +6,12 @@ import com.example.listi.ui.types.CreateCategoryRequest
 import com.example.listi.ui.types.UpdateCategoryRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class CategoryRepository(private val api: CategoryService) {
-
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
     private var cachedCategories: List<Category>? = null
 
     suspend fun getCategories(forceRefresh: Boolean = false): List<Category> {
@@ -37,9 +40,9 @@ class CategoryRepository(private val api: CategoryService) {
                 val created = Category(
                     id = createdResponse.id,
                     name = createdResponse.name,
-                    metadata = createdResponse.metadata,
-                    createdAt = java.util.Date(),
-                    updatedAt = java.util.Date()
+
+                    createdAt = dateFormat.format(Date()),
+                    updatedAt = dateFormat.format(Date())
                 )
                 cachedCategories = (cachedCategories ?: emptyList()) + created
                 created
@@ -57,9 +60,8 @@ class CategoryRepository(private val api: CategoryService) {
                 Category(
                     id = result.id,
                     name = result.name,
-                    metadata = result.metadata,
-                    createdAt = java.util.Date(),
-                    updatedAt = java.util.Date()
+                    createdAt = dateFormat.format(Date()),
+                    updatedAt = dateFormat.format(Date())
                 )
             } else {
                 throw Exception("Error al obtener categoría: ${response.code()}")
@@ -75,9 +77,8 @@ class CategoryRepository(private val api: CategoryService) {
                 val updated = Category(
                     id = result.id,
                     name = result.name,
-                    metadata = result.metadata,
-                    createdAt = java.util.Date(),
-                    updatedAt = java.util.Date()
+                    createdAt = dateFormat.format(Date()),
+                    updatedAt = dateFormat.format(Date())
                 )
                 cachedCategories = cachedCategories?.map {
                     if (it.id == id) updated else it

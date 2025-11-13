@@ -19,8 +19,11 @@ import androidx.compose.material.icons.filled.Edit
 import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ShoppingListItem
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
+val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
 @Composable
 fun ListScreenView(items: List<ShoppingListItem>) {
     var text by remember { mutableStateOf("") }
@@ -107,22 +110,22 @@ fun HeaderRow() {
 @Preview(showBackground = true)
 @Composable
 fun ListScreenPreview() {
-    val category1 = Category(1, "Panadería", null, Date(), Date())
-    val category2 = Category(2, "Almacén", null, Date(), Date())
+    val category1 = Category(1, "Panadería", "", dateFormat.format(Date()))
+    val category2 = Category(2, "Almacén", "", dateFormat.format(Date()))
 
     val product1 = Product(
         id = 1,
         name = "Pan",
-        createdAt = Date(),
-        updatedAt = Date(),
+        createdAt = dateFormat.format(Date()),
+        updatedAt = dateFormat.format(Date()),
         category = category1
     )
 
     val product2 = Product(
         id = 2,
         name = "Sal",
-        createdAt = Date(),
-        updatedAt = Date(),
+        createdAt = dateFormat.format(Date()),
+        updatedAt = dateFormat.format(Date()),
         category = category2
     )
 

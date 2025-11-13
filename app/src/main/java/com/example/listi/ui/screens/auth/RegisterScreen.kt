@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -26,12 +27,11 @@ import com.example.listi.R
 import com.example.listi.repository.AuthRepository
 
 @Composable
-fun RegisterScreen(context: Context) {
+fun RegisterScreen( authViewModel: AuthViewModel,
+                    goLogin: (() -> Unit)? = null,) {
 
-    // 🧠 ViewModel correctamente creado con Factory
-    val viewModel: AuthViewModel = viewModel(
-        factory = AuthViewModelFactory(AuthRepository(context))
-    )
+    val context = LocalContext.current
+    val viewModel = authViewModel
 
     // Estado de UI (para mostrar errores, loading, etc.)
     val uiState = viewModel.uiState
@@ -169,7 +169,7 @@ fun RegisterScreen(context: Context) {
             }
         }
 
-        TextButton(onClick = {  }) {
+        TextButton(onClick = { goLogin?.invoke() }) {
             Text(
                 text = "¿Ya tienes cuenta? Iniciar sesión",
                 color = DarkGreen,

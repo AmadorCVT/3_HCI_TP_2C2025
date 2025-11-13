@@ -8,8 +8,8 @@ import com.example.listi.repository.CategoryRepository
 import com.example.listi.repository.ProductRepository
 import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
-import com.example.listi.ui.types.UpdateProductRequest
 import com.example.listi.ui.types.CategoryReference
+import com.example.listi.ui.types.UpdateProductRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
