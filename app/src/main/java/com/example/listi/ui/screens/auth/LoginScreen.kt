@@ -44,12 +44,7 @@ fun LoginScreen(
 
         Text(
             text = stringResource(R.string.app_name),
-            style = TextStyle(
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                color = DarkGreen,
-                textAlign = TextAlign.Center
-            ),
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = 32.dp)
         )
 

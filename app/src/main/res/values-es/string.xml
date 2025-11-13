@@ -13,11 +13,13 @@
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
     <string name="not_specified">No especificado</string>
+    <string name="name">Nombre</string>
 
     <!-- Shopping lists screen -->
     <string name="active_lists">Activo</string>
     <string name="saved_lists">Guardado</string>
     <string name="add_lists">Añadir lista</string>
+    <string name="recurring">Recurrente</string>
 
     <!-- Profile screen -->
     <string name="profile_change_photo">Cambiar foto de perfil</string>
