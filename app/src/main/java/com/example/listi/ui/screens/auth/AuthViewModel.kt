@@ -1,5 +1,6 @@
 package com.example.listi.ui.screens.auth
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,7 +31,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     // LOGIN
     // --------------------------
     fun login(email: String, password: String) {
-        
+
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true, errorMessage = null)
             try {
@@ -45,6 +46,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                     uiState = uiState.copy(errorMessage = "Credenciales inválidas")
                 }
             } catch (e: Exception) {
+                Log.e("LoginViewModel", "Login failed", e)
                 uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión")
             } finally {
                 uiState = uiState.copy(isLoading = false)

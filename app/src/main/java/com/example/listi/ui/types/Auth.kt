@@ -1,6 +1,6 @@
 package com.example.listi.ui.types
 
-
+import kotlinx.serialization.Serializable
 data class RegisterRequest(
     val name: String,
     val surname: String,
@@ -9,6 +9,7 @@ data class RegisterRequest(
     val metadata: Map<String, Any> = emptyMap()
 )
 
+@Serializable
 data class LoginRequest(
     val email: String,
     val password: String
@@ -24,6 +25,7 @@ data class RegisterResponse(
     val createdAt: String
 )
 
+@Serializable
 data class LoginResponse(
     val token: String
 )

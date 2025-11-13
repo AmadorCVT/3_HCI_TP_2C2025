@@ -25,6 +25,7 @@ class AuthRepository(private val context: Context) {
      * Devuelve el Response<LoginResponse> tal cual lo devuelve Retrofit.
      */
     suspend fun login(email: String, password: String): Response<LoginResponse> {
+
         val response = service.loginUser(LoginRequest(email = email, password = password))
 
         if (response.isSuccessful) {

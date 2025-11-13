@@ -29,6 +29,7 @@ import com.example.listi.ui.screens.auth.AuthViewModelFactory
 fun ListiApp(
     context: Context
 ) {
+
     ListiTheme {
         val navController = rememberNavController()
 
