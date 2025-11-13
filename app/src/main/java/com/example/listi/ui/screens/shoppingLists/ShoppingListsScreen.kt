@@ -43,24 +43,24 @@ private val shoppingLists = listOf(
         user1,
         arrayOf(user1, user2),
         Date(),
-        null,
-        null),
+        Date(),
+        Date()),
     ShoppingList(2,"Lista super",
         "Una lista",
         true,
         user1,
         arrayOf(user3, user2),
         Date(),
-        null,
-        null),
+        Date(),
+        Date()),
     ShoppingList(3, "Juntada",
         "Una lista",
         true,
         user1,
         arrayOf(user1, user3),
         Date(),
-        null,
-        null)
+        Date(),
+        Date())
 )
 
 @Composable

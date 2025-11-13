@@ -35,7 +35,8 @@ interface ShoppingListService {
     @DELETE("/api/shopping-lists/{id}")
     suspend fun deleteShoppingList(@Path("id") id: Int): Response<Unit>
 
-
+    @POST("/api/shopping-lists/{id}/share")
+    suspend fun shareShoppingList(@Body request: ShareShoppingListRequest): Response<ShoppingListResponse>
 
 
 }

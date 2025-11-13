@@ -31,7 +31,7 @@ private val previewList = ShoppingList(1,
     false,
     user1,
     arrayOf(user1, user2, user3),
-    Date(), null, null);
+    Date(), Date(), Date());
 
 
 @Composable

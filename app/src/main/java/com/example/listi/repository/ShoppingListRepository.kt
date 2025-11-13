@@ -3,6 +3,7 @@ package com.example.listi.repository
 import com.example.listi.network.ShoppingListService
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.CreateShoppingListRequest
+import com.example.listi.ui.types.ShareShoppingListRequest
 import com.example.listi.ui.types.UpdateShoppingListRequest
 import com.example.listi.ui.types.User
 import kotlinx.coroutines.Dispatchers
@@ -52,8 +53,8 @@ class ShoppingListRepository (private val api: ShoppingListService) {
                     owner = createdResponse.owner,
                     sharedWith = createdResponse.sharedWith,
                     lastPurchasedAt = createdResponse.lastPurchasedAt,
-                    createdAt = dateFormat.format(Date()),
-                    updatedAt = dateFormat.format(Date())
+                    createdAt = Date(),
+                    updatedAt = Date()
                 )
                 cachedShoppingList = (cachedShoppingList ?: emptyList()) + created
                 created
@@ -77,8 +78,8 @@ class ShoppingListRepository (private val api: ShoppingListService) {
                     owner = result.owner,
                     sharedWith = result.sharedWith,
                     lastPurchasedAt = result.lastPurchasedAt,
-                    createdAt = dateFormat.format(Date()),
-                    updatedAt = dateFormat.format(Date())
+                    createdAt = Date(),
+                    updatedAt = Date()
                 )
             } else {
                 throw Exception("Error al obtener lista de compras: ${response.code()}")
@@ -99,8 +100,8 @@ class ShoppingListRepository (private val api: ShoppingListService) {
                     owner = result.owner,
                     sharedWith = result.sharedWith,
                     lastPurchasedAt = result.lastPurchasedAt,
-                    createdAt = dateFormat.format(Date()),
-                    updatedAt = dateFormat.format(Date())
+                    createdAt = Date(),
+                    updatedAt = Date()
                 )
 
                 // Actualiza caché
@@ -126,7 +127,35 @@ class ShoppingListRepository (private val api: ShoppingListService) {
         }
     }
 
+    //TODO: dudosa
+    suspend fun shareShoppingList(id: Int, request: ShareShoppingListRequest): ShoppingList {
+        return withContext(Dispatchers.IO) {
+            val response = api.shareShoppingList(request)
+            if (response.isSuccessful) {
+                val result = response.body()!!
+                val updated = ShoppingList(
+                    id = result.id,
+                    name = result.name,
+                    description = result.description,
+                    recurring = result.recurring,
+                    owner = result.owner,
+                    sharedWith = result.sharedWith,
+                    lastPurchasedAt = result.lastPurchasedAt,
+                    createdAt = Date(),
+                    updatedAt = Date()
+                )
 
+                // Actualiza caché
+                cachedShoppingList = cachedShoppingList?.map {
+                    if (it.id == id) updated else it
+                }
+
+                updated
+            } else {
+                throw Exception("Error al actualizar lista de compras: ${response.code()}")
+            }
+        }
+    }
 
 
 

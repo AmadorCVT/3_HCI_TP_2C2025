@@ -13,8 +13,8 @@ data class ShoppingList(
     val owner: User,
     val sharedWith: Array<User>,
     val lastPurchasedAt: Date,
-    val createdAt: String?,
-    val updatedAt: String?,
+    val createdAt: Date,
+    val updatedAt: Date,
 )
 
 @Serializable
@@ -30,8 +30,8 @@ data class ShoppingListResponse(
     val owner: User,
     val sharedWith: Array<User>,
     val lastPurchasedAt: Date,
-    val createdAt: String,
-    val updatedAt: String,
+    val createdAt: Date,
+    val updatedAt: Date,
 )
 
 //@Serializable
@@ -44,4 +44,10 @@ data class ShoppingListListResponse(
 @Serializable
 data class CreateShoppingListRequest(
     val name: String
+)
+
+
+@Serializable
+data class ShareShoppingListRequest(
+    val userId: Int
 )
