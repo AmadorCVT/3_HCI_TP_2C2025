@@ -11,6 +11,7 @@ import com.example.listi.ui.screens.auth.ProfileScreen
 import com.example.listi.ui.screens.auth.RegisterScreen
 import com.example.listi.ui.screens.shoppingLists.ShoppingListsScreen
 import com.example.listi.ui.screens.auth.AuthViewModel
+import com.example.listi.ui.screens.auth.VerifyAccountScreen
 import com.example.listi.ui.screens.friends.FriendsScreen
 
 @Composable
@@ -44,14 +45,19 @@ fun AppNavGraph(
             LoginScreen(
                 authViewModel = authViewModel,
                 onCreateAccountClick = { navController.navigate(ROUTE_REGISTER) },
-                onForgotPasswordClick = { /* si querés, más adelante */ }
+                onForgotPasswordClick = {  }
             )
         }
         composable(ROUTE_REGISTER) {
             RegisterScreen(
                 authViewModel = authViewModel,
-                goLogin = { navController.navigate(ROUTE_LOGIN) }
+                goLogin = { navController.navigate(ROUTE_LOGIN) },
+                goVerifyAccount = {navController.navigate(ROUTE_VERIFY)}
             )
+        }
+        composable(ROUTE_VERIFY){
+            VerifyAccountScreen(authViewModel = authViewModel,
+                goLogin = { navController.navigate(ROUTE_LOGIN) })
         }
     }
 }

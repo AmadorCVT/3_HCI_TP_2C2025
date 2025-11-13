@@ -21,6 +21,7 @@ import com.example.listi.ui.navigation.AppNavGraph
 import com.example.listi.ui.navigation.ROUTE_LISTS
 import com.example.listi.ui.navigation.ROUTE_LOGIN
 import com.example.listi.ui.navigation.ROUTE_REGISTER
+import com.example.listi.ui.navigation.ROUTE_VERIFY
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.screens.auth.AuthViewModel
 import com.example.listi.ui.screens.auth.AuthViewModelFactory
@@ -46,7 +47,7 @@ fun ListiApp(
 
         Scaffold(
             topBar = {
-                if (currentRoute != ROUTE_LOGIN && currentRoute != ROUTE_REGISTER)
+                if (currentRoute != ROUTE_LOGIN && currentRoute != ROUTE_REGISTER && currentRoute!= ROUTE_VERIFY)
                     AppTopBar()
             },
             bottomBar = {

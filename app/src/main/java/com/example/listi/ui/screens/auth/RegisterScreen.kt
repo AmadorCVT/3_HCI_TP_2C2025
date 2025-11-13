@@ -29,7 +29,8 @@ import com.example.listi.repository.AuthRepository
 
 @Composable
 fun RegisterScreen( authViewModel: AuthViewModel,
-                    goLogin: (() -> Unit)? = null,) {
+                    goLogin: (() -> Unit)? = null,
+                    goVerifyAccount: (() -> Unit)? = null,) {
 
     val context = LocalContext.current
     val viewModel = authViewModel
@@ -192,7 +193,7 @@ fun RegisterScreen( authViewModel: AuthViewModel,
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextButton(onClick = {  }) {
+        TextButton(onClick = { goVerifyAccount?.invoke() }) {
             Text(
                 text = "¿Ya te registraste? Verificar",
                 color = DarkGreen,

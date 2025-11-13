@@ -67,15 +67,15 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
             uiState = uiState.copy(isLoading = true, errorMessage = null)
             try {
-                Log.d("RegisterScreen", "Botón Crear cuenta presionado")
+
                 val response = authRepository.register(firstName, lastName, email, password)
-                Log.d("RegisterScreen", "¿Fue exitoso? ${response.isSuccessful}")
+
                 if (response.isSuccessful) {
                     uiState = uiState.copy(showVerification = true)
-                    Log.d("RegisterScreen", "BEXITO")
+
                 } else {
                     uiState = uiState.copy(errorMessage = "Error al registrar usuario")
-                    Log.d("RegisterScreen", "FRACASO")
+
                 }
             } catch (e: Exception) {
                 uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión")
@@ -85,9 +85,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    // --------------------------
-    // VERIFICAR CUENTA
-    // --------------------------
+
     fun verifyAccount(code: String) {
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true, errorMessage = null)
