@@ -7,14 +7,18 @@
     <string name="registration">Registration</string>
     <string name="generic_description">Description</string>
     <string name="login">Login</string>
-    <string name="active_lists">Active</string>
-    <string name="saved_lists">Saved</string>
     <string name="filter">Filters</string>
     <string name="search_friends">Search friends</string>
     <string name="more_options">More options</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="not_specified">Not specified</string>
+
+    <!-- Shopping lists screen -->
+    <string name="active_lists">Active</string>
+    <string name="saved_lists">Saved</string>
+    <string name="add_lists">Add list</string>
+
 
     <!-- Profile screen -->
     <string name="profile_change_photo">Change profile photo</string>
