@@ -7,7 +7,11 @@
     <string name="registration">Registro</string>
     <string name="generic_description">Descripcion</string>
     <string name="login">Inicio</string>
-    <string name="active_lists">Active</string>
-    <string name="saved_lists">Stored</string>
+    <string name="active_lists">Activo</string>
+    <string name="saved_lists">Guardado</string>
     <string name="filter">Filtros</string>
+    <string name="search_friends">Buscar amigos</string>
+    <string name="more_options">Más opciones</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
 </resources>

@@ -3,10 +3,9 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.0.190</domain>
         <domain includeSubdomains="true">192.168.1.27</domain>
+        <domain includeSubdomains="true">192.168.0.96</domain>
         <domain includeSubdomains="true">10.0.2.2</domain>
     </domain-config>
-    192.168.0.190
-
 
     <!-- Para permitir TODO el tráfico HTTP (solo desarrollo) -->
     <!-- <base-config cleartextTrafficPermitted="true" /> -->

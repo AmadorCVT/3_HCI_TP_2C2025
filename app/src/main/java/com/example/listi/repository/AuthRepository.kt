@@ -1,6 +1,7 @@
 package com.example.listi.repository
 
 import android.content.Context
+import android.util.Log
 import com.example.listi.network.RetrofitInstance
 import com.example.listi.TokenManager
 import com.example.listi.ui.types.*
@@ -51,7 +52,16 @@ class AuthRepository(private val context: Context) {
             password = password,
             metadata = emptyMap()
         )
-        return service.registerUser(request)
+        Log.d("RegisterScreen", "REGISTER")
+
+        return try {
+            val response = service.registerUser(request)
+            Log.d("RegisterScreen", "Response recibida correctamente")
+            response
+        } catch (e: Exception) {
+            Log.e("RegisterScreen", "Error dentro de service.registerUser()", e)
+            throw e
+        }
     }
 
     // -------------------
