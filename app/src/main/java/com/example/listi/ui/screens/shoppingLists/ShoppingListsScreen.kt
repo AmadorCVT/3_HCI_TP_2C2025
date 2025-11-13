@@ -33,9 +33,9 @@ import com.example.listi.ui.types.User
 import java.util.Date
 
 
-private val user1 = User(1, "Ama", "Doe", "ama@mail.com", Date(), Date());
-private val user2 = User(2, "Lucas", "Doe", "ama@mail.com", Date(), Date());
-private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", Date(), Date());
+private val user1 = User(1, "Ama", "Doe", "ama@mail.com", null, null);
+private val user2 = User(2, "Lucas", "Doe", "ama@mail.com", null, null);
+private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", null, null);
 private val shoppingLists = listOf(
     ShoppingList(1, "Lista resi",
         "Una lista",
@@ -43,24 +43,24 @@ private val shoppingLists = listOf(
         user1,
         arrayOf(user1, user2),
         Date(),
-        Date(),
-        Date()),
+        null,
+        null),
     ShoppingList(2,"Lista super",
         "Una lista",
         true,
         user1,
         arrayOf(user3, user2),
         Date(),
-        Date(),
-        Date()),
+        null,
+        null),
     ShoppingList(3, "Juntada",
         "Una lista",
         true,
         user1,
         arrayOf(user1, user3),
         Date(),
-        Date(),
-        Date())
+        null,
+        null)
 )
 
 @Composable

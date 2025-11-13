@@ -14,4 +14,34 @@
     <string name="more_options">More options</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="not_specified">Not specified</string>
+
+    <!-- Profile screen -->
+    <string name="profile_change_photo">Change profile photo</string>
+    <string name="profile_name_label">Name:</string>
+    <string name="profile_email_label">Email:</string>
+    <string name="profile_sex_label">Sex:</string>
+    <string name="profile_birthdate_label">Birth date:</string>
+    <string name="profile_edit_button">Edit profile</string>
+    <string name="profile_placeholder_dash">-</string>
+    <string name="profile_language_label">Language:</string>
+
+    <!-- Languages -->
+    <string name="language_spanish">Spanish</string>
+    <string name="language_english">English</string>
+
+    <!-- Error/resource message keys (stored as actual strings for default) -->
+    <string name="error_credentials_invalid">Invalid credentials</string>
+    <string name="error_connection">Connection error</string>
+    <string name="error_register_user">Error registering user</string>
+    <string name="error_code_incorrect">Incorrect code</string>
+    <string name="error_could_not_resend">Could not resend code</string>
+    <string name="error_password_reset_failed">Could not reset password</string>
+    <string name="error_profile_fetch">Could not get profile</string>
+    <string name="error_profile_connection">Connection error while fetching profile</string>
+
+    <!-- Login labels -->
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="forgot_password">Forgot your password?</string>
 </resources>

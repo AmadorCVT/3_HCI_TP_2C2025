@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.listi.repository.AuthRepository
+import com.example.listi.ui.types.GetUserResponse
+import com.example.listi.ui.types.User
 import kotlinx.coroutines.launch
 
 
@@ -42,6 +44,8 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                         isLogged = true,
                         token = token
                     )
+                    // cargar perfil después del login
+                    loadProfile()
                 } else {
                     uiState = uiState.copy(errorMessage = "Credenciales inválidas")
                 }
@@ -147,6 +151,35 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 // no importa mucho el error de logout en cliente
             } finally {
                 uiState = AuthUiState() // reinicia el estado
+            }
+        }
+    }
+
+    // --------------------------
+    // PROFILE
+    // --------------------------
+    fun loadProfile() {
+        viewModelScope.launch {
+            try {
+                val response = authRepository.getProfile()
+                if (response.isSuccessful && response.body() != null) {
+                    val body: GetUserResponse = response.body()!!
+                    val user = User(
+                        id = body.id,
+                        name = body.name,
+                        surname = body.surname,
+                        email = body.email,
+                        metadata = body.metadata,
+                        createdAt = body.createdAt,
+                        updatedAt = body.updatedAt
+                    )
+                    uiState = uiState.copy(currentUser = user)
+                } else {
+                    // opcional: setear errorMessage
+                    uiState = uiState.copy(errorMessage = "No se pudo obtener perfil")
+                }
+            } catch (e: Exception) {
+                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión al obtener perfil")
             }
         }
     }

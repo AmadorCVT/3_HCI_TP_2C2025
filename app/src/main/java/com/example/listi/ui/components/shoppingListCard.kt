@@ -21,9 +21,9 @@ import com.example.listi.ui.types.User
 import java.util.Date
 
 // For preview
-private val user1 = User(1, "Ama", "Doe", "ama@mail.com", Date(), Date());
-private val user2 = User(2, "Lucas", "Doe", "ama@mail.com", Date(), Date());
-private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", Date(), Date());
+private val user1 = User(1, "Ama", "Doe", "ama@mail.com", null, null);
+private val user2 = User(2, "Lucas", "Doe", "ama@mail.com", null, null);
+private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", null, null);
 
 private val previewList = ShoppingList(1,
     "Lista Resi",
@@ -31,7 +31,7 @@ private val previewList = ShoppingList(1,
     false,
     user1,
     arrayOf(user1, user2, user3),
-    Date(), Date(), Date());
+    Date(), null, null);
 
 
 @Composable

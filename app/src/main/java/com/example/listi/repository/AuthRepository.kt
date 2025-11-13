@@ -121,4 +121,15 @@ class AuthRepository(private val context: Context) {
     suspend fun saveTokenLocally(token: String) = tokenManager.saveToken(token) // sync helper
 
     suspend fun clearSavedToken() = tokenManager.clearToken()
+
+    // -------------------
+    // PROFILE
+    // -------------------
+    /**
+     * Obtiene el perfil del usuario autenticado y lo convierte a User.
+     * Devuelve Response<GetUserResponse> para mantener consistencia con otros métodos.
+     */
+    suspend fun getProfile(): Response<GetUserResponse> {
+        return service.getProfile()
+    }
 }

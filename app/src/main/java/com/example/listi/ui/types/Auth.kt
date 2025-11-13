@@ -65,3 +65,14 @@ data class ChangePasswordRequest(
     val currentPassword: String,
     val newPassword: String
 )
+
+@Serializable
+data class GetUserResponse(
+    val id: Int,
+    val name: String,
+    val surname: String,
+    val email: String,
+    val metadata: Map<String, String>? = null,
+    val updatedAt: String? = null,
+    val createdAt: String? = null
+)

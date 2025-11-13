@@ -13,8 +13,8 @@ data class ShoppingList(
     val owner: User,
     val sharedWith: Array<User>,
     val lastPurchasedAt: Date,
-    val createdAt: String,
-    val updatedAt: String,
+    val createdAt: String?,
+    val updatedAt: String?,
 )
 
 @Serializable

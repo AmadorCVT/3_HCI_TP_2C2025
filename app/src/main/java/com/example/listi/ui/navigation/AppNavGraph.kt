@@ -34,11 +34,15 @@ fun AppNavGraph(
     ) {
         composable(ROUTE_LISTS) { ShoppingListsScreen() }
         composable(ROUTE_PRODUCTS) { ProductsScreen() }
+<<<<<<< Updated upstream
         composable(ROUTE_FRIENDS) {
             FriendsScreen(
                 authViewModel = authViewModel
         ) }
         composable(ROUTE_PROFILE) { ProfileScreen() }
+=======
+        composable(ROUTE_PROFILE) { ProfileScreen(authViewModel = authViewModel) }
+>>>>>>> Stashed changes
         composable(ROUTE_LOGIN) {
             LoginScreen(
                 authViewModel = authViewModel,

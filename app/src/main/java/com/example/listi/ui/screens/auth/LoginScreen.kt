@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.LightGreen
 import com.example.listi.ui.theme.White
@@ -41,7 +43,7 @@ fun LoginScreen(
     ) {
 
         Text(
-            text = "Listi",
+            text = stringResource(R.string.app_name),
             style = TextStyle(
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold,
@@ -54,9 +56,9 @@ fun LoginScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text(stringResource(R.string.email_label)) },
             singleLine = true,
-            leadingIcon = { Icon(Icons.Default.Email, contentDescription = "Email") },
+            leadingIcon = { Icon(Icons.Default.Email, contentDescription = stringResource(R.string.email_label)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier.fillMaxWidth()
         )
@@ -66,9 +68,9 @@ fun LoginScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Contraseña") },
+            label = { Text(stringResource(R.string.password_label)) },
             singleLine = true,
-            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = "Contraseña") },
+            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = stringResource(R.string.password_label)) },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
@@ -84,7 +86,7 @@ fun LoginScreen(
             shape = MaterialTheme.shapes.medium
         ) {
             Text(
-                text = "Iniciar sesión",
+                text = stringResource(R.string.login),
                 color = White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
@@ -95,7 +97,7 @@ fun LoginScreen(
 
         TextButton(onClick = { onForgotPasswordClick?.invoke() }) {
             Text(
-                text = "¿Olvidaste tu contraseña?",
+                text = stringResource(R.string.forgot_password),
                 color = DarkGreen,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
@@ -113,7 +115,7 @@ fun LoginScreen(
             colors = ButtonDefaults.outlinedButtonColors(contentColor = DarkGreen)
         ) {
             Text(
-                text = "Crear cuenta nueva",
+                text = stringResource(R.string.registration),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )

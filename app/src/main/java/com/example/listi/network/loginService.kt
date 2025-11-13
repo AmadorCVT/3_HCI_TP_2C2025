@@ -10,8 +10,10 @@ import com.example.listi.ui.types.SendVerificationResponse
 import com.example.listi.ui.types.VerifyAccountRequest
 import com.example.listi.ui.types.VerifyAccountResponse
 import com.example.listi.ui.types.ChangePasswordRequest
+import com.example.listi.ui.types.GetUserResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -39,4 +41,7 @@ interface LoginService {
 
     @POST("/api/users/logout")
     suspend fun logout(): Response<Unit>
+
+    @GET("/api/users/profile")
+    suspend fun getProfile(): Response<GetUserResponse>
 }

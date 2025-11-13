@@ -20,26 +20,51 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.listi.ui.types.User
+import com.example.listi.R
 
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    name: String = "Carlos amador vallejo tapia",
-    email: String = "CVallejotapia@gmail.com",
-    sex: String = "Hombre",
-    birthDate: String = "28/08/2005",
-    initials: String = "AC",
+    authViewModel: AuthViewModel? = null,
     onEditClick: () -> Unit = {},
     onChangePhoto: () -> Unit = {}
 ) {
-    var selectedLanguage by remember { mutableStateOf("Español") }
+    // obtener recursos localizados una sola vez en el contexto composable
+    val spanishLabel = stringResource(R.string.language_spanish)
+    val englishLabel = stringResource(R.string.language_english)
+    val profileLanguageLabel = stringResource(R.string.profile_language_label)
+
+    var selectedLanguage by remember { mutableStateOf(spanishLabel) }
+
+    // Cargar perfil si no está cargado
+    LaunchedEffect(Unit) {
+        if (authViewModel != null && authViewModel.uiState.currentUser == null) {
+            authViewModel.loadProfile()
+        }
+    }
+
+    val user: User? = authViewModel?.uiState?.currentUser
+
+    val name = user?.let { "${it.name} ${it.surname}" } ?: ""
+    val email = user?.email ?: ""
+    // metadata puede contener sexo y birthDate; como no hay clave definida, usamos placeholders
+    val sex = user?.metadata?.get("sex") ?: stringResource(R.string.not_specified)
+    val birthDate = user?.metadata?.get("birthDate") ?: stringResource(R.string.profile_placeholder_dash)
+    val initials = user?.let {
+        val n = it.name.trim()
+        val s = it.surname.trim()
+        "${n.firstOrNull()?.uppercaseChar() ?: 'A'}${s.firstOrNull()?.uppercaseChar() ?: 'C'}"
+    } ?: "AC"
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -57,7 +82,7 @@ fun ProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    Text(text = "Editar perfil")
+                    Text(text = stringResource(R.string.profile_edit_button))
                 }
             }
         }
@@ -89,7 +114,7 @@ fun ProfileScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Cambiar foto de perfil",
+                        text = stringResource(R.string.profile_change_photo),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier
@@ -116,25 +141,28 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.height(12.dp))
 
                     // Nombre
-                    ProfileField(label = "Nombre:", value = name)
+                    ProfileField(label = stringResource(R.string.profile_name_label), value = if (name.isBlank()) stringResource(R.string.profile_placeholder_dash) else name)
                     Spacer(modifier = Modifier.height(30.dp))
 
                     // Gmail
-                    ProfileField(label = "Email:", value = email)
+                    ProfileField(label = stringResource(R.string.profile_email_label), value = if (email.isBlank()) stringResource(R.string.profile_placeholder_dash) else email)
                     Spacer(modifier = Modifier.height(30.dp))
 
                     // Sexo
-                    ProfileField(label = "Sexo:", value = sex)
+                    ProfileField(label = stringResource(R.string.profile_sex_label), value = sex)
                     Spacer(modifier = Modifier.height(30.dp))
 
                     // Fecha de nacimiento
-                    ProfileField(label = "Fecha de nacimiento:", value = birthDate)
+                    ProfileField(label = stringResource(R.string.profile_birthdate_label), value = birthDate)
                     Spacer(modifier = Modifier.height(30.dp))
 
                     // Idioma
                     LanguageSelectorField(
                         selectedLanguage = selectedLanguage,
-                        onLanguageChange = { selectedLanguage = it }
+                        onLanguageChange = { onLanguageChange -> selectedLanguage = onLanguageChange },
+                        spanishLabel = spanishLabel,
+                        englishLabel = englishLabel,
+                        profileLanguageLabel = profileLanguageLabel
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -151,14 +179,17 @@ fun ProfileScreen(
 @Composable
 private fun LanguageSelectorField(
     selectedLanguage: String,
-    onLanguageChange: (String) -> Unit
+    onLanguageChange: (String) -> Unit,
+    spanishLabel: String,
+    englishLabel: String,
+    profileLanguageLabel: String
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Idioma:",
+            text = profileLanguageLabel,
             modifier = Modifier.width(100.dp),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.SemiBold,
@@ -168,14 +199,14 @@ private fun LanguageSelectorField(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             LanguageButton(
-                text = "Español",
-                isSelected = selectedLanguage == "Español",
-                onClick = { onLanguageChange("Español") }
+                text = spanishLabel,
+                isSelected = selectedLanguage == spanishLabel,
+                onClick = { onLanguageChange(spanishLabel) }
             )
             LanguageButton(
-                text = "Inglés",
-                isSelected = selectedLanguage == "Inglés",
-                onClick = { onLanguageChange("Inglés") }
+                text = englishLabel,
+                isSelected = selectedLanguage == englishLabel,
+                onClick = { onLanguageChange(englishLabel) }
             )
         }
     }
