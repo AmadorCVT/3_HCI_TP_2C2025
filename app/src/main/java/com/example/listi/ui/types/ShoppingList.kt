@@ -19,7 +19,9 @@ data class ShoppingList(
 
 @Serializable
 data class UpdateShoppingListRequest(
-    val name: String
+    val name: String,
+    val description: String,
+    val recurring: Boolean,
 )
 //@Serializable
 data class ShoppingListResponse(
@@ -43,7 +45,9 @@ data class ShoppingListListResponse(
 
 @Serializable
 data class CreateShoppingListRequest(
-    val name: String
+    val name: String,
+    val description: String,
+    val recurring: Boolean,
 )
 
 

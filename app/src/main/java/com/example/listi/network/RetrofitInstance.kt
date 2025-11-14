@@ -41,6 +41,7 @@ object RetrofitInstance {
     val loginService: LoginService by lazy { retrofit.create(LoginService::class.java) }
     val productService: ProductService by lazy { retrofit.create(ProductService::class.java) }
     val shoppingListService: ShoppingListService by lazy { retrofit.create(ShoppingListService::class.java) }
+    val shoppingListItemService: ShoppingListItemService by lazy { retrofit.create(ShoppingListItemService::class.java) }
     val categoryService: CategoryService by lazy { retrofit.create(CategoryService::class.java) }
 }
 
