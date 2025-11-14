@@ -8,7 +8,7 @@ interface ShoppingListService {
 
     // Crear nueva ShoppingList
     @POST("/api/shopping-lists")
-    suspend fun createShoppingList(@Body request: CreateShoppingListRequest): Response<ShoppingListResponse>
+    suspend fun createShoppingList(@Body request: ShoppingListRequest): Response<ShoppingListResponse>
 
     // Obtener lista de ShoppingList (con filtros opcionales)
     @GET("/api/shopping-lists")
@@ -28,7 +28,7 @@ interface ShoppingListService {
     @PUT("/api/shopping-lists/{id}")
     suspend fun updateShoppingList(
         @Path("id") id: Int,
-        @Body request: UpdateShoppingListRequest
+        @Body request: ShoppingListRequest
     ): Response<ShoppingListResponse>
 
     // Eliminar ShoppingList

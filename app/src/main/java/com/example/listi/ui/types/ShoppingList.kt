@@ -23,10 +23,11 @@ data class ShoppingList(
 )
 
 @Serializable
-data class UpdateShoppingListRequest(
+data class ShoppingListRequest(
     val name: String,
     val description: String,
     val recurring: Boolean,
+    val metadata: JsonElement = JsonObject(emptyMap()),
 )
 @Serializable
 data class ShoppingListResponse(
@@ -46,16 +47,6 @@ data class ShoppingListListResponse(
     val data: List<ShoppingList>,
     val pagination: Pagination
 )
-
-
-@Serializable
-data class CreateShoppingListRequest(
-    val name: String,
-    val description: String,
-    val recurring: Boolean,
-    val metadata: JsonElement = JsonObject(emptyMap()),
-)
-
 
 @Serializable
 data class ShareShoppingListRequest(

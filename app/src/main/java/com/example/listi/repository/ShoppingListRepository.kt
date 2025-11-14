@@ -4,9 +4,8 @@ import android.util.Log
 import android.util.Log.e
 import com.example.listi.network.ShoppingListService
 import com.example.listi.ui.types.ShoppingList
-import com.example.listi.ui.types.CreateShoppingListRequest
+import com.example.listi.ui.types.ShoppingListRequest
 import com.example.listi.ui.types.ShareShoppingListRequest
-import com.example.listi.ui.types.UpdateShoppingListRequest
 import com.example.listi.ui.types.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -41,7 +40,7 @@ class ShoppingListRepository (private val api: ShoppingListService) {
     }
 
 
-    suspend fun createShoppingList(request: CreateShoppingListRequest): ShoppingList {
+    suspend fun createShoppingList(request: ShoppingListRequest): ShoppingList {
         return withContext(Dispatchers.IO) {
             val response = api.createShoppingList(request)
             if (response.isSuccessful) {
@@ -91,7 +90,7 @@ class ShoppingListRepository (private val api: ShoppingListService) {
         }
     }
 
-    suspend fun updateShoppingList(id: Int, request: UpdateShoppingListRequest): ShoppingList {
+    suspend fun updateShoppingList(id: Int, request: ShoppingListRequest): ShoppingList {
         return withContext(Dispatchers.IO) {
             val response = api.updateShoppingList(id, request)
             if (response.isSuccessful) {

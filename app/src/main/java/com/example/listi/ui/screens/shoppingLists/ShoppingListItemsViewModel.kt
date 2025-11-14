@@ -7,11 +7,10 @@ import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.ShoppingListItemRepository
 import com.example.listi.repository.ShoppingListRepository
 import com.example.listi.ui.types.CreateShoppingListItemRequest
-import com.example.listi.ui.types.CreateShoppingListRequest
+import com.example.listi.ui.types.ShoppingListRequest
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.ShoppingListItem
 import com.example.listi.ui.types.UpdateShoppingListItemRequest
-import com.example.listi.ui.types.UpdateShoppingListRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

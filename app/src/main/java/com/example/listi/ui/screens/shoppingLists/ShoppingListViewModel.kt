@@ -4,17 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.listi.network.RetrofitInstance
-import com.example.listi.repository.ShoppingListItemRepository
 import com.example.listi.repository.ShoppingListRepository
-import com.example.listi.ui.screens.auth.AuthViewModel
-import com.example.listi.ui.types.Category
-import com.example.listi.ui.types.CategoryReference
-import com.example.listi.ui.types.CreateShoppingListRequest
-import com.example.listi.ui.types.Friend
-import com.example.listi.ui.types.Product
+import com.example.listi.ui.types.ShoppingListRequest
 import com.example.listi.ui.types.ShoppingList
-import com.example.listi.ui.types.UpdateProductRequest
-import com.example.listi.ui.types.UpdateShoppingListRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -59,7 +51,7 @@ class ShoppingListsViewModel(
         }
     }
 
-    fun createShoppingLists(shoppingList: CreateShoppingListRequest) {
+    fun createShoppingLists(shoppingList: ShoppingListRequest) {
         viewModelScope.launch {
             try {
                 shoppingListsRespository.createShoppingList(
@@ -75,7 +67,7 @@ class ShoppingListsViewModel(
             try {
                 shoppingListsRespository.updateShoppingList(
                     id = shoppingList.id,
-                    request = UpdateShoppingListRequest(
+                    request = ShoppingListRequest(
                         shoppingList.name,
                         shoppingList.description,
                         shoppingList.recurring

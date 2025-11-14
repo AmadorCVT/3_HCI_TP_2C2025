@@ -18,7 +18,7 @@
     <!-- Shopping lists screen -->
     <string name="active_lists">Active</string>
     <string name="saved_lists">Saved</string>
-    <string name="add_lists">Add list</string>
+    <string name="create_lists">Create list</string>
     <string name="recurring">Recurring</string>
 
     <!-- Profile screen -->

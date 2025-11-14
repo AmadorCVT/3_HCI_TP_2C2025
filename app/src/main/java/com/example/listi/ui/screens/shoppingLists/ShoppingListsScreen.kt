@@ -36,12 +36,13 @@ import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.CategoryRepository
 import com.example.listi.ui.components.GreenAddButton
 import com.example.listi.ui.components.ShoppingListCard
+import com.example.listi.ui.components.ShoppingListDialog
 import com.example.listi.ui.screens.products.CategoryViewModel
 import com.example.listi.ui.screens.products.CategoryViewModelFactory
 import com.example.listi.ui.screens.products.ProductViewModel
 import com.example.listi.ui.screens.products.ProductViewModelFactory
 import com.example.listi.ui.theme.ListiTheme
-import com.example.listi.ui.types.CreateShoppingListRequest
+import com.example.listi.ui.types.ShoppingListRequest
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.User
 import java.util.Date
@@ -108,61 +109,17 @@ fun ShoppingListsScreen(
 
     when {
         openCreateDialog.value -> {
-            CreateShoppingListDialog(
+            ShoppingListDialog(
+                title = stringResource(R.string.create_lists),
                 onDismissRequest = { openCreateDialog.value = false },
-                onConfirmation = {
+                onConfirmation = { list ->
+                    shoppingListViewModel.createShoppingLists(list)
                     openCreateDialog.value = false
-                    shoppingListViewModel.createShoppingLists(CreateShoppingListRequest(
-                        "tes33333dddd9",
-                        "Una lista de prueba",
-                        true
-                    ))
-                },
-                dialogTitle = "Crear lista de prueba",
-                dialogText = "Confirma para crear una lista!!"
+                }
             )
         }
     }
 
-}
-
-// NOTE: Testing!
-@Composable
-fun CreateShoppingListDialog(
-    onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
-    dialogTitle: String,
-    dialogText: String,
-) {
-    AlertDialog(
-        title = {
-            Text(text = dialogTitle)
-        },
-        text = {
-            Text(text = dialogText)
-        },
-        onDismissRequest = {
-            onDismissRequest()
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirmation()
-                }
-            ) {
-                Text("Confirm")
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onDismissRequest()
-                }
-            ) {
-                Text("Dismiss")
-            }
-        }
-    )
 }
 
 @Composable
