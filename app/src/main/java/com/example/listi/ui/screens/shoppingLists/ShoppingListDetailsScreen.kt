@@ -10,10 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -26,12 +32,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.R
+import com.example.listi.ui.components.ProductRow
 import com.example.listi.ui.components.WhiteBoxWithText
 import com.example.listi.ui.screens.friends.FriendsViewModel
 import com.example.listi.ui.screens.friends.FriendsViewModelFactory
@@ -90,122 +100,99 @@ fun ShoppingListDetailsScreen(
     LaunchedEffect(Unit) {
         shoppingListItemsViewModel.loadShoppingListItems(listId)
     }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp, 16.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        Text(
-            text = stringResource(id = R.string.name),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        AddedShoppingListItem(modifier, shoppingListItems)
-    }
-}
-
-// TODO: Check reactiveness
-@Composable
-fun ShoppingListHeader(
-    modifier: Modifier = Modifier,
-    shoppingListName: String,
-    onShoppingListNameChange: (String) -> Unit,
-    recurring: Boolean,
-    onRecurringChange: (Boolean) -> Unit
-) {
-    Text(
-        text = stringResource(id = R.string.name),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface
-    )
-
-    OutlinedTextField(
-        value = shoppingListName,
-        onValueChange = onShoppingListNameChange,
-        label = { Text(stringResource(R.string.name)) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    Spacer(modifier = Modifier.padding(8.dp))
-
-    Row (
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(24.dp),
-        modifier = Modifier.clickable { onRecurringChange(!recurring) }.fillMaxWidth().padding(16.dp)
-    ) {
-        Checkbox(checked = recurring, onCheckedChange = { onRecurringChange(it) })
-        Text(stringResource(R.string.recurring))
-    }
-
+    AddedShoppingListItem(modifier, shoppingListItems)
 }
 
 @Composable
 fun AddedShoppingListItem(
     modifier: Modifier = Modifier,
-    shoppingListItems: List<ShoppingListItem>
+    items: List<ShoppingListItem>
 ) {
-    WhiteBoxWithText(
-        text = "",
-        modifier = modifier
-            .fillMaxWidth()
+    var text by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
             .fillMaxSize()
+            .padding(16.dp,64.dp),
+        verticalArrangement = Arrangement.Top
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(vertical = 8.dp)
+        // === Caja de texto arriba del todo ===
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Nombre") },
+            trailingIcon = {
+                Icon(Icons.Default.Edit, contentDescription = "Editar")
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // === Encabezado verde ===
+
+
+        // === WhiteBox con los productos ===
+        WhiteBoxWithText(
+            text = "",
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f, fill = false)
         ) {
-            // NOTA: Usar LazyColumn es más eficiente para listas largas
-            // que forEach, ya que solo renderiza los elementos visibles.
-            // Si la lista de amigos puede crecer, considera cambiar esto.
-            shoppingListItems.forEach { item ->
-                Text(item.product.name)
+
+            LazyColumn {
+                item { HeaderRow() }
+                items(items) { item ->
+                    ProductRow(item = item)
+                }
             }
         }
     }
+}
+
+@Composable
+fun HeaderRow() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp, vertical = 2.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Producto",
+            color = Color(0xFF2E7D32), // verde tipo material
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            modifier = Modifier.weight(1.2f)
+        )
+        Text(
+            text = "Cant.",
+            color = Color(0xFF2E7D32),
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            modifier = Modifier.weight(0.8f)
+        )
+        Text(
+            text = "Unidad",
+            color = Color(0xFF2E7D32),
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            modifier = Modifier.weight(1f)
+        )
+    }
+
+    Divider(
+        color = Color(0xFFBDBDBD),
+        thickness = 1.dp,
+        modifier = Modifier.padding(top = 2.dp)
+    )
 }
 
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun AddShoppingListsScreenPreview() {
     ListiTheme {
-        var shoppingListName by remember { mutableStateOf("") }
-        var recurring by remember { mutableStateOf(false) }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(16.dp, 16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-
-            Spacer(modifier = Modifier.padding(8.dp))
-
-            // Seguir reglas de jerarquia con funciones que modifican el estado desde aca arriba
-            ShoppingListHeader(
-                shoppingListName = shoppingListName,
-                onShoppingListNameChange = { shoppingListName = it },
-                recurring = recurring,
-                onRecurringChange = { recurring = it }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            AddedShoppingListItem(Modifier, ShoppingListItemsPreview)
-        }
+        AddedShoppingListItem(Modifier, ShoppingListItemsPreview)
     }
 }

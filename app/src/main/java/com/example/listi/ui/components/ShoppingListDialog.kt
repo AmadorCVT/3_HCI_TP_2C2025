@@ -52,9 +52,6 @@ fun ShoppingListDialog(
         name = shoppingList.name
         description = shoppingList.description
         recurring = shoppingList.recurring
-    } else {
-        name = stringResource(R.string.name)
-        description = stringResource(R.string.generic_description)
     }
 
     Dialog(
