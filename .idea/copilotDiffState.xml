@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/listi/ui/types/UpdateUserRequest.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/listi/ui/types/UpdateUserRequest.kt" />
+              <option name="originalContent" value="&#10;" />
+              <option name="updatedContent" value="package com.example.listi.ui.types&#10;&#10;// This file is intentionally left as a reference. The UpdateUserRequest type has been moved to `Auth.kt` to keep all user-related requests together." />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

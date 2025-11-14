@@ -23,6 +23,7 @@
 
     <!-- Profile screen -->
     <string name="profile_change_photo">Change profile photo</string>
+    <string name="profile_photo_content_description">Profile photo</string>
     <string name="profile_name_label">Name:</string>
     <string name="profile_email_label">Email:</string>
     <string name="profile_sex_label">Sex:</string>
@@ -30,6 +31,7 @@
     <string name="profile_edit_button">Edit profile</string>
     <string name="profile_placeholder_dash">-</string>
     <string name="profile_language_label">Language:</string>
+    <string name="profile_surname_label">Surname:</string>
 
     <!-- Languages -->
     <string name="language_spanish">Spanish</string>
@@ -56,4 +58,6 @@
     <string name="email_label">Email</string>
     <string name="password_label">Password</string>
     <string name="forgot_password">Forgot your password?</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>

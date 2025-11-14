@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.listi.repository.AuthRepository
 import com.example.listi.ui.types.GetUserResponse
 import com.example.listi.ui.types.User
+import com.example.listi.ui.types.UpdateUserRequest
 import kotlinx.coroutines.launch
 
 
@@ -178,6 +179,91 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 }
             } catch (e: Exception) {
                 uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión al obtener perfil")
+            }
+        }
+    }
+
+    /**
+     * Actualiza la metadata del perfil (mapa parcial). En caso de exito recarga el perfil.
+     */
+    fun updateProfileMetadata(metadata: Map<String, String>) {
+        viewModelScope.launch {
+            uiState = uiState.copy(isLoading = true, errorMessage = null)
+            try {
+                val current = uiState.currentUser
+                val request = UpdateUserRequest(
+                    name = current?.name,
+                    surname = current?.surname,
+                    metadata = metadata
+                )
+                val response = authRepository.updateProfile(request)
+                if (response.isSuccessful) {
+                    // recargar perfil para reflejar cambios
+                    loadProfile()
+                } else {
+                    uiState = uiState.copy(errorMessage = "No se pudo actualizar perfil")
+                }
+            } catch (e: Exception) {
+                uiState = uiState.copy(errorMessage = e.message ?: "Error al actualizar perfil")
+            } finally {
+                uiState = uiState.copy(isLoading = false)
+            }
+        }
+    }
+
+    /**
+     * Sube la foto codificada en base64 y guarda en metadata con la clave "profile_photo".
+     */
+    fun updateProfilePhoto(base64Data: String) {
+        viewModelScope.launch {
+            try {
+                uiState = uiState.copy(isLoading = true, errorMessage = null)
+                // construir metadata existente + nueva entrada
+                val existing = uiState.currentUser?.metadata ?: emptyMap()
+                val newMetadata = existing.toMutableMap()
+                newMetadata["profile_photo"] = base64Data
+
+                val request = UpdateUserRequest(
+                    name = uiState.currentUser?.name,
+                    surname = uiState.currentUser?.surname,
+                    metadata = newMetadata
+                )
+                val response = authRepository.updateProfile(request)
+                if (response.isSuccessful) {
+                    loadProfile()
+                } else {
+                    uiState = uiState.copy(errorMessage = "No se pudo subir la foto de perfil")
+                }
+            } catch (e: Exception) {
+                uiState = uiState.copy(errorMessage = e.message ?: "Error al subir foto de perfil")
+            } finally {
+                uiState = uiState.copy(isLoading = false)
+            }
+        }
+    }
+
+    /**
+     * Actualiza el perfil con nombre, apellido y metadata proporcionados.
+     */
+    fun updateProfile(name: String, surname: String, metadata: Map<String, String>?) {
+        viewModelScope.launch {
+            uiState = uiState.copy(isLoading = true, errorMessage = null)
+            try {
+                val request = UpdateUserRequest(
+                    name = name,
+                    surname = surname,
+                    metadata = metadata
+                )
+                val response = authRepository.updateProfile(request)
+                if (response.isSuccessful) {
+                    loadProfile()
+                } else {
+                    uiState = uiState.copy(errorMessage = "No se pudo actualizar perfil")
+                }
+            } catch (e: Exception) {
+                uiState = uiState.copy(errorMessage = e.message ?: "Error al actualizar perfil")
+            } finally {
+                uiState = uiState.copy(isLoading = false)
             }
         }
     }

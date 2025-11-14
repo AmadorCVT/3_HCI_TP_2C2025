@@ -1,5 +1,11 @@
 package com.example.listi.ui.screens.auth
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,15 +22,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,13 +46,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listi.ui.types.User
 import com.example.listi.R
+import java.io.ByteArrayOutputStream
+import androidx.core.graphics.scale
 
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    authViewModel: AuthViewModel? = null,
-    onEditClick: () -> Unit = {},
-    onChangePhoto: () -> Unit = {}
+    authViewModel: AuthViewModel? = null
 ) {
     // obtener recursos localizados una sola vez en el contexto composable
     val spanishLabel = stringResource(R.string.language_spanish)
@@ -49,18 +63,19 @@ fun ProfileScreen(
 
     var showLogoutDialog by remember { mutableStateOf(false) }
 
-    // Cargar perfil si no está cargado
-    LaunchedEffect(Unit) {
-        if (authViewModel != null && authViewModel.uiState.currentUser == null) {
-            authViewModel.loadProfile()
-        }
-    }
-
     val user: User? = authViewModel?.uiState?.currentUser
 
+    var isEditing by remember { mutableStateOf(false) }
+
+
+    var editName by remember { mutableStateOf(user?.name ?: "") }
+    var editSurname by remember { mutableStateOf(user?.surname ?: "") }
+
+   var pendingPhotoBase64 by remember { mutableStateOf<String?>(null) }
+
+    // Derived display fields from current user
     val name = user?.let { "${it.name} ${it.surname}" } ?: ""
     val email = user?.email ?: ""
-    // metadata puede contener sexo y birthDate; como no hay clave definida, usamos placeholders
     val sex = user?.metadata?.get("sex") ?: stringResource(R.string.not_specified)
     val birthDate = user?.metadata?.get("birthDate") ?: stringResource(R.string.profile_placeholder_dash)
     val initials = user?.let {
@@ -68,6 +83,59 @@ fun ProfileScreen(
         val s = it.surname.trim()
         "${n.firstOrNull()?.uppercaseChar() ?: 'A'}${s.firstOrNull()?.uppercaseChar() ?: 'C'}"
     } ?: "AC"
+
+    val context = LocalContext.current
+
+    val pickImageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null) {
+            try {
+                val input = context.contentResolver.openInputStream(uri)
+                val options = BitmapFactory.Options().apply { inPreferredConfig = Bitmap.Config.ARGB_8888 }
+                val originalBitmap = BitmapFactory.decodeStream(input, null, options)
+                input?.close()
+
+                if (originalBitmap != null) {
+                    // Redimensionar si es necesario (max 1024px)
+                    val maxDim = 1024
+                    val width = originalBitmap.width
+                    val height = originalBitmap.height
+                    val scale = if (width > height) {
+                        if (width > maxDim) maxDim.toFloat() / width else 1f
+                    } else {
+                        if (height > maxDim) maxDim.toFloat() / height else 1f
+                    }
+
+                    val bitmapToCompress: Bitmap = if (scale < 1f) {
+                        val newW = (width * scale).toInt()
+                        val newH = (height * scale).toInt()
+                        originalBitmap.scale(newW, newH, true)
+                    } else {
+                        originalBitmap
+                    }
+
+                    val baos = ByteArrayOutputStream()
+                    bitmapToCompress.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+                    val bytes = baos.toByteArray()
+                    baos.close()
+
+                    val base64 = Base64.encodeToString(bytes, Base64.NO_WRAP)
+                    pendingPhotoBase64 = base64
+                }
+            } catch (_: Exception) {
+             }
+        }
+    }
+
+    val profilePhotoBitmap = remember(user?.metadata, pendingPhotoBase64) {
+        val src = pendingPhotoBase64 ?: user?.metadata?.get("profile_photo")
+        if (src.isNullOrBlank()) null
+        else try {
+            val bytes = Base64.decode(src, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        } catch (_: Exception) {
+            null
+        }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -120,48 +188,111 @@ fun ProfileScreen(
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = stringResource(R.string.profile_change_photo),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier
-                            .align(Alignment.Start)
-                            .padding(bottom = 8.dp)
-                    )
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 4.dp)) {
+                        IconButton(
+                            onClick = { isEditing = !isEditing },
+                            modifier = Modifier.align(Alignment.TopEnd)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Edit,
+                                contentDescription = stringResource(R.string.profile_edit_button),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     Box(
                         modifier = Modifier
                             .size(110.dp)
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.primaryContainer)
-                            .clickable { onChangePhoto() },
+                            .clickable(enabled = isEditing) { if (isEditing) pickImageLauncher.launch("image/*") },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = initials,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontSize = 36.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        if (profilePhotoBitmap != null) {
+                            Image(
+                                bitmap = profilePhotoBitmap.asImageBitmap(),
+                                contentDescription = stringResource(R.string.profile_change_photo),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape)
+                            )
+                        } else {
+                            Text(
+                                text = initials,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontSize = 36.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Nombre
-                    ProfileField(label = stringResource(R.string.profile_name_label), value = if (name.isBlank()) stringResource(R.string.profile_placeholder_dash) else name)
-                    Spacer(modifier = Modifier.height(30.dp))
+                    // Editable name and surname
+                    if (isEditing) {
+                        OutlinedTextField(
+                            value = editName,
+                            onValueChange = { editName = it },
+                            label = { Text(stringResource(R.string.profile_name_label)) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        OutlinedTextField(
+                            value = editSurname,
+                            onValueChange = { editSurname = it },
+                            label = { Text("Surname:") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
-                    // Gmail
-                    ProfileField(label = stringResource(R.string.profile_email_label), value = if (email.isBlank()) stringResource(R.string.profile_placeholder_dash) else email)
-                    Spacer(modifier = Modifier.height(30.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                    // Sexo
-                    ProfileField(label = stringResource(R.string.profile_sex_label), value = sex)
-                    Spacer(modifier = Modifier.height(30.dp))
+                        // Save / Cancel
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            ElevatedButton(onClick = {
+                                // Save changes
+                                // Construir metadata nueva fusionando existente y foto pendiente
+                                val existing = user?.metadata?.toMutableMap() ?: mutableMapOf()
+                                if (pendingPhotoBase64 != null) {
+                                    existing["profile_photo"] = pendingPhotoBase64!!
+                                }
+                                authViewModel?.updateProfile(editName.trim(), editSurname.trim(), existing)
+                                // limpiar pending
+                                pendingPhotoBase64 = null
+                                isEditing = false
+                             }) {
+                                Text(text = "Save")
+                            }
 
-                    // Fecha de nacimiento
-                    ProfileField(label = stringResource(R.string.profile_birthdate_label), value = birthDate)
-                    Spacer(modifier = Modifier.height(30.dp))
+                            TextButton(onClick = {
+                                // Cancel edits, reset fields
+                                isEditing = false
+                                editName = user?.name ?: ""
+                                editSurname = user?.surname ?: ""
+                            }) {
+                                Text(text = "Cancel")
+                            }
+                        }
+
+                    } else {
+                        // Display fields read-only
+                        ProfileField(label = stringResource(R.string.profile_name_label), value = if (name.isBlank()) stringResource(R.string.profile_placeholder_dash) else name)
+                        Spacer(modifier = Modifier.height(30.dp))
+
+                        ProfileField(label = stringResource(R.string.profile_email_label), value = if (email.isBlank()) stringResource(R.string.profile_placeholder_dash) else email)
+                        Spacer(modifier = Modifier.height(30.dp))
+
+                        // Sexo and birthdate unchanged
+                        ProfileField(label = stringResource(R.string.profile_sex_label), value = sex)
+                        Spacer(modifier = Modifier.height(30.dp))
+
+                        ProfileField(label = stringResource(R.string.profile_birthdate_label), value = birthDate)
+                        Spacer(modifier = Modifier.height(30.dp))
+                    }
 
                     // Idioma
                     LanguageSelectorField(

@@ -11,10 +11,12 @@ import com.example.listi.ui.types.VerifyAccountRequest
 import com.example.listi.ui.types.VerifyAccountResponse
 import com.example.listi.ui.types.ChangePasswordRequest
 import com.example.listi.ui.types.GetUserResponse
+import com.example.listi.ui.types.UpdateUserRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 
 interface LoginService {
@@ -44,4 +46,7 @@ interface LoginService {
 
     @GET("/api/users/profile")
     suspend fun getProfile(): Response<GetUserResponse>
+
+    @PUT("/api/users/profile")
+    suspend fun updateProfile(@Body request: UpdateUserRequest): Response<Unit>
 }

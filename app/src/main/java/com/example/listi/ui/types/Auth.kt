@@ -76,3 +76,10 @@ data class GetUserResponse(
     val updatedAt: String? = null,
     val createdAt: String? = null
 )
+
+@Serializable
+data class UpdateUserRequest(
+    val name: String? = null,
+    val surname: String? = null,
+    val metadata: Map<String, String>? = null
+)

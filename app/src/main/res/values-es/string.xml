@@ -23,13 +23,17 @@
 
     <!-- Profile screen -->
     <string name="profile_change_photo">Cambiar foto de perfil</string>
+    <string name="profile_photo_content_description">Foto de perfil</string>
     <string name="profile_name_label">Nombre:</string>
+    <string name="profile_surname_label">Apellido:</string>
     <string name="profile_email_label">Email:</string>
     <string name="profile_sex_label">Sexo:</string>
     <string name="profile_birthdate_label">Fecha de nacimiento:</string>
     <string name="profile_edit_button">Editar perfil</string>
     <string name="profile_placeholder_dash">-</string>
     <string name="profile_language_label">Idioma:</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
 
     <!-- Languages -->
     <string name="language_spanish">Español</string>

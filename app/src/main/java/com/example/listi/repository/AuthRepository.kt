@@ -125,11 +125,11 @@ class AuthRepository(private val context: Context) {
     // -------------------
     // PROFILE
     // -------------------
-    /**
-     * Obtiene el perfil del usuario autenticado y lo convierte a User.
-     * Devuelve Response<GetUserResponse> para mantener consistencia con otros métodos.
-     */
     suspend fun getProfile(): Response<GetUserResponse> {
         return service.getProfile()
+    }
+
+    suspend fun updateProfile(request: UpdateUserRequest): Response<Unit> {
+        return service.updateProfile(request)
     }
 }

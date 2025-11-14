@@ -1,8 +1,11 @@
 package com.example.listi.ui.navigation
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,6 +34,8 @@ fun AppNavGraph(
     authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
+
+    val context = LocalContext.current
 
     val destination =
         if(authViewModel.uiState.isLogged) {
@@ -80,8 +85,12 @@ fun AppNavGraph(
             FriendsScreen(
                 authViewModel = authViewModel
         ) }
-        composable(ROUTE_PROFILE) { ProfileScreen() }
-        composable(ROUTE_PROFILE) { ProfileScreen(authViewModel = authViewModel) }
+
+        // Perfil: pasar el authViewModel y el onChangePhoto que lanza el selector
+        composable(ROUTE_PROFILE) {
+            ProfileScreen(authViewModel = authViewModel)
+        }
+
         composable(ROUTE_LOGIN) {
             LoginScreen(
                 authViewModel = authViewModel,
