@@ -17,7 +17,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.listi.ui.types.ShoppingListItem
+import com.example.listi.ui.types.Product
+import com.example.listi.ui.types.Category
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+
 @Composable
 fun ProductRow(
     item: ShoppingListItem,
@@ -102,4 +110,40 @@ fun ProductRow(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProductRowPreview() {
+    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    sdf.timeZone = TimeZone.getTimeZone("UTC")
+    val dateString = sdf.format(Date())
+
+    val sampleCategory = Category(
+        id = 1,
+        name = "Lácteos",
+        createdAt = dateString,
+        updatedAt = dateString
+    )
+
+    val sampleProduct = Product(
+        id = 1,
+        name = "Leche Entera",
+        createdAt = dateString,
+        updatedAt = dateString,
+        category = sampleCategory
+    )
+
+    val sampleItem = ShoppingListItem(
+        id = 1,
+        unit = "L",
+        quantity = 2,
+        purchased = false,
+        lastPurchasedAt = dateString,
+        createdAt = Date(),
+        updatedAt = Date(),
+        product = sampleProduct
+    )
+
+    ProductRow(item = sampleItem)
 }

@@ -10,12 +10,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.TimeZone
 
 @Composable
 fun ProductCard(
@@ -28,8 +30,13 @@ fun ProductCard(
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf(product.category) }
 
+    //TODO: simplify
     val formattedDate = remember(product.createdAt) {
-        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(product.createdAt)
+        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        parser.timeZone = TimeZone.getTimeZone("UTC")
+        val date = parser.parse(product.createdAt)
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        date?.let { formatter.format(it) } ?: product.createdAt
     }
 
     Surface(
@@ -80,19 +87,44 @@ fun ProductCard(
                             onClick = {
                                 expanded = false
                                 selectedCategory = category
-                                onCategoryChange(product, category) // ✅ Notificamos a ViewModel
+                                onCategoryChange(product, category)
                             }
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(formattedDate, fontSize = 11.sp)
 
             IconButton(onClick = { onMenuClick(product) }) {
                 Icon(Icons.Default.MoreVert, contentDescription = "Más opciones")
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun ProductCardPreview() {
+    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    sdf.timeZone = TimeZone.getTimeZone("UTC")
+    val dateString = sdf.format(Date())
+
+    val sampleCategories = listOf(
+        Category(1, "Lácteos", dateString, dateString),
+        Category(2, "Panificados", dateString, dateString),
+        Category(3, "Bebidas", dateString, dateString)
+    )
+    val sampleProduct = Product(
+        id = 1,
+        name = "Leche",
+        category = sampleCategories[0],
+        createdAt = dateString,
+        updatedAt = dateString
+    )
+    ProductCard(
+        product = sampleProduct,
+        categories = sampleCategories,
+        onCategoryChange = { _, _ -> },
+        onMenuClick = {}
+    )
 }
