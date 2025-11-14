@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,12 +33,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.R
 import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.CategoryRepository
+import com.example.listi.ui.components.GreenAddButton
 import com.example.listi.ui.components.ShoppingListCard
 import com.example.listi.ui.screens.products.CategoryViewModel
 import com.example.listi.ui.screens.products.CategoryViewModelFactory
 import com.example.listi.ui.screens.products.ProductViewModel
 import com.example.listi.ui.screens.products.ProductViewModelFactory
 import com.example.listi.ui.theme.ListiTheme
+import com.example.listi.ui.types.CreateShoppingListRequest
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.User
 import java.util.Date
@@ -82,6 +86,73 @@ fun ShoppingListsScreen(
 
     // TODO: Agregar navigator al lambda
     ShoppingListsCards(modifier, shoppingLists,  {})
+
+    val openCreateDialog = remember { mutableStateOf(false) }
+
+    GreenAddButton(
+        {
+            openCreateDialog.value = true
+        },
+        modifier
+    )
+
+    when {
+        openCreateDialog.value -> {
+            CreateShoppingListDialog(
+                onDismissRequest = { openCreateDialog.value = false },
+                onConfirmation = {
+                    openCreateDialog.value = false
+                    shoppingListViewModel.createShoppingLists(CreateShoppingListRequest(
+                        "test",
+                        "Una lista de prueba",
+                        true
+                    ))
+                },
+                dialogTitle = "Crear lista de prueba",
+                dialogText = "Confirma para crear una lista!!"
+            )
+        }
+    }
+
+}
+
+// NOTE: Testing!
+@Composable
+fun CreateShoppingListDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    dialogTitle: String,
+    dialogText: String,
+) {
+    AlertDialog(
+        title = {
+            Text(text = dialogTitle)
+        },
+        text = {
+            Text(text = dialogText)
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmation()
+                }
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                }
+            ) {
+                Text("Dismiss")
+            }
+        }
+    )
 }
 
 @Composable
@@ -103,8 +174,6 @@ fun ShoppingListsCards(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-
-        Spacer(modifier = Modifier.height(80.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = padding),
@@ -150,6 +219,11 @@ fun ShoppingListsPreview() {
             Modifier,
             shoppingListsPreview as MutableList<ShoppingList>,
             {},
+        )
+
+        GreenAddButton(
+            {},
+            Modifier
         )
     }
 }

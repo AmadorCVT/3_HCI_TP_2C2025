@@ -69,6 +69,7 @@ fun ListiApp(
             AppNavGraph(
                 navController = navController,
                 authViewModel = authViewModel,
+                modifier = Modifier.padding(innerPadding)
             )
         }
     }

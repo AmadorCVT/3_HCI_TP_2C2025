@@ -56,15 +56,11 @@ class ShoppingListsViewModel(
         }
     }
 
-    fun createShoppingLists(shoppingList: ShoppingList) {
+    fun createShoppingLists(shoppingList: CreateShoppingListRequest) {
         viewModelScope.launch {
             try {
                 shoppingListsRespository.createShoppingList(
-                    request = CreateShoppingListRequest(
-                        shoppingList.name,
-                        shoppingList.description,
-                        shoppingList.recurring
-                    )
+                    request = shoppingList
                 )
                 loadShoppingLists()
             } catch (_: Exception) {}

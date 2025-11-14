@@ -1,5 +1,6 @@
 package com.example.listi.ui.components
 
+import android.R.attr.contentDescription
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.listi.R
@@ -38,8 +41,9 @@ fun GreenAddButton(
                 .then(modifier)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_add),
-                contentDescription = "Agregar lista"
+                imageVector = ImageVector.vectorResource(R.drawable.add),
+                contentDescription = "Agregar lista",
+                modifier
             )
         }
     }
