@@ -21,6 +21,7 @@ import com.example.listi.ui.screens.shoppingLists.ShoppingListsViewModel
 import com.example.listi.ui.screens.shoppingLists.ShoppingListsViewModelFactory
 
 object Constants {
+    const val ROUTE_LIST_DETAILS = "ROUTE_LIST_DETAILS"
     const val LIST_ID_ARG = "LIST_ID"
 }
 
@@ -33,7 +34,7 @@ fun AppNavGraph(
 
     val destination =
         if(authViewModel.uiState.isLogged) {
-            ROUTE_LISTS
+            "lists_root"
         } else {
             ROUTE_LOGIN
         }
@@ -46,23 +47,26 @@ fun AppNavGraph(
 
         // Para que compartan el mismo view model
         navigation(startDestination = ROUTE_LISTS, route = "lists_root") {
-            composable(ROUTE_LISTS) {
-                val backStackEntry = navController.getBackStackEntry("lists_root")
-                val parentEntry = remember { backStackEntry }
+            composable(ROUTE_LISTS) { entry ->
+                val parentEntry = remember(entry) {
+                    navController.getBackStackEntry("lists_root")
+                }
                 val vm: ShoppingListsViewModel =
                     viewModel(parentEntry, factory = ShoppingListsViewModelFactory())
                 ShoppingListsScreen(
                     shoppingListViewModel = vm,
                     onNavigateToDetails = { listId ->
-                        navController.navigate("ROUTE_LIST_DETAILS/$listId")
+                        navController.navigate("$Constants.ROUTE_LIST_DETAILS/$listId")
                     }
                 )
             }
-            composable("ROUTE_LIST_DETAILS/{${Constants.LIST_ID_ARG}}") { entry ->
+            composable("$Constants.ROUTE_LIST_DETAILS/{$Constants.LIST_ID_ARG}") { entry ->
                 val listId = entry.arguments?.getInt(Constants.LIST_ID_ARG) ?: 0
 
-                val backStackEntry = navController.getBackStackEntry("lists_root")
-                val parentEntry = remember { backStackEntry }
+                val parentEntry = remember(entry) {
+                    navController.getBackStackEntry("lists_root")
+                }
+
                 val vm: ShoppingListsViewModel =
                     viewModel(parentEntry, factory = ShoppingListsViewModelFactory())
                 ShoppingListDetailsScreen(modifier,
