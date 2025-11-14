@@ -30,10 +30,10 @@ enum class AppDestinations(
     PROFILE(R.string.profile, R.drawable.person_foreground, R.string.generic_description, ROUTE_PROFILE),
     LOGIN(R.string.login, R.drawable.person_foreground, R.string.generic_description, ROUTE_LOGIN),
 }
-const val ROUTE_LISTS = "lists"
-const val ROUTE_PRODUCTS = "products"
-const val ROUTE_PROFILE = "profile"
-const val ROUTE_FRIENDS = "friends"
-const val ROUTE_LOGIN = "login"
-const val ROUTE_REGISTER ="register"
-const val ROUTE_VERIFY = "verify"
+const val ROUTE_LISTS = "Shopping Lists"
+const val ROUTE_PRODUCTS = "Products"
+const val ROUTE_PROFILE = "Profile"
+const val ROUTE_FRIENDS = "Friends"
+const val ROUTE_LOGIN = "Login"
+const val ROUTE_REGISTER ="Register"
+const val ROUTE_VERIFY = "Verify"

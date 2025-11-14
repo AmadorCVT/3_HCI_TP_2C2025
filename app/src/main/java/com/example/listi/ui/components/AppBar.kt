@@ -16,13 +16,13 @@ import com.example.listi.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppTopBar() {
+fun AppTopBar(title: String) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Shopping Lists",
+                text = title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -54,5 +54,5 @@ fun AppTopBar() {
 @Preview
 @Composable
 fun AppTopBarPreview() {
-    AppTopBar()
+    AppTopBar("Shopping Lists")
 }

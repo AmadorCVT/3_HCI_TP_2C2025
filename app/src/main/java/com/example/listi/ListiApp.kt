@@ -48,7 +48,7 @@ fun ListiApp(
         Scaffold(
             topBar = {
                 if (currentRoute != ROUTE_LOGIN && currentRoute != ROUTE_REGISTER && currentRoute!= ROUTE_VERIFY)
-                    AppTopBar()
+                    AppTopBar(currentRoute)
             },
             bottomBar = {
                 if (currentRoute != ROUTE_LOGIN && currentRoute != ROUTE_REGISTER)
@@ -85,7 +85,7 @@ fun ListiAppPreview() {
     ListiTheme {
         val navController = rememberNavController()
         Scaffold (
-            topBar = { AppTopBar() },
+            topBar = { AppTopBar("Test") },
             bottomBar = { BottomBar(currentRoute = ROUTE_LISTS, onNavigateToRoute = {}) }
         ) {
             AppNavGraph(
