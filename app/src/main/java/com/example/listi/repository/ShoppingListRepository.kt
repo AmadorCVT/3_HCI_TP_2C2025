@@ -1,5 +1,7 @@
 package com.example.listi.repository
 
+import android.util.Log
+import android.util.Log.e
 import com.example.listi.network.ShoppingListService
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.CreateShoppingListRequest
@@ -40,7 +42,7 @@ class ShoppingListRepository (private val api: ShoppingListService) {
 
 
     suspend fun createShoppingList(request: CreateShoppingListRequest): ShoppingList {
-        return withContext(Dispatchers.IO) {
+        return try {
             val response = api.createShoppingList(request)
             if (response.isSuccessful) {
                 val createdResponse = response.body()!!
@@ -49,18 +51,22 @@ class ShoppingListRepository (private val api: ShoppingListService) {
                     id = createdResponse.id,
                     name = createdResponse.name,
                     description = createdResponse.description,
+                    metadata = "",
                     recurring = createdResponse.recurring,
                     owner = createdResponse.owner,
                     sharedWith = createdResponse.sharedWith,
-                    lastPurchasedAt = createdResponse.lastPurchasedAt,
-                    createdAt = Date(),
-                    updatedAt = Date()
+                    lastPurchasedAt = Date().toString(),
+                    createdAt = Date().toString(),
+                    updatedAt = Date().toString()
                 )
                 cachedShoppingList = (cachedShoppingList ?: emptyList()) + created
                 created
             } else {
-                throw Exception("Error al crear categoría: ${response.code()}")
+                throw Exception("Error al crear lista de compras: ${response.code()}")
             }
+        } catch (e: Exception) {
+            Log.e("RegisterScreen", "Error dentro de service.createShoppingList()", e)
+            throw e
         }
     }
 
@@ -74,12 +80,13 @@ class ShoppingListRepository (private val api: ShoppingListService) {
                     id = result.id,
                     name = result.name,
                     description = result.description,
+                    metadata = "",
                     recurring = result.recurring,
                     owner = result.owner,
                     sharedWith = result.sharedWith,
                     lastPurchasedAt = result.lastPurchasedAt,
-                    createdAt = Date(),
-                    updatedAt = Date()
+                    createdAt = Date().toString(),
+                    updatedAt = Date().toString()
                 )
             } else {
                 throw Exception("Error al obtener lista de compras: ${response.code()}")
@@ -96,12 +103,13 @@ class ShoppingListRepository (private val api: ShoppingListService) {
                     id = result.id,
                     name = result.name,
                     description = result.description,
+                    metadata = "",
                     recurring = result.recurring,
                     owner = result.owner,
                     sharedWith = result.sharedWith,
                     lastPurchasedAt = result.lastPurchasedAt,
-                    createdAt = Date(),
-                    updatedAt = Date()
+                    createdAt = Date().toString(),
+                    updatedAt = Date().toString()
                 )
 
                 // Actualiza caché
@@ -137,12 +145,13 @@ class ShoppingListRepository (private val api: ShoppingListService) {
                     id = result.id,
                     name = result.name,
                     description = result.description,
+                    metadata = "",
                     recurring = result.recurring,
                     owner = result.owner,
                     sharedWith = result.sharedWith,
                     lastPurchasedAt = result.lastPurchasedAt,
-                    createdAt = Date(),
-                    updatedAt = Date()
+                    createdAt = Date().toString(),
+                    updatedAt = Date().toString()
                 )
 
                 // Actualiza caché

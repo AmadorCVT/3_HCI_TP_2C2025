@@ -28,10 +28,11 @@ private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", null, null);
 private val previewList = ShoppingList(1,
     "Lista Resi",
     "Una lista",
+    metadata = "",
     false,
     user1,
     arrayOf(user1, user2, user3),
-    Date(), Date(), Date());
+    Date().toString(), Date().toString(), Date().toString());
 
 
 @Composable

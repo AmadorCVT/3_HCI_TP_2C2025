@@ -52,28 +52,31 @@ private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", null, null);
 private val shoppingListsPreview = listOf(
     ShoppingList(1, "Lista resi",
         "Una lista",
+        metadata = "",
         false,
         user1,
         arrayOf(user1, user2),
-        Date(),
-        Date(),
-        Date()),
+        Date().toString(),
+        Date().toString(),
+        Date().toString()),
     ShoppingList(2,"Lista super",
         "Una lista",
+        metadata = "",
         true,
         user1,
         arrayOf(user3, user2),
-        Date(),
-        Date(),
-        Date()),
+        Date().toString(),
+        Date().toString(),
+        Date().toString()),
     ShoppingList(3, "Juntada",
         "Una lista",
+        metadata = "",
         true,
         user1,
         arrayOf(user1, user3),
-        Date(),
-        Date(),
-        Date())
+        Date().toString(),
+        Date().toString(),
+        Date().toString())
 )
 
 @Composable
@@ -103,7 +106,7 @@ fun ShoppingListsScreen(
                 onConfirmation = {
                     openCreateDialog.value = false
                     shoppingListViewModel.createShoppingLists(CreateShoppingListRequest(
-                        "test",
+                        "test1asd3",
                         "Una lista de prueba",
                         true
                     ))
