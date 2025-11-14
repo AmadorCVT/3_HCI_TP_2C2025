@@ -42,7 +42,7 @@ class ShoppingListRepository (private val api: ShoppingListService) {
 
 
     suspend fun createShoppingList(request: CreateShoppingListRequest): ShoppingList {
-        return try {
+        return withContext(Dispatchers.IO) {
             val response = api.createShoppingList(request)
             if (response.isSuccessful) {
                 val createdResponse = response.body()!!
@@ -64,9 +64,6 @@ class ShoppingListRepository (private val api: ShoppingListService) {
             } else {
                 throw Exception("Error al crear lista de compras: ${response.code()}")
             }
-        } catch (e: Exception) {
-            Log.e("RegisterScreen", "Error dentro de service.createShoppingList()", e)
-            throw e
         }
     }
 

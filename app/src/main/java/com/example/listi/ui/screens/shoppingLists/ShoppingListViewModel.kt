@@ -48,7 +48,10 @@ class ShoppingListsViewModel(
             try {
                 // TODO: Deberian ser todas MutableList para que sea reactivo??
                 _shoppingLists.value = shoppingListsRespository.getShoppingLists(false) as MutableList<ShoppingList>
+
             } catch (e: Exception) {
+                println("ERRROOOROROROROROROROOROR:")
+                println(e.localizedMessage)
                 _errorMessage.value = e.localizedMessage
             } finally {
                 _isLoading.value = false

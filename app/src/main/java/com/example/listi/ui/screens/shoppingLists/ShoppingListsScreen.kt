@@ -18,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -87,6 +88,11 @@ fun ShoppingListsScreen(
 
     val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
 
+    // Apenas se abre quiero que se haga fetch
+    LaunchedEffect(Unit) {
+        shoppingListViewModel.loadShoppingLists()
+    }
+
     // TODO: Agregar navigator al lambda
     ShoppingListsCards(modifier, shoppingLists,  {})
 
@@ -106,7 +112,7 @@ fun ShoppingListsScreen(
                 onConfirmation = {
                     openCreateDialog.value = false
                     shoppingListViewModel.createShoppingLists(CreateShoppingListRequest(
-                        "test1asd3",
+                        "tes33333dddd9",
                         "Una lista de prueba",
                         true
                     ))

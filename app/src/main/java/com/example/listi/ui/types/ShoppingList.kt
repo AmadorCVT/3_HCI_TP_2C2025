@@ -2,6 +2,8 @@ package com.example.listi.ui.types
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import java.util.Date
 
 //@Serializable
@@ -11,11 +13,11 @@ data class ShoppingList(
     val id: Int,
     val name: String,
     val description: String,
-    val metadata: String,
+    val metadata: String?,
     val recurring: Boolean,
     val owner: User,
     val sharedWith: Array<User>,
-    val lastPurchasedAt: String,
+    val lastPurchasedAt: String?,
     val createdAt: String,
     val updatedAt: String,
 )
@@ -34,7 +36,7 @@ data class ShoppingListResponse(
     val recurring: Boolean,
     val owner: User,
     val sharedWith: Array<User>,
-    val lastPurchasedAt: String,
+    val lastPurchasedAt: String = "",
     val createdAt: String,
     val updatedAt: String,
 )
@@ -51,6 +53,7 @@ data class CreateShoppingListRequest(
     val name: String,
     val description: String,
     val recurring: Boolean,
+    val metadata: JsonElement = JsonObject(emptyMap()),
 )
 
 
