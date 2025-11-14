@@ -29,7 +29,6 @@ fun ScrollableFilterMenu(
     onItemClick: (String?) -> Unit, // puede ser null si se deselecciona
     onFixedButtonClick: () -> Unit,
 ) {
-    // 🔹 Estado interno que guarda la categoría seleccionada (solo una o ninguna)
     var selectedCategory by remember { mutableStateOf<String?>(null) }
 
     Row(
@@ -38,7 +37,6 @@ fun ScrollableFilterMenu(
             .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // 🔹 Botón fijo a la izquierda
         IconButton(
             onClick = onFixedButtonClick,
             modifier = Modifier
@@ -55,7 +53,6 @@ fun ScrollableFilterMenu(
             )
         }
 
-        // 🔹 Lista horizontal deslizable
         LazyRow(
             modifier = Modifier
                 .weight(1f)
@@ -69,7 +66,6 @@ fun ScrollableFilterMenu(
                     text = label,
                     isSelected = isSelected,
                     onClick = {
-                        // ✅ Si ya estaba seleccionada → deselecciona
                         selectedCategory = if (isSelected) null else label
                         onItemClick(selectedCategory)
                     }
