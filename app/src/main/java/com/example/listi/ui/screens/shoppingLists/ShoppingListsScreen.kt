@@ -95,7 +95,6 @@ fun ShoppingListsScreen(
         shoppingListViewModel.loadShoppingLists()
     }
 
-    // TODO: Agregar navigator al lambda
     ShoppingListsCards(modifier, shoppingLists,  onNavigateToDetails)
 
     val openCreateDialog = remember { mutableStateOf(false) }
@@ -125,7 +124,7 @@ fun ShoppingListsScreen(
 @Composable
 fun ShoppingListsCards(
     modifier: Modifier = Modifier,
-    shoppingLists: MutableList<ShoppingList>,
+    shoppingLists: List<ShoppingList>,
     onShoppingListDetails: (Int) -> Unit,
 ) {
 

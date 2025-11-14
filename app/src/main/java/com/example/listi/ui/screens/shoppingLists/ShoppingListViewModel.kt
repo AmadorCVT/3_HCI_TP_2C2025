@@ -25,7 +25,7 @@ class ShoppingListsViewModel(
     private val shoppingListsRespository: ShoppingListRepository,
 ) : ViewModel() {
 
-    private val _shoppingLists = MutableStateFlow<MutableList<ShoppingList>>(mutableListOf())
+    private val _shoppingLists = MutableStateFlow<List<ShoppingList>>(emptyList())
     val shoppingLists = _shoppingLists.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)
@@ -39,7 +39,7 @@ class ShoppingListsViewModel(
             _isLoading.value = true
             try {
                 // TODO: Deberian ser todas MutableList para que sea reactivo??
-                _shoppingLists.value = shoppingListsRespository.getShoppingLists(false) as MutableList<ShoppingList>
+                _shoppingLists.value = shoppingListsRespository.getShoppingLists(true)
 
             } catch (e: Exception) {
                 println("ERRROOOROROROROROROROOROR:")
