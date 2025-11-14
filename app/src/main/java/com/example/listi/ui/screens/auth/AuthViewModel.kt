@@ -36,25 +36,25 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     fun login(email: String, password: String) {
 
         viewModelScope.launch {
-            uiState = uiState.copy(isLoading = true, errorMessage = null)
+            uiState = uiState.copy(isLoading = true,)
             try {
                 val response = authRepository.login(email, password)
                 if (response.isSuccessful && response.body() != null) {
                     val token = response.body()!!.token
                     uiState = uiState.copy(
                         isLogged = true,
-                        token = token
+                        token = token,
                     )
                     // cargar perfil después del login
                     loadProfile()
                 } else {
-                    uiState = uiState.copy(errorMessage = "Credenciales inválidas")
+                    uiState = uiState.copy(errorMessage = "Credenciales inválidas",)
                 }
             } catch (e: Exception) {
                 Log.e("LoginViewModel", "Login failed", e)
-                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión")
+                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión",)
             } finally {
-                uiState = uiState.copy(isLoading = false)
+                uiState = uiState.copy()
             }
         }
     }
@@ -66,22 +66,22 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
         viewModelScope.launch {
 
-            uiState = uiState.copy(isLoading = true, errorMessage = null)
+            uiState = uiState.copy(isLoading = true,)
             try {
 
                 val response = authRepository.register(firstName, lastName, email, password)
 
                 if (response.isSuccessful) {
-                    uiState = uiState.copy(showVerification = true)
+                    uiState = uiState.copy(showVerification = true,)
 
                 } else {
-                    uiState = uiState.copy(errorMessage = "Error al registrar usuario")
+                    uiState = uiState.copy(errorMessage = "Error al registrar usuario",)
 
                 }
             } catch (e: Exception) {
-                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión")
+                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión",)
             } finally {
-                uiState = uiState.copy(isLoading = false)
+                uiState = uiState.copy()
             }
         }
     }
@@ -89,18 +89,18 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     fun verifyAccount(code: String) {
         viewModelScope.launch {
-            uiState = uiState.copy(isLoading = true, errorMessage = null)
+            uiState = uiState.copy(isLoading = true,)
             try {
                 val response = authRepository.verifyAccount(code)
                 if (response.isSuccessful) {
-                    uiState = uiState.copy(isVerified = true)
+                    uiState = uiState.copy(isVerified = true,)
                 } else {
-                    uiState = uiState.copy(errorMessage = "Código incorrecto")
+                    uiState = uiState.copy(errorMessage = "Código incorrecto",)
                 }
             } catch (e: Exception) {
-                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión")
+                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión",)
             } finally {
-                uiState = uiState.copy(isLoading = false)
+                uiState = uiState.copy()
             }
         }
     }
@@ -113,7 +113,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
             try {
                 authRepository.sendVerificationCode(email)
             } catch (e: Exception) {
-                uiState = uiState.copy(errorMessage = e.message ?: "No se pudo reenviar el código")
+                uiState = uiState.copy(errorMessage = e.message ?: "No se pudo reenviar el código",)
             }
         }
     }
@@ -123,22 +123,48 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     // --------------------------
     fun resetPassword(code: String, newPassword: String) {
         viewModelScope.launch {
-            uiState = uiState.copy(isLoading = true)
+            uiState = uiState.copy(isLoading = true,)
             try {
                 val response = authRepository.resetPassword(code, newPassword)
                 if (response.isSuccessful) {
-                    uiState = uiState.copy(passwordChanged = true)
+                    uiState = uiState.copy(passwordChanged = true,)
                 } else {
-                    uiState = uiState.copy(errorMessage = "No se pudo restablecer la contraseña")
+                    uiState = uiState.copy(errorMessage = "No se pudo restablecer la contraseña",)
                 }
             } catch (e: Exception) {
-                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión")
+                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión",)
             } finally {
-                uiState = uiState.copy(isLoading = false)
+                uiState = uiState.copy()
             }
         }
     }
 
+    fun sendForgotPasswordCode(email: String) {
+        viewModelScope.launch {
+            uiState = uiState.copy(isLoading = true,)
+
+            try {
+                val response = authRepository.forgotPassword(email)
+
+                if (response.isSuccessful) {
+
+                    uiState = uiState.copy(
+                        forgotCodeSent = true
+                    )
+                } else {
+                    uiState = uiState.copy(
+                        errorMessage = "No se pudo enviar el código de recuperación",
+                    )
+                }
+            } catch (e: Exception) {
+                uiState = uiState.copy(
+                    errorMessage = e.message ?: "Error de conexión",
+                )
+            } finally {
+                uiState = uiState.copy()
+            }
+        }
+    }
     // --------------------------
     // LOGOUT
     // --------------------------
@@ -172,13 +198,13 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                         createdAt = body.createdAt,
                         updatedAt = body.updatedAt
                     )
-                    uiState = uiState.copy(currentUser = user)
+                    uiState = uiState.copy(currentUser = user,)
                 } else {
                     // opcional: setear errorMessage
-                    uiState = uiState.copy(errorMessage = "No se pudo obtener perfil")
+                    uiState = uiState.copy(errorMessage = "No se pudo obtener perfil",)
                 }
             } catch (e: Exception) {
-                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión al obtener perfil")
+                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión al obtener perfil",)
             }
         }
     }
@@ -188,7 +214,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
      */
     fun updateProfileMetadata(metadata: Map<String, String>) {
         viewModelScope.launch {
-            uiState = uiState.copy(isLoading = true, errorMessage = null)
+            uiState = uiState.copy(isLoading = true,)
             try {
                 val current = uiState.currentUser
                 val request = UpdateUserRequest(
@@ -201,12 +227,12 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                     // recargar perfil para reflejar cambios
                     loadProfile()
                 } else {
-                    uiState = uiState.copy(errorMessage = "No se pudo actualizar perfil")
+                    uiState = uiState.copy(errorMessage = "No se pudo actualizar perfil",)
                 }
             } catch (e: Exception) {
-                uiState = uiState.copy(errorMessage = e.message ?: "Error al actualizar perfil")
+                uiState = uiState.copy(errorMessage = e.message ?: "Error al actualizar perfil",)
             } finally {
-                uiState = uiState.copy(isLoading = false)
+                uiState = uiState.copy()
             }
         }
     }
@@ -217,7 +243,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     fun updateProfilePhoto(base64Data: String) {
         viewModelScope.launch {
             try {
-                uiState = uiState.copy(isLoading = true, errorMessage = null)
+                uiState = uiState.copy(isLoading = true,)
                 // construir metadata existente + nueva entrada
                 val existing = uiState.currentUser?.metadata ?: emptyMap()
                 val newMetadata = existing.toMutableMap()
@@ -232,12 +258,12 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 if (response.isSuccessful) {
                     loadProfile()
                 } else {
-                    uiState = uiState.copy(errorMessage = "No se pudo subir la foto de perfil")
+                    uiState = uiState.copy(errorMessage = "No se pudo subir la foto de perfil",)
                 }
             } catch (e: Exception) {
-                uiState = uiState.copy(errorMessage = e.message ?: "Error al subir foto de perfil")
+                uiState = uiState.copy(errorMessage = e.message ?: "Error al subir foto de perfil",)
             } finally {
-                uiState = uiState.copy(isLoading = false)
+                uiState = uiState.copy()
             }
         }
     }
@@ -247,7 +273,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
      */
     fun updateProfile(name: String, surname: String, metadata: Map<String, String>?) {
         viewModelScope.launch {
-            uiState = uiState.copy(isLoading = true, errorMessage = null)
+            uiState = uiState.copy(isLoading = true,)
             try {
                 val request = UpdateUserRequest(
                     name = name,
@@ -258,12 +284,12 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 if (response.isSuccessful) {
                     loadProfile()
                 } else {
-                    uiState = uiState.copy(errorMessage = "No se pudo actualizar perfil")
+                    uiState = uiState.copy(errorMessage = "No se pudo actualizar perfil",)
                 }
             } catch (e: Exception) {
-                uiState = uiState.copy(errorMessage = e.message ?: "Error al actualizar perfil")
+                uiState = uiState.copy(errorMessage = e.message ?: "Error al actualizar perfil",)
             } finally {
-                uiState = uiState.copy(isLoading = false)
+                uiState = uiState.copy()
             }
         }
     }

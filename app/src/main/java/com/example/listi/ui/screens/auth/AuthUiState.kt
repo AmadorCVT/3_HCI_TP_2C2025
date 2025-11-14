@@ -11,4 +11,5 @@ data class AuthUiState(
     val token: String? = null,
     val errorMessage: String? = null,
     val currentUser: User? = null,
+    val forgotCodeSent: Boolean =false,
 )

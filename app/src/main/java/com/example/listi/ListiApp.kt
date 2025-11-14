@@ -20,6 +20,8 @@ import com.example.listi.ui.components.BottomBar
 import com.example.listi.ui.navigation.AppNavGraph
 import com.example.listi.ui.navigation.ROUTE_LISTS
 import com.example.listi.ui.navigation.ROUTE_LOGIN
+import com.example.listi.ui.navigation.ROUTE_PASSWORD
+import com.example.listi.ui.navigation.ROUTE_PASSWORD_CODE
 import com.example.listi.ui.navigation.ROUTE_REGISTER
 import com.example.listi.ui.navigation.ROUTE_VERIFY
 import com.example.listi.ui.theme.ListiTheme
@@ -47,11 +49,11 @@ fun ListiApp(
 
         Scaffold(
             topBar = {
-                if (currentRoute != ROUTE_LOGIN && currentRoute != ROUTE_REGISTER && currentRoute!= ROUTE_VERIFY)
+                if (currentRoute != ROUTE_LOGIN && currentRoute != ROUTE_REGISTER && currentRoute!= ROUTE_VERIFY && currentRoute!= ROUTE_PASSWORD_CODE && currentRoute!= ROUTE_PASSWORD)
                     AppTopBar(currentRoute)
             },
             bottomBar = {
-                if (currentRoute != ROUTE_LOGIN && currentRoute != ROUTE_REGISTER)
+                if (currentRoute != ROUTE_LOGIN && currentRoute != ROUTE_REGISTER && currentRoute != ROUTE_VERIFY && currentRoute!= ROUTE_PASSWORD_CODE && currentRoute!= ROUTE_PASSWORD)
                     BottomBar(
                         currentRoute = currentRoute,
                         onNavigateToRoute = { route ->

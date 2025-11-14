@@ -1,7 +1,5 @@
 package com.example.listi.ui.navigation
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -17,6 +15,8 @@ import com.example.listi.ui.screens.auth.ProfileScreen
 import com.example.listi.ui.screens.auth.RegisterScreen
 import com.example.listi.ui.screens.shoppingLists.ShoppingListsScreen
 import com.example.listi.ui.screens.auth.AuthViewModel
+import com.example.listi.ui.screens.auth.RecoverPasswordScreenCode
+import com.example.listi.ui.screens.auth.ResetPasswordScreen
 import com.example.listi.ui.screens.auth.VerifyAccountScreen
 import com.example.listi.ui.screens.friends.FriendsScreen
 import com.example.listi.ui.screens.shoppingLists.ShoppingListDetailsScreen
@@ -95,7 +95,7 @@ fun AppNavGraph(
             LoginScreen(
                 authViewModel = authViewModel,
                 onCreateAccountClick = { navController.navigate(ROUTE_REGISTER) },
-                onForgotPasswordClick = {  }
+                onForgotPasswordClick = { navController.navigate(ROUTE_PASSWORD_CODE) }
             )
         }
         composable(ROUTE_REGISTER) {
@@ -108,6 +108,14 @@ fun AppNavGraph(
         composable(ROUTE_VERIFY){
             VerifyAccountScreen(authViewModel = authViewModel,
                 goLogin = { navController.navigate(ROUTE_LOGIN) })
+        }
+        composable(ROUTE_PASSWORD){
+            ResetPasswordScreen(authViewModel = authViewModel,
+                goLogin = { navController.navigate(ROUTE_LOGIN) })
+        }
+        composable(ROUTE_PASSWORD_CODE){
+            RecoverPasswordScreenCode(authViewModel = authViewModel,
+                goRestorePassword = { navController.navigate(ROUTE_PASSWORD) })
         }
     }
 }
