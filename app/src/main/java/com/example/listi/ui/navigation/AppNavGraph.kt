@@ -52,12 +52,14 @@ fun AppNavGraph(
 
         // Para que compartan el mismo view model
         navigation(startDestination = ROUTE_LISTS, route = "lists_root") {
-            composable(ROUTE_LISTS) { entry ->
-                val parentEntry = remember(entry) {
+            composable(ROUTE_LISTS) {
+                val parentEntry = remember(navController.getBackStackEntry("lists_root")) {
                     navController.getBackStackEntry("lists_root")
                 }
+
                 val vm: ShoppingListsViewModel =
                     viewModel(parentEntry, factory = ShoppingListsViewModelFactory())
+
                 ShoppingListsScreen(
                     shoppingListViewModel = vm,
                     onNavigateToDetails = { listId ->
@@ -65,18 +67,22 @@ fun AppNavGraph(
                     }
                 )
             }
+
             composable("$Constants.ROUTE_LIST_DETAILS/{$Constants.LIST_ID_ARG}") { entry ->
                 val listId = entry.arguments?.getInt(Constants.LIST_ID_ARG) ?: 0
 
-                val parentEntry = remember(entry) {
+                val parentEntry = remember(navController.getBackStackEntry("lists_root")) {
                     navController.getBackStackEntry("lists_root")
                 }
 
                 val vm: ShoppingListsViewModel =
                     viewModel(parentEntry, factory = ShoppingListsViewModelFactory())
-                ShoppingListDetailsScreen(modifier,
+
+                ShoppingListDetailsScreen(
+                    modifier,
                     shoppingListViewModel = vm,
-                    listId = listId)
+                    listId = listId
+                )
             }
         }
 

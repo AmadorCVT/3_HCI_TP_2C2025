@@ -88,10 +88,11 @@ fun ShoppingListsScreen(
     onNavigateToDetails: (Int) -> Unit
     ) {
 
+    val refreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
     val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
 
-    // Apenas se abre quiero que se haga fetch
-    LaunchedEffect(Unit) {
+    // Apenas se abre o cambie el refreshTrigger quiero que se haga fetch
+    LaunchedEffect(refreshTrigger) {
         shoppingListViewModel.loadShoppingLists()
     }
 
@@ -169,7 +170,10 @@ fun ShoppingListsCards(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.small_padding) / 4),
             contentPadding = PaddingValues(horizontal = padding, vertical = padding)
         ) {
-            items(items = filteredLists) { item ->
+            items(
+                items = filteredLists,
+                key = { it.id }
+            ) { item ->
                 ShoppingListCard(item, Modifier.padding(10.dp).clickable { onShoppingListDetails(item.id) })
             }
         }
