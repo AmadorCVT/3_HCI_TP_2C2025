@@ -1,5 +1,6 @@
 package com.example.listi.ui.screens.shoppingLists
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,8 +27,15 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.R
+import com.example.listi.network.RetrofitInstance
+import com.example.listi.repository.CategoryRepository
 import com.example.listi.ui.components.ShoppingListCard
+import com.example.listi.ui.screens.products.CategoryViewModel
+import com.example.listi.ui.screens.products.CategoryViewModelFactory
+import com.example.listi.ui.screens.products.ProductViewModel
+import com.example.listi.ui.screens.products.ProductViewModelFactory
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.User
@@ -36,7 +45,7 @@ import java.util.Date
 private val user1 = User(1, "Ama", "Doe", "ama@mail.com", null, null);
 private val user2 = User(2, "Lucas", "Doe", "ama@mail.com", null, null);
 private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", null, null);
-private val shoppingLists = listOf(
+private val shoppingListsPreview = listOf(
     ShoppingList(1, "Lista resi",
         "Una lista",
         false,
@@ -65,8 +74,23 @@ private val shoppingLists = listOf(
 
 @Composable
 fun ShoppingListsScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    shoppingListViewModel: ShoppingListsViewModel = viewModel(factory = ShoppingListsViewModelFactory())
+    ) {
+
+    val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
+
+    // TODO: Agregar navigator al lambda
+    ShoppingListsCards(modifier, shoppingLists,  {})
+}
+
+@Composable
+fun ShoppingListsCards(
+    modifier: Modifier = Modifier,
+    shoppingLists: MutableList<ShoppingList>,
+    onShoppingListDetails: () -> Unit,
 ) {
+
     val padding = dimensionResource(R.dimen.medium_padding)
     var selectedButton by remember { mutableStateOf("Activas") }
 
@@ -109,6 +133,7 @@ fun ShoppingListsScreen(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.small_padding) / 4),
             contentPadding = PaddingValues(horizontal = padding, vertical = padding),
+            modifier = Modifier.clickable { onShoppingListDetails() }
         ) {
             items(items = filteredLists) { item ->
                 ShoppingListCard(item, Modifier.padding(10.dp))
@@ -117,11 +142,14 @@ fun ShoppingListsScreen(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun ShoppingListsPreview() {
     ListiTheme {
-        ShoppingListsScreen()
+        ShoppingListsCards(
+            Modifier,
+            shoppingListsPreview as MutableList<ShoppingList>,
+            {},
+        )
     }
 }
