@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -46,6 +47,8 @@ fun ProfileScreen(
 
     var selectedLanguage by remember { mutableStateOf(spanishLabel) }
 
+    var showLogoutDialog by remember { mutableStateOf(false) }
+
     // Cargar perfil si no está cargado
     LaunchedEffect(Unit) {
         if (authViewModel != null && authViewModel.uiState.currentUser == null) {
@@ -69,8 +72,7 @@ fun ProfileScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
-            // Botón fijo en el fondo de la pantalla
-            Box(
+             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surface)
@@ -78,11 +80,16 @@ fun ProfileScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Button(
-                    onClick = onEditClick,
+                    onClick = { showLogoutDialog = true },
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        // El botón en la barra no debe ser rojo
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 ) {
-                    Text(text = stringResource(R.string.profile_edit_button))
+                    Text(text = stringResource(R.string.logout))
                 }
             }
         }
@@ -171,7 +178,38 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+            // Eliminado: Row con botón de logout dentro del body para evitar duplicado
+
             Spacer(modifier = Modifier.height(80.dp)) // espacio extra para que el contenido no quede oculto detrás del bottomBar
+
+            if (showLogoutDialog) {
+                AlertDialog(
+                    onDismissRequest = { showLogoutDialog = false },
+                    title = { Text(text = stringResource(R.string.logout_confirm_title)) },
+                    text = { Text(text = stringResource(R.string.logout_confirm_message)) },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                // Ejecutar logout si el ViewModel está presente
+                                authViewModel?.logout()
+                                showLogoutDialog = false
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error,
+                                contentColor = MaterialTheme.colorScheme.onError
+                            )
+                        ) {
+                            Text(text = stringResource(R.string.logout_confirm_confirm))
+                        }
+                    },
+                    dismissButton = {
+                        OutlinedButton(onClick = { showLogoutDialog = false }) {
+                            Text(text = stringResource(R.string.logout_confirm_cancel))
+                        }
+                    }
+                )
+            }
+
         }
     }
 }
@@ -237,7 +275,7 @@ private fun LanguageButton(
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.height(32.dp),
             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-            border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp),
+            border = ButtonDefaults.outlinedButtonBorder(enabled = true).copy(width = 1.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary
             )

@@ -35,6 +35,13 @@
     <string name="language_spanish">Spanish</string>
     <string name="language_english">English</string>
 
+    <!-- Logout strings -->
+    <string name="logout">Logout</string>
+    <string name="logout_confirm_title">Log out</string>
+    <string name="logout_confirm_message">Are you sure you want to log out?</string>
+    <string name="logout_confirm_confirm">Log out</string>
+    <string name="logout_confirm_cancel">Cancel</string>
+
     <!-- Error/resource message keys (stored as actual strings for default) -->
     <string name="error_credentials_invalid">Invalid credentials</string>
     <string name="error_connection">Connection error</string>

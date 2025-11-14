@@ -35,6 +35,13 @@
     <string name="language_spanish">Español</string>
     <string name="language_english">Inglés</string>
 
+    <!-- Logout strings -->
+    <string name="logout">Cerrar sesión</string>
+    <string name="logout_confirm_title">Cerrar sesión</string>
+    <string name="logout_confirm_message">¿Estás seguro de que quieres cerrar sesión?</string>
+    <string name="logout_confirm_confirm">Cerrar sesión</string>
+    <string name="logout_confirm_cancel">Cancelar</string>
+
     <!-- Error/resource message keys -->
     <string name="error_credentials_invalid">Credenciales inválidas</string>
     <string name="error_connection">Error de conexión</string>
