@@ -2,6 +2,7 @@ package com.example.listi.ui.screens.auth
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.provider.OpenableColumns
 import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -86,9 +87,26 @@ fun ProfileScreen(
 
     val context = LocalContext.current
 
+    // máximo permitido 2 MB
+    val MAX_IMAGE_SIZE_BYTES = 2 * 1024 * 1024L
+    var showImageTooLargeDialog by remember { mutableStateOf(false) }
+
     val pickImageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
             try {
+
+                val cursor = context.contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)
+                cursor?.use {
+                    if (it.moveToFirst()) {
+                        val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
+                        val size = if (sizeIndex != -1) it.getLong(sizeIndex) else -1L
+                        if (size > MAX_IMAGE_SIZE_BYTES) {
+                            showImageTooLargeDialog = true
+                            return@rememberLauncherForActivityResult
+                        }
+                    }
+                }
+
                 val input = context.contentResolver.openInputStream(uri)
                 val options = BitmapFactory.Options().apply { inPreferredConfig = Bitmap.Config.ARGB_8888 }
                 val originalBitmap = BitmapFactory.decodeStream(input, null, options)
@@ -216,7 +234,7 @@ fun ProfileScreen(
                         if (profilePhotoBitmap != null) {
                             Image(
                                 bitmap = profilePhotoBitmap.asImageBitmap(),
-                                contentDescription = stringResource(R.string.profile_change_photo),
+                                contentDescription = null,
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .clip(CircleShape)
@@ -245,7 +263,7 @@ fun ProfileScreen(
                         OutlinedTextField(
                             value = editSurname,
                             onValueChange = { editSurname = it },
-                            label = { Text("Surname:") },
+                            label = { Text(stringResource(R.string.profile_surname_label)) },
                             modifier = Modifier.fillMaxWidth()
                         )
 
@@ -265,7 +283,7 @@ fun ProfileScreen(
                                 pendingPhotoBase64 = null
                                 isEditing = false
                              }) {
-                                Text(text = "Save")
+                                Text(text = stringResource(R.string.save))
                             }
 
                             TextButton(onClick = {
@@ -274,7 +292,7 @@ fun ProfileScreen(
                                 editName = user?.name ?: ""
                                 editSurname = user?.surname ?: ""
                             }) {
-                                Text(text = "Cancel")
+                                Text(text = stringResource(R.string.cancel))
                             }
                         }
 
@@ -336,6 +354,20 @@ fun ProfileScreen(
                     dismissButton = {
                         OutlinedButton(onClick = { showLogoutDialog = false }) {
                             Text(text = stringResource(R.string.logout_confirm_cancel))
+                        }
+                    }
+                )
+            }
+
+            // Dialogo cuando la imagen es demasiado grande (usa la variable showImageTooLargeDialog)
+            if (showImageTooLargeDialog) {
+                AlertDialog(
+                    onDismissRequest = { showImageTooLargeDialog = false },
+                    title = { Text(text = "Image too large") },
+                    text = { Text(text = "The selected image exceeds the 2 MB limit. Please choose a smaller file.") },
+                    confirmButton = {
+                        Button(onClick = { showImageTooLargeDialog = false }) {
+                            Text(text = "OK")
                         }
                     }
                 )
