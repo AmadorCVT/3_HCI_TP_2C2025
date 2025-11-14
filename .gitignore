@@ -16,3 +16,7 @@ local.properties
 API\ v1.0.2\ Installer/node_modules
 /app/src/main/java/com/example/listi/network/RetrofitInstance.kt
 /app/src/main/res/xml/network_security_config.xml
+
+RetrofitClient.kt
+
+app/src/main/java/com/example/listi/network/
