@@ -83,7 +83,8 @@ private val shoppingListsPreview = listOf(
 @Composable
 fun ShoppingListsScreen(
     modifier: Modifier = Modifier,
-    shoppingListViewModel: ShoppingListsViewModel = viewModel(factory = ShoppingListsViewModelFactory())
+    shoppingListViewModel: ShoppingListsViewModel = viewModel(factory = ShoppingListsViewModelFactory()),
+    onNavigateToDetails: (Int) -> Unit
     ) {
 
     val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
@@ -94,7 +95,7 @@ fun ShoppingListsScreen(
     }
 
     // TODO: Agregar navigator al lambda
-    ShoppingListsCards(modifier, shoppingLists,  {})
+    ShoppingListsCards(modifier, shoppingLists,  onNavigateToDetails)
 
     val openCreateDialog = remember { mutableStateOf(false) }
 
@@ -168,7 +169,7 @@ fun CreateShoppingListDialog(
 fun ShoppingListsCards(
     modifier: Modifier = Modifier,
     shoppingLists: MutableList<ShoppingList>,
-    onShoppingListDetails: () -> Unit,
+    onShoppingListDetails: (Int) -> Unit,
 ) {
 
     val padding = dimensionResource(R.dimen.medium_padding)
@@ -210,11 +211,10 @@ fun ShoppingListsCards(
 
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.small_padding) / 4),
-            contentPadding = PaddingValues(horizontal = padding, vertical = padding),
-            modifier = Modifier.clickable { onShoppingListDetails() }
+            contentPadding = PaddingValues(horizontal = padding, vertical = padding)
         ) {
             items(items = filteredLists) { item ->
-                ShoppingListCard(item, Modifier.padding(10.dp))
+                ShoppingListCard(item, Modifier.padding(10.dp).clickable { onShoppingListDetails(item.id) })
             }
         }
     }

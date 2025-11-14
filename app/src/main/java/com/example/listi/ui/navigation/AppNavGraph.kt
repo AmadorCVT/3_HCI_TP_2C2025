@@ -13,6 +13,11 @@ import com.example.listi.ui.screens.shoppingLists.ShoppingListsScreen
 import com.example.listi.ui.screens.auth.AuthViewModel
 import com.example.listi.ui.screens.auth.VerifyAccountScreen
 import com.example.listi.ui.screens.friends.FriendsScreen
+import com.example.listi.ui.screens.shoppingLists.ShoppingListDetailsScreen
+
+object Constants {
+    const val LIST_ID_ARG = "LIST_ID"
+}
 
 @Composable
 fun AppNavGraph(
@@ -33,7 +38,17 @@ fun AppNavGraph(
         startDestination = destination,
         modifier = modifier
     ) {
-        composable(ROUTE_LISTS) { ShoppingListsScreen() }
+
+        composable(ROUTE_LISTS) { ShoppingListsScreen(
+            onNavigateToDetails = { listId ->
+                navController.navigate("ROUTE_LIST_DETAILS/$listId")
+            }
+        ) }
+        composable("ROUTE_LIST_DETAILS/{${Constants.LIST_ID_ARG}}") { entry ->
+            val listId = entry.arguments?.getInt(Constants.LIST_ID_ARG) ?: 0
+            ShoppingListDetailsScreen(modifier, listId)
+        }
+
         composable(ROUTE_PRODUCTS) { ProductsScreen() }
         composable(ROUTE_FRIENDS) {
             FriendsScreen(
