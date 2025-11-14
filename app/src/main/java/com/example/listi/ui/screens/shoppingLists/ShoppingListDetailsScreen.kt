@@ -74,10 +74,12 @@ private val ShoppingListItemsPreview = listOf<ShoppingListItem>(item1, item2)
 @Composable
 fun ShoppingListDetailsScreen(
     modifier: Modifier = Modifier,
+    shoppingListViewModel: ShoppingListsViewModel,
     listId: Int
 ) {
-    var shoppingListName by remember { mutableStateOf("") }
-    var recurring by remember { mutableStateOf(false) }
+
+    // Buscar la lista que nos piden
+
 
     Column(
         modifier = Modifier
@@ -90,12 +92,10 @@ fun ShoppingListDetailsScreen(
 
         Spacer(modifier = Modifier.padding(8.dp))
 
-        // Seguir reglas de jerarquia con funciones que modifican el estado desde aca arriba
-        ShoppingListHeader(
-            shoppingListName = shoppingListName,
-            onShoppingListNameChange = { shoppingListName = it },
-            recurring = recurring,
-            onRecurringChange = { recurring = it }
+        Text(
+            text = stringResource(id = R.string.name),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Spacer(modifier = Modifier.height(16.dp))

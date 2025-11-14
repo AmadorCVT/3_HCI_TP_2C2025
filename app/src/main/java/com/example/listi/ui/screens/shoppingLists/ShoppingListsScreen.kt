@@ -83,7 +83,7 @@ private val shoppingListsPreview = listOf(
 @Composable
 fun ShoppingListsScreen(
     modifier: Modifier = Modifier,
-    shoppingListViewModel: ShoppingListsViewModel = viewModel(factory = ShoppingListsViewModelFactory()),
+    shoppingListViewModel: ShoppingListsViewModel,
     onNavigateToDetails: (Int) -> Unit
     ) {
 
