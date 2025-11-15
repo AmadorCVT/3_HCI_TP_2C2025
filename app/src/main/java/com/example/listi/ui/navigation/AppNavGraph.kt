@@ -6,9 +6,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.listi.network.RetrofitInstance
+import com.example.listi.repository.CategoryRepository
 import com.example.listi.ui.screens.auth.LoginScreen
 import com.example.listi.ui.screens.products.ProductsScreen
 import com.example.listi.ui.screens.auth.ProfileScreen
@@ -19,13 +23,19 @@ import com.example.listi.ui.screens.auth.RecoverPasswordScreenCode
 import com.example.listi.ui.screens.auth.ResetPasswordScreen
 import com.example.listi.ui.screens.auth.VerifyAccountScreen
 import com.example.listi.ui.screens.friends.FriendsScreen
+import com.example.listi.ui.screens.products.CategoryViewModel
+import com.example.listi.ui.screens.products.CategoryViewModelFactory
+import com.example.listi.ui.screens.products.ProductViewModel
+import com.example.listi.ui.screens.products.ProductViewModelFactory
 import com.example.listi.ui.screens.shoppingLists.ShoppingListDetailsScreen
+import com.example.listi.ui.screens.shoppingLists.ShoppingListItemsViewModel
+import com.example.listi.ui.screens.shoppingLists.ShoppingListItemsViewModelFactory
 import com.example.listi.ui.screens.shoppingLists.ShoppingListsViewModel
 import com.example.listi.ui.screens.shoppingLists.ShoppingListsViewModelFactory
 
 object Constants {
-    const val ROUTE_LIST_DETAILS = "ROUTE_LIST_DETAILS"
-    const val LIST_ID_ARG = "LIST_ID"
+    const val ROUTE_LIST_DETAILS = "list_details"
+    const val LIST_ID_ARG = "listId"
 }
 
 @Composable
@@ -35,11 +45,24 @@ fun AppNavGraph(
     modifier: Modifier = Modifier
 ) {
 
-    val context = LocalContext.current
+    // Crear los viewModels asi se pueden pasar entre las vistas que los requieren
+    val productViewModel: ProductViewModel =
+        viewModel(factory = ProductViewModelFactory())
+
+    val categoryViewModel: CategoryViewModel =
+        viewModel(factory = CategoryViewModelFactory(
+            CategoryRepository(RetrofitInstance.categoryService)
+        ))
+
+    val shoppingListsViewModel: ShoppingListsViewModel =
+        viewModel(factory = ShoppingListsViewModelFactory())
+
+    val shoppingListItemsViewModel: ShoppingListItemsViewModel =
+        viewModel(factory = ShoppingListItemsViewModelFactory())
 
     val destination =
         if(authViewModel.uiState.isLogged) {
-            "lists_root"
+            ROUTE_LISTS
         } else {
             ROUTE_LOGIN
         }
@@ -50,43 +73,39 @@ fun AppNavGraph(
         modifier = modifier
     ) {
 
+
         // Para que compartan el mismo view model
-        navigation(startDestination = ROUTE_LISTS, route = "lists_root") {
             composable(ROUTE_LISTS) {
-                val parentEntry = remember(navController.getBackStackEntry("lists_root")) {
-                    navController.getBackStackEntry("lists_root")
-                }
-
-                val vm: ShoppingListsViewModel =
-                    viewModel(parentEntry, factory = ShoppingListsViewModelFactory())
-
                 ShoppingListsScreen(
-                    shoppingListViewModel = vm,
+                    shoppingListViewModel = shoppingListsViewModel,
                     onNavigateToDetails = { listId ->
-                        navController.navigate("$Constants.ROUTE_LIST_DETAILS/$listId")
+                        navController.navigate("${Constants.ROUTE_LIST_DETAILS}/$listId")
                     }
                 )
             }
 
-            composable("$Constants.ROUTE_LIST_DETAILS/{$Constants.LIST_ID_ARG}") { entry ->
-                val listId = entry.arguments?.getInt(Constants.LIST_ID_ARG) ?: 0
-
-                val parentEntry = remember(navController.getBackStackEntry("lists_root")) {
-                    navController.getBackStackEntry("lists_root")
-                }
-
-                val vm: ShoppingListsViewModel =
-                    viewModel(parentEntry, factory = ShoppingListsViewModelFactory())
+            composable(
+                route = "${Constants.ROUTE_LIST_DETAILS}/{${Constants.LIST_ID_ARG}}",
+                arguments = listOf(
+                    navArgument(Constants.LIST_ID_ARG) {
+                        type = NavType.IntType
+                    }
+                )) { entry ->
+                val listId = entry.arguments!!.getInt(Constants.LIST_ID_ARG)
 
                 ShoppingListDetailsScreen(
                     modifier,
-                    shoppingListViewModel = vm,
+                    shoppingListViewModel = shoppingListsViewModel,
                     listId = listId
                 )
             }
-        }
 
-        composable(ROUTE_PRODUCTS) { ProductsScreen() }
+        composable(ROUTE_PRODUCTS) {
+            ProductsScreen(
+                viewModel = productViewModel,
+                categoryViewModel = categoryViewModel
+            ) }
+
         composable(ROUTE_FRIENDS) {
             FriendsScreen(
                 authViewModel = authViewModel

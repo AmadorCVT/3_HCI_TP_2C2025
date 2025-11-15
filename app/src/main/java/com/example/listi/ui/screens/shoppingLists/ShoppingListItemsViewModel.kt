@@ -31,6 +31,10 @@ class ShoppingListItemsViewModel(
     private val _items = MutableStateFlow<MutableList<ShoppingListItem>>(mutableListOf())
     val items = _items.asStateFlow()
 
+    // Para decirle a la UI cuando recomponerse
+    private val _refreshTrigger = MutableStateFlow(0)
+    val refreshTrigger = _refreshTrigger.asStateFlow()
+
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
@@ -59,6 +63,7 @@ class ShoppingListItemsViewModel(
                 loadShoppingListItems(listId)
             } catch (_: Exception) {}
         }
+        _refreshTrigger.value++
     }
 
     fun updateShoppingListItem(listId: Int, itemId: Int, item: UpdateShoppingListItemRequest) {
@@ -68,6 +73,7 @@ class ShoppingListItemsViewModel(
                 loadShoppingListItems(listId)
             } catch (_: Exception) {}
         }
+        _refreshTrigger.value++
     }
 
     fun deleteShoppingLists(listId: Int, itemId: Int) {
@@ -77,6 +83,7 @@ class ShoppingListItemsViewModel(
                 loadShoppingListItems(listId)
             } catch (_: Exception) {}
         }
+        _refreshTrigger.value++
     }
 
 }
