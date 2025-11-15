@@ -141,9 +141,10 @@ fun ShoppingListDetailsScreen(
     LaunchedEffect(shoppingListItemsError) {
         shoppingListItemsError?.let {
             scope.launch {
-                snackbarHostState.showSnackbar(connectionError)
+                snackbarHostState.showSnackbar(shoppingListItemsError.toString())
             }
         }
+        shoppingListItemsViewModel.clearError()
     }
 
     when {
@@ -230,21 +231,21 @@ fun HeaderRow() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Producto",
+            text = stringResource(R.string.products),
             color = Color(0xFF2E7D32), // verde tipo material
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             modifier = Modifier.weight(1.2f)
         )
         Text(
-            text = "Cant.",
+            text = stringResource(R.string.quantity),
             color = Color(0xFF2E7D32),
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             modifier = Modifier.weight(0.8f)
         )
         Text(
-            text = "Unidad",
+            text = stringResource(R.string.unit),
             color = Color(0xFF2E7D32),
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,

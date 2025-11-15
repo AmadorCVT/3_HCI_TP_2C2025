@@ -22,7 +22,9 @@
     <string name="active_lists">Active</string>
     <string name="saved_lists">Saved</string>
     <string name="create_lists">Create list</string>
+    <string name="edit_list">Edit list</string>
     <string name="recurring">Recurring</string>
+    <string name="all">All</string>
     <string name="add_lists_item">Add list item</string>
 
     <!-- Products screen -->

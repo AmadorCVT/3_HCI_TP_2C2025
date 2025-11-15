@@ -39,6 +39,10 @@ class ShoppingListsViewModel(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
+    fun clearError() {
+        _errorMessage.value = null
+    }
+
     fun loadShoppingLists() {
         viewModelScope.launch {
             _isLoading.value = true

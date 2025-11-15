@@ -60,7 +60,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.ui.platform.LocalConfiguration
 import com.example.listi.ui.components.DeleteDialog
-import com.example.listi.ui.components.EditShoppingListDialog
 
 
 private val user1 = User(1, "Ama", "Doe", "ama@mail.com", null, null);
@@ -124,6 +123,7 @@ fun ShoppingListsScreen(
                 snackbarHostState.showSnackbar(connectionError)
             }
         }
+        shoppingListViewModel.clearError()
     }
     val openCreateDialog = rememberSaveable { mutableStateOf(false) }
 
@@ -200,7 +200,7 @@ fun ShoppingListsCards(
                     contentColor = if (selectedButton == "Activas") Color.White else Color.Black
                 )
             ) {
-                Text(stringResource(R.string.active_lists))
+                Text(stringResource(R.string.all))
             }
 
             Button(
@@ -210,7 +210,7 @@ fun ShoppingListsCards(
                     contentColor = if (selectedButton == "Guardadas") Color.White else Color.Black
                 )
             ) {
-                Text(stringResource(R.string.saved_lists))
+                Text(stringResource(R.string.recurring))
             }
         }
 
@@ -256,13 +256,11 @@ fun ShoppingListsCards(
 
 
     if (listToEdit != null) {
-        EditShoppingListDialog(
-            listName = listToEdit!!.name,
-            recurring = listToEdit!!.recurring,
+        ShoppingListDialog(
+            title = stringResource(R.string.edit_list),
+            shoppingList = listToEdit!!,
             onDismissRequest = { listToEdit = null },
-            onConfirm = { updatedRequest ->
-
-
+            onConfirmation = { updatedRequest ->
                 val updatedList = listToEdit!!.copy(
                     name = updatedRequest.name,
                     description = updatedRequest.description,
