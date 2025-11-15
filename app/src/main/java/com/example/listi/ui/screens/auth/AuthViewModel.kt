@@ -30,9 +30,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     var uiState by mutableStateOf(AuthUiState())
         private set
 
-    // --------------------------
-    // LOGIN
-    // --------------------------
+
     fun login(email: String, password: String) {
 
         viewModelScope.launch {
@@ -45,7 +43,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                         isLogged = true,
                         token = token,
                     )
-                    // cargar perfil después del login
+
                     loadProfile()
                 } else {
                     uiState = uiState.copy(errorMessage = "Credenciales inválidas",)
@@ -59,9 +57,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    // --------------------------
-    // REGISTER
-    // --------------------------
+
     fun register(firstName: String, lastName: String, email: String, password: String) {
 
         viewModelScope.launch {
@@ -105,9 +101,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    // --------------------------
-    // REENVIAR CÓDIGO
-    // --------------------------
+
     fun resendVerificationCode(email: String) {
         viewModelScope.launch {
             try {
@@ -118,9 +112,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    // --------------------------
-    // RESET PASSWORD
-    // --------------------------
+
     fun resetPassword(code: String, newPassword: String) {
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true,)
@@ -165,24 +157,20 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
             }
         }
     }
-    // --------------------------
-    // LOGOUT
-    // --------------------------
+
     fun logout() {
         viewModelScope.launch {
             try {
                 authRepository.logout()
             } catch (_: Exception) {
-                // no importa mucho el error de logout en cliente
+
             } finally {
-                uiState = AuthUiState() // reinicia el estado
+                uiState = AuthUiState()
             }
         }
     }
 
-    // --------------------------
-    // PROFILE
-    // --------------------------
+
     fun loadProfile() {
         viewModelScope.launch {
             try {
@@ -200,7 +188,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                     )
                     uiState = uiState.copy(currentUser = user,)
                 } else {
-                    // opcional: setear errorMessage
+
                     uiState = uiState.copy(errorMessage = "No se pudo obtener perfil",)
                 }
             } catch (e: Exception) {
@@ -209,9 +197,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    /**
-     * Actualiza la metadata del perfil (mapa parcial). En caso de exito recarga el perfil.
-     */
+
     fun updateProfileMetadata(metadata: Map<String, String>) {
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true,)
@@ -224,7 +210,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 )
                 val response = authRepository.updateProfile(request)
                 if (response.isSuccessful) {
-                    // recargar perfil para reflejar cambios
+
                     loadProfile()
                 } else {
                     uiState = uiState.copy(errorMessage = "No se pudo actualizar perfil",)
@@ -237,14 +223,12 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    /**
-     * Sube la foto codificada en base64 y guarda en metadata con la clave "profile_photo".
-     */
+
     fun updateProfilePhoto(base64Data: String) {
         viewModelScope.launch {
             try {
                 uiState = uiState.copy(isLoading = true,)
-                // construir metadata existente + nueva entrada
+
                 val existing = uiState.currentUser?.metadata ?: emptyMap()
                 val newMetadata = existing.toMutableMap()
                 newMetadata["profile_photo"] = base64Data
@@ -268,9 +252,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    /**
-     * Actualiza el perfil con nombre, apellido y metadata proporcionados.
-     */
+
     fun updateProfile(name: String, surname: String, metadata: Map<String, String>?) {
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true,)
@@ -312,9 +294,12 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    // Limpia los indicadores relacionados con el cambio de contraseña (usado por la UI para resetear mensajes)
+
     fun clearPasswordChangeState() {
         uiState = uiState.copy(passwordChanged = false, errorMessage = null)
+    }
+    fun clearErrorMessage() {
+        uiState = uiState.copy(errorMessage = null)
     }
 
 }

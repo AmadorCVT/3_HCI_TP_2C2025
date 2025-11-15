@@ -26,6 +26,7 @@ import com.example.listi.ui.theme.LightGreen
 import com.example.listi.ui.theme.White
 import com.example.listi.R
 import com.example.listi.repository.AuthRepository
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen( authViewModel: AuthViewModel,
@@ -35,7 +36,8 @@ fun RegisterScreen( authViewModel: AuthViewModel,
     val context = LocalContext.current
     val viewModel = authViewModel
 
-    // Estado de UI (para mostrar errores, loading, etc.)
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     val uiState = viewModel.uiState
 
     var firstName by remember { mutableStateOf("") }
@@ -50,6 +52,15 @@ fun RegisterScreen( authViewModel: AuthViewModel,
             if (goLogin != null) {
                 goLogin()
             }
+        }
+    }
+    LaunchedEffect(uiState.errorMessage) {
+        uiState.errorMessage?.let { msg ->
+            scope.launch {
+                snackbarHostState.showSnackbar(msg)
+            }
+
+            authViewModel.clearErrorMessage()
         }
     }
 

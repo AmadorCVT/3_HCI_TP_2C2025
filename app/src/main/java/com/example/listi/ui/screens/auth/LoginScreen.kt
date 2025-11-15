@@ -23,6 +23,7 @@ import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.LightGreen
 import com.example.listi.ui.theme.White
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -33,7 +34,20 @@ fun LoginScreen(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val uiState = authViewModel.uiState
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
+
+    LaunchedEffect(uiState.errorMessage) {
+        uiState.errorMessage?.let { msg ->
+            scope.launch {
+                snackbarHostState.showSnackbar(msg)
+            }
+
+            authViewModel.clearErrorMessage()
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

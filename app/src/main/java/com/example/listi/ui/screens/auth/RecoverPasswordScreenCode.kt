@@ -49,7 +49,7 @@ fun RecoverPasswordScreenCode(
 
     var email by remember { mutableStateOf("") }
 
-    // Cuando el backend confirma el envío del mail → se navega
+
     LaunchedEffect(uiState.forgotCodeSent) {
         if (uiState.forgotCodeSent) {
             snackbarHostState.showSnackbar("Instrucciones enviadas a tu email")
