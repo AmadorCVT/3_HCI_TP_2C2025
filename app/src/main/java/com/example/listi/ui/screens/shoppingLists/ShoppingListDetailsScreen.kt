@@ -106,7 +106,7 @@ fun ShoppingListDetailsScreen(
     // Para mostrar errores
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    
+
     val openCreateDialog = remember { mutableStateOf(false) }
 
     // Buscar la lista que nos piden

@@ -1,5 +1,6 @@
 package com.example.listi.ui.screens.shoppingLists
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -84,6 +87,7 @@ private val shoppingListsPreview = listOf(
         Date().toString())
 )
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ShoppingListsScreen(
     modifier: Modifier = Modifier,
@@ -107,22 +111,11 @@ fun ShoppingListsScreen(
     // Si sale un mensaje de error, mostrarlo
     LaunchedEffect(shoppingListsError) {
         shoppingListsError?.let {
-            scope.launch {
-                snackbarHostState.showSnackbar(shoppingListsError.toString())
-            }
+            snackbarHostState.showSnackbar(shoppingListsError.toString())
         }
     }
 
-    ShoppingListsCards(modifier, shoppingLists,  onNavigateToDetails)
-
     val openCreateDialog = remember { mutableStateOf(false) }
-
-    GreenAddButton(
-        {
-            openCreateDialog.value = true
-        },
-        modifier
-    )
 
     when {
         openCreateDialog.value -> {
@@ -135,6 +128,20 @@ fun ShoppingListsScreen(
                 }
             )
         }
+    }
+
+    // Scafold para el snackbar
+    Scaffold(
+        snackbarHost = { SnackbarHost( snackbarHostState) }
+    ) {
+        ShoppingListsCards(modifier, shoppingLists, onNavigateToDetails)
+
+        GreenAddButton(
+            {
+                openCreateDialog.value = true
+            },
+            modifier
+        )
     }
 
 }
