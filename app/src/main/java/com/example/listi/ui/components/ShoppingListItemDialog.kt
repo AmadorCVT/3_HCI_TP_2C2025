@@ -14,6 +14,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +39,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.listi.R
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.types.Product
+import com.example.listi.ui.types.ProductReference
 import com.example.listi.ui.types.ShoppingListItem
 import com.example.listi.ui.types.ShoppingListItemRequest
 import com.example.listi.ui.types.ShoppingListRequest
@@ -129,6 +131,7 @@ fun ShoppingListItemDialog(
                         label = { Text(stringResource(R.string.select_product)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                         modifier = Modifier.fillMaxWidth()
+                            .menuAnchor(ExposedDropdownMenuAnchorType.SecondaryEditable)
                     )
                     ExposedDropdownMenu(
                         expanded = expanded,
@@ -167,7 +170,7 @@ fun ShoppingListItemDialog(
                                     ShoppingListItemRequest(
                                         unit = unit,
                                         quantity = quantity.toInt(),
-                                        productId = productId
+                                        product = ProductReference(productId)
                                     )
                                 )
                             }

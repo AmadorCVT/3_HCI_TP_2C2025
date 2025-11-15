@@ -68,6 +68,18 @@ class ShoppingListItemsViewModel(
         _refreshTrigger.value++
     }
 
+    fun toggleStatusShoppingListItem(listId: Int, itemId: Int) {
+        viewModelScope.launch {
+            try {
+                shoppingListItemRepository.toggleStatusShoppingListItem(listId, itemId)
+                loadShoppingListItems(listId)
+            } catch (_: Exception) {
+
+            }
+        }
+        _refreshTrigger.value++
+    }
+
     fun updateShoppingListItem(listId: Int, itemId: Int, item: UpdateShoppingListItemRequest) {
         viewModelScope.launch {
             try {

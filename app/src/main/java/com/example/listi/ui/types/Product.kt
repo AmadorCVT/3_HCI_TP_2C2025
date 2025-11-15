@@ -27,6 +27,11 @@ data class CategoryReference(
 )
 
 @Serializable
+data class ProductReference(
+    val id: Int
+)
+
+@Serializable
 data class ProductListResponse(
     val data: List<Product>,
     val pagination: Pagination

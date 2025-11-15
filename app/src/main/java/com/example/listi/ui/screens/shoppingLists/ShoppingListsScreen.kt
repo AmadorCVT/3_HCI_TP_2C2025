@@ -174,10 +174,10 @@ fun ShoppingListsCards(
 ) {
 
     val padding = dimensionResource(R.dimen.medium_padding)
-    var selectedButton by remember { mutableStateOf("Activas") }
+    var selectedButton by remember { mutableStateOf("all") }
 
     val filteredLists = shoppingLists.filter {
-        if (selectedButton == "Activas") !it.recurring else it.recurring
+        if (selectedButton == "all") true else it.recurring
     }
 
     var listToShare by remember { mutableStateOf<ShoppingList?>(null) }
@@ -185,8 +185,6 @@ fun ShoppingListsCards(
     var listToDelete by remember { mutableStateOf<ShoppingList?>(null) }
 
     Column(modifier = modifier.fillMaxSize()) {
-
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -194,20 +192,20 @@ fun ShoppingListsCards(
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             Button(
-                onClick = { selectedButton = "Activas" },
+                onClick = { selectedButton = "all" },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedButton == "Activas") Color(0xFF006400) else Color.Transparent,
-                    contentColor = if (selectedButton == "Activas") Color.White else Color.Black
+                    containerColor = if (selectedButton == "all") Color(0xFF006400) else Color.Transparent,
+                    contentColor = if (selectedButton == "all") Color.White else Color.Black
                 )
             ) {
                 Text(stringResource(R.string.all))
             }
 
             Button(
-                onClick = { selectedButton = "Guardadas" },
+                onClick = { selectedButton = "recurring" },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedButton == "Guardadas") Color(0xFF006400) else Color.Transparent,
-                    contentColor = if (selectedButton == "Guardadas") Color.White else Color.Black
+                    containerColor = if (selectedButton == "recurring") Color(0xFF006400) else Color.Transparent,
+                    contentColor = if (selectedButton == "recurring") Color.White else Color.Black
                 )
             ) {
                 Text(stringResource(R.string.recurring))

@@ -8,11 +8,15 @@ interface ShoppingListItemService {
 
     // Crear nueva ShoppingListItem
     @POST("/api/shopping-lists/{id}/items")
-    suspend fun createShoppingListItem(@Body request: ShoppingListItemRequest): Response<ShoppingListItemResponse>
+    suspend fun createShoppingListItem(
+        @Path("id") id: Int,
+        @Body request: ShoppingListItemRequest
+    ): Response<ShoppingListItemResponse>
 
     // Obtener lista de categorías
     @GET("/api/shopping-lists/{id}/items")
     suspend fun getShoppingListItems(
+        @Path("id") id: Int,
         @Query("name") name: String? = null,
         @Query("page") page: Int = 1,
         @Query("per_page") perPage: Int = 10,

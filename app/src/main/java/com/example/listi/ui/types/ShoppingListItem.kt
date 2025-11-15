@@ -10,7 +10,7 @@ data class ShoppingListItem(
     val unit: String,
     val quantity: Int,
     val purchased: Boolean,
-    val lastPurchasedAt: String,
+    val lastPurchasedAt: String? = null,
     val createdAt: String,
     val updatedAt: String,
     val product: Product
@@ -20,7 +20,7 @@ data class ShoppingListItem(
 data class ShoppingListItemRequest(
     val unit: String,
     val quantity: Int,
-    val productId: Int
+    val product: ProductReference
 )
 
 @Serializable

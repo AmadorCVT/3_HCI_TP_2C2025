@@ -21,7 +21,7 @@ class ShoppingListItemRepository(private val api: ShoppingListItemService) {
             if (!forceRefresh && cachedItems.containsKey(listId)) {
                 return@withContext cachedItems[listId]!!
             }
-            val response = api.getShoppingListItems()
+            val response = api.getShoppingListItems(listId)
             if (response.isSuccessful) {
                 val items = response.body()?.data ?: emptyList()
                 cachedItems[listId] = items
@@ -37,7 +37,7 @@ class ShoppingListItemRepository(private val api: ShoppingListItemService) {
         request: ShoppingListItemRequest
     ): ShoppingListItem {
         return withContext(Dispatchers.IO) {
-            val response = api.createShoppingListItem(request)
+            val response = api.createShoppingListItem(listId, request)
             if (response.isSuccessful) {
                 val result = response.body()!!
                 val created = ShoppingListItem(

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -59,6 +60,7 @@ import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.ShoppingListItem
+import com.example.listi.ui.types.ShoppingListItemRequest
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -141,7 +143,7 @@ fun ShoppingListDetailsScreen(
     LaunchedEffect(shoppingListItemsError) {
         shoppingListItemsError?.let {
             scope.launch {
-                snackbarHostState.showSnackbar(shoppingListItemsError.toString())
+                snackbarHostState.showSnackbar(connectionError)
             }
         }
         shoppingListItemsViewModel.clearError()
@@ -151,7 +153,10 @@ fun ShoppingListDetailsScreen(
         openCreateDialog.value -> {
             ShoppingListItemDialog(
                 onDismissRequest = { openCreateDialog.value = false },
-                onConfirmation = {},
+                onConfirmation = { shoppingListItemRequest ->
+                    shoppingListItemsViewModel.createShoppingListsItem(listId, shoppingListItemRequest)
+                    openCreateDialog.value = false
+                },
                 products = products
             )
         }
@@ -169,7 +174,12 @@ fun ShoppingListDetailsScreen(
                 verticalArrangement = Arrangement.Top
             ) {
                 ShoppingListItemsHeader(modifier, shoppingLists.first { it.id == listId })
-                AddedShoppingListItem(modifier, shoppingListItems)
+                AddedShoppingListItem(
+                    modifier,
+                    shoppingListItems,
+                    { itemId ->
+                        shoppingListItemsViewModel.toggleStatusShoppingListItem(listId, itemId)
+                    })
             }
 
             GreenAddButton(
@@ -204,7 +214,8 @@ fun ShoppingListItemsHeader(
 @Composable
 fun AddedShoppingListItem(
     modifier: Modifier = Modifier,
-    items: List<ShoppingListItem>
+    items: List<ShoppingListItem>,
+    onStatusToggle: (Int) -> (Unit)
 ) {
     // === WhiteBox con los productos ===
     WhiteBoxWithText(
@@ -215,7 +226,11 @@ fun AddedShoppingListItem(
         LazyColumn {
             item { HeaderRow() }
             items(items) { item ->
-                ProductRow(item = item)
+                ProductRow(
+                    item = item,
+                    onCheckedChange = {
+                        onStatusToggle(item.id)
+                    })
             }
         }
     }
@@ -232,24 +247,24 @@ fun HeaderRow() {
     ) {
         Text(
             text = stringResource(R.string.products),
-            color = Color(0xFF2E7D32), // verde tipo material
+            color = MaterialTheme.colorScheme.surfaceVariant,
             fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.weight(1.2f)
         )
         Text(
             text = stringResource(R.string.quantity),
-            color = Color(0xFF2E7D32),
+            color = MaterialTheme.colorScheme.surfaceVariant,
             fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            modifier = Modifier.weight(0.8f)
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.weight(1.2f)
         )
+
         Text(
             text = stringResource(R.string.unit),
-            color = Color(0xFF2E7D32),
+            color = MaterialTheme.colorScheme.surfaceVariant,
             fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            modifier = Modifier.weight(1f)
+            style = MaterialTheme.typography.bodyLarge,
         )
     }
 
@@ -264,6 +279,6 @@ fun HeaderRow() {
 @Composable
 fun AddShoppingListsScreenPreview() {
     ListiTheme {
-        AddedShoppingListItem(Modifier, ShoppingListItemsPreview)
+        AddedShoppingListItem(Modifier, ShoppingListItemsPreview, {})
     }
 }
