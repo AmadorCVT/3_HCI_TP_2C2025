@@ -59,6 +59,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.ui.platform.LocalConfiguration
+import com.example.listi.ui.components.DeleteShoppingListDialog
+import com.example.listi.ui.components.EditShoppingListDialog
 
 
 private val user1 = User(1, "Ama", "Doe", "ama@mail.com", null, null);
@@ -101,7 +103,7 @@ fun ShoppingListsScreen(
     onNavigateToDetails: (Int) -> Unit
     ) {
 
-    // Para mostrar errores
+
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val connectionError = stringResource(R.string.error_connection)
@@ -110,12 +112,12 @@ fun ShoppingListsScreen(
     val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
     val shoppingListsError by shoppingListViewModel.errorMessage.collectAsState()
 
-    // Apenas se abre o cambie el refreshTrigger quiero que se haga fetch
+
     LaunchedEffect(refreshTrigger) {
         shoppingListViewModel.loadShoppingLists()
     }
 
-    // Si sale un mensaje de error, mostrarlo
+
     LaunchedEffect(shoppingListsError) {
         shoppingListsError?.let {
             scope.launch {
@@ -138,7 +140,7 @@ fun ShoppingListsScreen(
         }
     }
 
-    // Scaffold para el snackbar
+
     Scaffold(
         snackbarHost = { SnackbarHost( snackbarHostState) }
     ) { paddingValues ->
@@ -175,16 +177,15 @@ fun ShoppingListsCards(
     var selectedButton by remember { mutableStateOf("Activas") }
 
     val filteredLists = shoppingLists.filter {
-        if (selectedButton == "Activas") {
-            !it.recurring
-        } else {
-            it.recurring
-        }
+        if (selectedButton == "Activas") !it.recurring else it.recurring
     }
 
     var listToShare by remember { mutableStateOf<ShoppingList?>(null) }
+    var listToEdit by remember { mutableStateOf<ShoppingList?>(null) }
+    var listToDelete by remember { mutableStateOf<ShoppingList?>(null) }
 
     Column(modifier = modifier.fillMaxSize()) {
+
 
         Row(
             modifier = Modifier
@@ -201,6 +202,7 @@ fun ShoppingListsCards(
             ) {
                 Text(stringResource(R.string.active_lists))
             }
+
             Button(
                 onClick = { selectedButton = "Guardadas" },
                 colors = ButtonDefaults.buttonColors(
@@ -213,8 +215,9 @@ fun ShoppingListsCards(
         }
 
         val screenWidth = LocalConfiguration.current.screenWidthDp
-        val maxCardWidth = 350   //
+        val maxCardWidth = 350
         val columns = (screenWidth / maxCardWidth).coerceAtLeast(1)
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(columns),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -231,13 +234,14 @@ fun ShoppingListsCards(
                         .padding(8.dp)
                         .fillMaxWidth()
                         .clickable { onShoppingListDetails(item.id) },
-                    onEditClick = { /* TODO editar */ },
+                    onEditClick = { listToEdit = item },
                     onShareClick = { listToShare = it },
-                    onDeleteClick = { /* TODO borrar */ }
+                    onDeleteClick = { listToDelete = it }
                 )
             }
         }
     }
+
 
     if (listToShare != null) {
         ShareListDialog(
@@ -250,4 +254,36 @@ fun ShoppingListsCards(
         )
     }
 
+
+    if (listToEdit != null) {
+        EditShoppingListDialog(
+            listName = listToEdit!!.name,
+            recurring = listToEdit!!.recurring,
+            onDismissRequest = { listToEdit = null },
+            onConfirm = { updatedRequest ->
+
+
+                val updatedList = listToEdit!!.copy(
+                    name = updatedRequest.name,
+                    description = updatedRequest.description,
+                    recurring = updatedRequest.recurring
+                )
+
+
+                shoppingListViewModel.updateShoppingLists(updatedList)
+
+                listToEdit = null
+            }
+        )
+    }
+    if (listToDelete != null) {
+        DeleteShoppingListDialog(
+            listName = listToDelete!!.name,
+            onDismiss = { listToDelete = null },
+            onConfirm = {
+                shoppingListViewModel.deleteShoppingLists(listToDelete!!.id)
+                listToDelete = null
+            }
+        )
+    }
 }
