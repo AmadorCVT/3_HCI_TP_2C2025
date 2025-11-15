@@ -71,10 +71,11 @@ class ShoppingListItemsViewModel(
         _refreshTrigger.value++
     }
 
-    fun toggleStatusShoppingListItem(listId: Int, itemId: Int) {
+    fun toggleStatusShoppingListItem(listId: Int, itemId: Int, purchased: Boolean) {
+
         viewModelScope.launch {
             try {
-                shoppingListItemRepository.toggleStatusShoppingListItem(listId, itemId)
+                shoppingListItemRepository.toggleStatusShoppingListItem(listId, itemId, purchased)
                 loadShoppingListItems(listId)
             } catch (e: Exception) {
                 _errorMessage.value = e.localizedMessage

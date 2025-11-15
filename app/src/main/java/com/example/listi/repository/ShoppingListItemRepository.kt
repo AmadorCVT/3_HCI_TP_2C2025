@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.example.listi.ui.types.ShoppingListItem
+import com.example.listi.ui.types.ToggleShoppingListItemRequest
 import com.example.listi.ui.types.UpdateShoppingListItemRequest
 class ShoppingListItemRepository(private val api: ShoppingListItemService) {
 
@@ -95,13 +96,15 @@ class ShoppingListItemRepository(private val api: ShoppingListItemService) {
 
     suspend fun toggleStatusShoppingListItem(
         listId: Int,
-        itemId: Int
+        itemId: Int,
+        purchased: Boolean
     ): ShoppingListItem {
         return withContext(Dispatchers.IO) {
-            val response = api.toggleStatusShoppingListItem(listId, itemId)
+            val response = api.toggleStatusShoppingListItem(listId, itemId,
+                ToggleShoppingListItemRequest(purchased))
             if (response.isSuccessful) {
                 val r = response.body()!!
-                val updated = r.item
+                val updated = r
                 cachedItems[listId] = cachedItems[listId]?.map {
                     if (it.id == itemId) updated else it
                 } ?: emptyList()

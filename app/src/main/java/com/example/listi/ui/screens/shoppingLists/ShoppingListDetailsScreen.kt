@@ -133,6 +133,7 @@ fun ShoppingListDetailsScreen(
 
     // Apenas se abre o cambie el refreshTrigger quiero que se haga fetch
     LaunchedEffect(itemsRefreshTrigger) {
+        println("REFRESHHHHH")
         shoppingListItemsViewModel.loadShoppingListItems(listId)
     }
 
@@ -198,8 +199,8 @@ fun ShoppingListDetailsScreen(
                 AddedShoppingListItem(
                     modifier,
                     shoppingListItems,
-                    onStatusToggle = { itemId ->
-                        shoppingListItemsViewModel.toggleStatusShoppingListItem(listId, itemId)
+                    onStatusToggle = { itemId, purchased ->
+                        shoppingListItemsViewModel.toggleStatusShoppingListItem(listId, itemId, purchased)
                     },
                     onDelete = { item ->
                         itemToDelete.value = item
@@ -241,7 +242,7 @@ fun ShoppingListItemsHeader(
 fun AddedShoppingListItem(
     modifier: Modifier = Modifier,
     items: List<ShoppingListItem>,
-    onStatusToggle: (Int) -> (Unit),
+    onStatusToggle: (Int, Boolean) -> (Unit),
     onDelete: (ShoppingListItem) -> (Unit)
 ) {
     // === WhiteBox con los productos ===
@@ -256,7 +257,7 @@ fun AddedShoppingListItem(
                 ProductRow(
                     item = item,
                     onCheckedChange = {
-                        onStatusToggle(item.id)
+                        onStatusToggle(item.id, !item.purchased)
                     },
                     onDelete = { onDelete(item) })
             }
@@ -310,6 +311,6 @@ fun HeaderRow() {
 @Composable
 fun AddShoppingListsScreenPreview() {
     ListiTheme {
-        AddedShoppingListItem(Modifier, ShoppingListItemsPreview, {}, {})
+        AddedShoppingListItem(Modifier, ShoppingListItemsPreview, { a, b -> Unit}, {})
     }
 }

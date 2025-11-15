@@ -32,6 +32,11 @@ data class UpdateShoppingListItemRequest(
 )
 
 @Serializable
+data class ToggleShoppingListItemRequest(
+    val purchased: Boolean
+)
+
+@Serializable
 data class ShoppingListItemResponse(
     val item: ShoppingListItem
 )

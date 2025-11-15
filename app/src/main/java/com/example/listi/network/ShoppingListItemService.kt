@@ -45,5 +45,6 @@ interface ShoppingListItemService {
     @PATCH("/api/shopping-lists/{id}/items/{item_id}")
     suspend fun toggleStatusShoppingListItem(
         @Path("id") id: Int,
-        @Path("item_id") itemId: Int): Response<ShoppingListItemResponse>
+        @Path("item_id") itemId: Int,
+        @Body body: ToggleShoppingListItemRequest): Response<ShoppingListItem>
 }

@@ -34,7 +34,7 @@ fun ProductRow(
     onCheckedChange: () -> Unit,
     onDelete: () -> Unit
 ) {
-    var checked by remember { mutableStateOf(item.purchased) }
+    val checked = item.purchased
 
     Column(
         modifier = Modifier
