@@ -79,7 +79,7 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
 
-    <!-- New strings for image size dialog and generic OK -->
+
     <string name="profile_image_too_large_title">Image too large</string>
     <string name="profile_image_too_large_message">The selected image exceeds the 2 MB limit. Please choose a smaller file.</string>
     <string name="ok">OK</string>
