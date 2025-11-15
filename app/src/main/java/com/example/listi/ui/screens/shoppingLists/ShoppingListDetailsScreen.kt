@@ -41,13 +41,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.R
+import com.example.listi.ui.components.GreenAddButton
 import com.example.listi.ui.components.ProductRow
+import com.example.listi.ui.components.ShoppingListDialog
 import com.example.listi.ui.components.WhiteBoxWithText
 import com.example.listi.ui.screens.friends.FriendsViewModel
 import com.example.listi.ui.screens.friends.FriendsViewModelFactory
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
+import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.ShoppingListItem
 import java.util.Date
 
@@ -94,13 +97,72 @@ fun ShoppingListDetailsScreen(
     listId: Int
 ) {
 
+    val openCreateDialog = remember { mutableStateOf(false) }
+
     // Buscar la lista que nos piden
     val shoppingListItems by shoppingListItemsViewModel.items.collectAsState()
+    val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
 
-    LaunchedEffect(Unit) {
+    val listsRefreshTrigger by shoppingListItemsViewModel.refreshTrigger.collectAsState()
+    val itemsRefreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
+
+    // Apenas se abre o cambie el refreshTrigger quiero que se haga fetch
+    LaunchedEffect(itemsRefreshTrigger) {
         shoppingListItemsViewModel.loadShoppingListItems(listId)
     }
-    AddedShoppingListItem(modifier, shoppingListItems)
+
+    LaunchedEffect(listsRefreshTrigger) {
+        shoppingListViewModel.loadShoppingLists()
+    }
+
+    Column(
+        modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp),
+        verticalArrangement = Arrangement.Top
+    ) {
+        ShoppingListItemsHeader(modifier, shoppingLists.first { it.id == listId })
+        AddedShoppingListItem(modifier, shoppingListItems)
+    }
+
+    GreenAddButton(
+        {
+            openCreateDialog.value = true
+        }
+    )
+
+    when {
+        openCreateDialog.value -> {
+//            ShoppingListDialog(
+//                title = stringResource(R.string.create_lists),
+//                onDismissRequest = { openCreateDialog.value = false },
+//                onConfirmation = { list ->
+//                    shoppingListViewModel.createShoppingLists(list)
+//                    openCreateDialog.value = false
+//                }
+//            )
+        }
+    }
+}
+
+@Composable
+fun ShoppingListItemsHeader(
+    modifier: Modifier = Modifier,
+    list: ShoppingList
+) {
+    Column {
+        Text(
+            text = list.name,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(16.dp),
+        )
+
+        Text(
+            text = list.description,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(16.dp),
+        )
+    }
 }
 
 @Composable
@@ -108,43 +170,16 @@ fun AddedShoppingListItem(
     modifier: Modifier = Modifier,
     items: List<ShoppingListItem>
 ) {
-    var text by remember { mutableStateOf("") }
-
-    Column(
+    // === WhiteBox con los productos ===
+    WhiteBoxWithText(
+        text = "",
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp,64.dp),
-        verticalArrangement = Arrangement.Top
+            .fillMaxWidth()
     ) {
-        // === Caja de texto arriba del todo ===
-        OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Nombre") },
-            trailingIcon = {
-                Icon(Icons.Default.Edit, contentDescription = "Editar")
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // === Encabezado verde ===
-
-
-        // === WhiteBox con los productos ===
-        WhiteBoxWithText(
-            text = "",
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f, fill = false)
-        ) {
-
-            LazyColumn {
-                item { HeaderRow() }
-                items(items) { item ->
-                    ProductRow(item = item)
-                }
+        LazyColumn {
+            item { HeaderRow() }
+            items(items) { item ->
+                ProductRow(item = item)
             }
         }
     }
