@@ -2,13 +2,18 @@ package com.example.listi.ui.screens.friends
 
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,11 +81,15 @@ fun FriendsCardList(
 
         Spacer(modifier = Modifier.height(60.dp))
 
+        val isLargeScreen = maxWidthDp() > 600
+
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
-            modifier = Modifier.fillMaxWidth(),
-            label = {stringResource(R.string.search_friends)},
+            modifier = Modifier
+                .fillMaxWidth(if (isLargeScreen) 0.7f else 1f)
+                .align(Alignment.CenterHorizontally),
+            label = { stringResource(R.string.search_friends) },
             leadingIcon = {
                 Icon(
                     ImageVector.vectorResource(R.drawable.search),
@@ -90,19 +99,14 @@ fun FriendsCardList(
             singleLine = true,
 
             colors = TextFieldDefaults.colors(
-                // Fondo del campo de texto
-                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant, // Verde oscuro al hacer foco
-                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary, // Verde estándar
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
                 disabledContainerColor = Color.Gray,
-
-                // Color del texto y los iconos
                 focusedTextColor = MaterialTheme.colorScheme.onSurface,
                 focusedLabelColor = MaterialTheme.colorScheme.surface,
-                unfocusedLabelColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
+                unfocusedLabelColor = MaterialTheme.colorScheme.surface,
                 focusedLeadingIconColor = MaterialTheme.colorScheme.surface,
-                unfocusedLeadingIconColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-
-                // Color del cursor
+                unfocusedLeadingIconColor = MaterialTheme.colorScheme.surface,
                 cursorColor = MaterialTheme.colorScheme.surface
             )
         )
@@ -115,20 +119,21 @@ fun FriendsCardList(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 8.dp)
+
+            val screenWidth = maxWidthDp()
+            val columns = calculateColumns(screenWidth)
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(columns),
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(12.dp)
             ) {
-                // NOTA: Usar LazyColumn es más eficiente para listas largas
-                // que forEach, ya que solo renderiza los elementos visibles.
-                // Si la lista de amigos puede crecer, considera cambiar esto.
-                filteredFriends.forEach { friend ->
+                items(filteredFriends) { friend ->
                     FriendCard(
                         friendName = friend.name,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp, horizontal = 12.dp)
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
@@ -136,6 +141,15 @@ fun FriendsCardList(
     }
 }
 
+@Composable
+fun maxWidthDp(): Int {
+    return LocalConfiguration.current.screenWidthDp
+}
+
+fun calculateColumns(screenWidthDp: Int): Int {
+    val minCardWidth = 240 // tamaño mínimo por tarjeta
+    return maxOf(1, screenWidthDp / minCardWidth)
+}
 
 @Preview(showBackground = true)
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=900dp,height=1400dp")
