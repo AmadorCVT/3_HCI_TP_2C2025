@@ -42,6 +42,7 @@ import com.example.listi.R
 import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.CategoryRepository
 import com.example.listi.ui.components.GreenAddButton
+import com.example.listi.ui.components.ShareListDialog
 import com.example.listi.ui.components.ShoppingListCard
 import com.example.listi.ui.components.ShoppingListDialog
 import com.example.listi.ui.screens.products.CategoryViewModel
@@ -76,7 +77,7 @@ private val shoppingListsPreview = listOf(
     ShoppingList(2,"Lista super",
         "Una lista",
         metadata = "",
-        false,
+        true,
         user1,
         arrayOf(user3, user2),
         Date().toString(),
@@ -142,7 +143,15 @@ fun ShoppingListsScreen(
         snackbarHost = { SnackbarHost( snackbarHostState) }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-            ShoppingListsCards(modifier, shoppingLists, onNavigateToDetails)
+            ShoppingListsCards(
+                modifier = modifier,
+                shoppingLists = shoppingLists,
+                onShoppingListDetails = onNavigateToDetails,
+                shoppingListViewModel = shoppingListViewModel,
+                onShareList = { list, email ->
+                    shoppingListViewModel.shareShoppingList(list.id, email)
+                }
+            )
             GreenAddButton(
                 { openCreateDialog.value = true },
                 modifier
@@ -152,11 +161,14 @@ fun ShoppingListsScreen(
 
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun ShoppingListsCards(
     modifier: Modifier = Modifier,
     shoppingLists: List<ShoppingList>,
     onShoppingListDetails: (Int) -> Unit,
+    shoppingListViewModel: ShoppingListsViewModel,
+    onShareList: (ShoppingList, String) -> Unit = { _, _ -> }
 ) {
 
     val padding = dimensionResource(R.dimen.medium_padding)
@@ -170,10 +182,14 @@ fun ShoppingListsCards(
         }
     }
 
+    var listToShare by remember { mutableStateOf<ShoppingList?>(null) }
+
     Column(modifier = modifier.fillMaxSize()) {
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = padding),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = padding),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             Button(
@@ -195,6 +211,7 @@ fun ShoppingListsCards(
                 Text(stringResource(R.string.saved_lists))
             }
         }
+
         val screenWidth = LocalConfiguration.current.screenWidthDp
         val maxCardWidth = 350   //
         val columns = (screenWidth / maxCardWidth).coerceAtLeast(1)
@@ -209,33 +226,28 @@ fun ShoppingListsCards(
                 key = { it.id }
             ) { item ->
                 ShoppingListCard(
-                    item,
-                    Modifier
+                    shoppingList = item,
+                    modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
-                        .clickable { onShoppingListDetails(item.id) }
+                        .clickable { onShoppingListDetails(item.id) },
+                    onEditClick = { /* TODO editar */ },
+                    onShareClick = { listToShare = it },
+                    onDeleteClick = { /* TODO borrar */ }
                 )
             }
         }
-
     }
-}
 
-@Preview(showBackground = true)
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=900dp,height=1400dp")
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=900dp,height=1400dp, orientation=landscape")
-@Composable
-fun ShoppingListsPreview() {
-    ListiTheme {
-        ShoppingListsCards(
-            Modifier,
-            shoppingListsPreview as MutableList<ShoppingList>,
-            {},
-        )
-
-        GreenAddButton(
-            {},
-            Modifier
+    if (listToShare != null) {
+        ShareListDialog(
+            listName = listToShare!!.name,
+            onDismiss = { listToShare = null },
+            onSend = { email ->
+                onShareList(listToShare!!, email)
+                listToShare = null
+            }
         )
     }
+
 }

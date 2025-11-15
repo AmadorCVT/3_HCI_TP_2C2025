@@ -50,5 +50,5 @@ data class ShoppingListListResponse(
 
 @Serializable
 data class ShareShoppingListRequest(
-    val userId: Int
+    val userMail: String
 )

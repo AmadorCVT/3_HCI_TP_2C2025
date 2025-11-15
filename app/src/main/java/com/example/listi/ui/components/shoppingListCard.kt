@@ -7,48 +7,62 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.ui.unit.dp
 import com.example.listi.R
 import com.example.listi.ui.theme.*
+
 import com.example.listi.ui.types.ShoppingList
-import com.example.listi.ui.types.User
-import java.util.Date
 
-// For preview
-private val user1 = User(1, "Ama", "Doe", "ama@mail.com", null, null);
-private val user2 = User(2, "Lucas", "Doe", "ama@mail.com", null, null);
-private val user3 = User(3, "Bauti", "Doe", "ama@mail.com", null, null);
-
-private val previewList = ShoppingList(1,
-    "Lista Resi",
-    "Una lista",
-    metadata = "",
-    false,
-    user1,
-    arrayOf(user1, user2, user3),
-    Date().toString(), Date().toString(), Date().toString());
 
 
 @Composable
 fun ShoppingListCard(
     shoppingList: ShoppingList,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onEditClick: (ShoppingList) -> Unit,
+    onShareClick:(ShoppingList)->Unit,
+    onDeleteClick:(ShoppingList)->Unit
+
 ) {
+
+    var menuExpanded by remember { mutableStateOf(false) }
+
+
+    val actions = listOf(
+        ActionItem(
+            label = "Editar",
+            onClick = { onEditClick(shoppingList) }
+        ),
+        ActionItem(
+            label = "Compartir",
+            onClick = { onShareClick(shoppingList) }
+        ),
+        ActionItem(
+            label = "Borrar",
+            onClick = { onDeleteClick(shoppingList) }
+        )
+    )
+
     Surface(
         modifier = modifier
-            .widthIn(max = 600.dp)   // límite real
+            .widthIn(max = 600.dp)
             .padding(4.dp),
         shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius)),
         shadowElevation = 6.dp,
         tonalElevation = 2.dp,
         color = MaterialTheme.colorScheme.surface
     ) {
+
         Row(
             modifier = Modifier
                 .background(
@@ -58,65 +72,48 @@ fun ShoppingListCard(
                 .padding(dimensionResource(R.dimen.medium_padding))
         ) {
 
-            ShoppingListData(shoppingList.name, shoppingList.sharedWith)
+            // --- Nombre + usuarios ---
+            Column(horizontalAlignment = Alignment.Start) {
+
+                Text(
+                    shoppingList.name,
+                    maxLines = 1,
+                    style = Typography.bodyMedium,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                LazyRow {
+                    items(shoppingList.sharedWith) { user ->
+                        Text(
+                            "${user.name}, ",
+                            maxLines = 1,
+                            style = Typography.labelMedium,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+            }
 
             Spacer(Modifier.weight(1f))
 
-            OptionsButton({})
-        }
-    }
-}
+            // --- Botón de opciones ---
+            Box { // Necesario para posicionar el dropdown en el lugar exacto
+                IconButton(onClick = { menuExpanded = true }) {
+                    Icon(
+                        painterResource(R.drawable.more_vert_foreground),
+                        contentDescription = "Options"
+                    )
+                }
 
-@Composable
-fun ShoppingListData(
-    name: String,
-    sharedWith: Array<User>,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.Start
-    ) {
-        Text(
-            name,
-            maxLines = 1,
-            style = Typography.bodyMedium,
-            overflow = TextOverflow.Ellipsis
-        )
-
-        LazyRow {
-            items(items = sharedWith) { item ->
-                Text(
-                    "${item.name}, ",
-                    maxLines = 1,
-                    style = Typography.labelMedium,
-                    overflow = TextOverflow.Ellipsis
+                ReusedDropdownMenu(
+                    expanded = menuExpanded,
+                    onDismiss = { menuExpanded = false },
+                    actions = actions
                 )
             }
         }
     }
 }
 
-@Composable
-fun OptionsButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    IconButton(onClick = onClick) {
-        Icon(
-            painterResource(R.drawable.more_vert_foreground),
-            contentDescription = "Button"
-        )
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun ShoppingListCardPreview() {
-    ListiTheme {
-        ShoppingListCard(
-            previewList,
-            modifier = Modifier.padding(10.dp)
-        )
-    }
-}
+

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.ShoppingListRepository
+import com.example.listi.ui.types.ShareShoppingListRequest
 import com.example.listi.ui.types.ShoppingListRequest
 import com.example.listi.ui.types.ShoppingList
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -86,6 +87,17 @@ class ShoppingListsViewModel(
             try {
                 shoppingListsRespository.deleteShoppingList(id)
                 loadShoppingLists()
+            } catch (_: Exception) {}
+        }
+        _refreshTrigger.value++
+    }
+
+
+    fun shareShoppingList(id: Int, userMail: String) {
+        viewModelScope.launch {
+            try {
+                val request = ShareShoppingListRequest(userMail)
+                shoppingListsRespository.shareShoppingList(id, request)
             } catch (_: Exception) {}
         }
         _refreshTrigger.value++
