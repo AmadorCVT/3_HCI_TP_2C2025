@@ -37,7 +37,9 @@ interface ShoppingListItemService {
 
     // Eliminar ShoppingListItem
     @DELETE("/api/shopping-lists/{id}/items/{item_id}")
-    suspend fun deleteShoppingListItem(@Path("id") id: Int): Response<Unit>
+    suspend fun deleteShoppingListItem(
+        @Path("id") id: Int,
+        @Path("item_id") itemId: Int): Response<Unit>
 
     // Actualizar estado de compra de un ShoppingListItem
     @PATCH("/api/shopping-lists/{id}/items/{item_id}")

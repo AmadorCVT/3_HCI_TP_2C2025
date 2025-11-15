@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.R
+import com.example.listi.ui.components.DeleteDialog
 import com.example.listi.ui.components.GreenAddButton
 import com.example.listi.ui.components.ProductRow
 import com.example.listi.ui.components.ShoppingListDialog
@@ -111,9 +113,12 @@ fun ShoppingListDetailsScreen(
     // Para mostrar errores
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val errorColor = MaterialTheme.colorScheme.error
     val connectionError = stringResource(R.string.error_connection)
 
     val openCreateDialog = remember { mutableStateOf(false) }
+    val openDeleteDialog = remember { mutableStateOf(false) }
+    val itemToDelete = remember { mutableStateOf<ShoppingListItem?>(null) }
 
     // Buscar la lista que nos piden
     val shoppingListItems by shoppingListItemsViewModel.items.collectAsState()
@@ -143,7 +148,9 @@ fun ShoppingListDetailsScreen(
     LaunchedEffect(shoppingListItemsError) {
         shoppingListItemsError?.let {
             scope.launch {
-                snackbarHostState.showSnackbar(connectionError)
+                snackbarHostState.showSnackbar(
+                    message = shoppingListItemsError.toString()
+                )
             }
         }
         shoppingListItemsViewModel.clearError()
@@ -158,6 +165,20 @@ fun ShoppingListDetailsScreen(
                     openCreateDialog.value = false
                 },
                 products = products
+            )
+        }
+        openDeleteDialog.value -> {
+            DeleteDialog(
+                name = itemToDelete.value?.product?.name ?: "-",
+                onDismiss = {
+                    openDeleteDialog.value = false},
+                onConfirm = {
+
+                    shoppingListItemsViewModel.deleteShoppingListItem(listId,
+                        itemToDelete.value?.id ?: -1
+                    )
+                    openDeleteDialog.value = false
+                }
             )
         }
     }
@@ -177,9 +198,14 @@ fun ShoppingListDetailsScreen(
                 AddedShoppingListItem(
                     modifier,
                     shoppingListItems,
-                    { itemId ->
+                    onStatusToggle = { itemId ->
                         shoppingListItemsViewModel.toggleStatusShoppingListItem(listId, itemId)
-                    })
+                    },
+                    onDelete = { item ->
+                        itemToDelete.value = item
+                        openDeleteDialog.value = true
+                    }
+                )
             }
 
             GreenAddButton(
@@ -215,7 +241,8 @@ fun ShoppingListItemsHeader(
 fun AddedShoppingListItem(
     modifier: Modifier = Modifier,
     items: List<ShoppingListItem>,
-    onStatusToggle: (Int) -> (Unit)
+    onStatusToggle: (Int) -> (Unit),
+    onDelete: (ShoppingListItem) -> (Unit)
 ) {
     // === WhiteBox con los productos ===
     WhiteBoxWithText(
@@ -230,7 +257,8 @@ fun AddedShoppingListItem(
                     item = item,
                     onCheckedChange = {
                         onStatusToggle(item.id)
-                    })
+                    },
+                    onDelete = { onDelete(item) })
             }
         }
     }
@@ -241,31 +269,34 @@ fun HeaderRow() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 4.dp, vertical = 2.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+            .padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = stringResource(R.string.products),
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1.2f)
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.surfaceVariant
         )
+
         Text(
             text = stringResource(R.string.quantity),
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(0.65f),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1.2f)
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.surfaceVariant
         )
 
         Text(
             text = stringResource(R.string.unit),
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(0.55f),
             style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.surfaceVariant
         )
+
+        Spacer(modifier = Modifier.weight(0.3f))
     }
 
     Divider(
@@ -279,6 +310,6 @@ fun HeaderRow() {
 @Composable
 fun AddShoppingListsScreenPreview() {
     ListiTheme {
-        AddedShoppingListItem(Modifier, ShoppingListItemsPreview, {})
+        AddedShoppingListItem(Modifier, ShoppingListItemsPreview, {}, {})
     }
 }

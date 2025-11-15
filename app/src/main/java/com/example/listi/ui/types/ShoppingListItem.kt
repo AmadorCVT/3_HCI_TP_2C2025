@@ -33,14 +33,7 @@ data class UpdateShoppingListItemRequest(
 
 @Serializable
 data class ShoppingListItemResponse(
-    val id: Int,
-    val unit: String,
-    val quantity: Int,
-    val purchased: Boolean,
-    val lastPurchasedAt: String,
-    val createdAt: String,
-    val updatedAt: String,
-    val product: Product
+    val item: ShoppingListItem
 )
 
 @Serializable

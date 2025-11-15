@@ -150,7 +150,7 @@ fun ProductsScreen(
                         )
 
                         val filteredProducts = if (selectedCategory != null && selectedCategory != "Todos")
-                            products.filter { it.category.name == selectedCategory }
+                            products.filter { it.category?.name == selectedCategory }
                         else products
 
                         LazyColumn(
