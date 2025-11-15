@@ -42,28 +42,26 @@ fun ShoppingListCard(
 ) {
     Surface(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(4.dp), // margen exterior para que se vea la sombra
+            .widthIn(max = 600.dp)   // límite real
+            .padding(4.dp),
         shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius)),
-        shadowElevation = 6.dp, // 🔥 sombra real
-        tonalElevation = 2.dp, // opcional: da un pequeño relieve
-        color = MaterialTheme.colorScheme.surface // color base del fondo
+        shadowElevation = 6.dp,
+        tonalElevation = 2.dp,
+        color = MaterialTheme.colorScheme.surface
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
                 .background(
                     color = MaterialTheme.colorScheme.surface,
                     shape = RoundedCornerShape(dimensionResource(R.dimen.medium_radius))
                 )
                 .padding(dimensionResource(R.dimen.medium_padding))
         ) {
-            // List name and collaborators names
+
             ShoppingListData(shoppingList.name, shoppingList.sharedWith)
 
             Spacer(Modifier.weight(1f))
 
-            // Options button
             OptionsButton({})
         }
     }

@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
 
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -84,6 +85,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.compose.runtime.saveable)
     implementation("androidx.compose.material:material-icons-extended:1.7.5")
+    implementation(libs.androidx.compose.material3.window.size.class1)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
