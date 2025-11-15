@@ -94,6 +94,7 @@ fun AppNavGraph(
             val listId = entry.arguments!!.getInt(Constants.LIST_ID_ARG)
             ShoppingListDetailsScreen(
                 modifier,
+                productViewModel = productViewModel,
                 shoppingListViewModel = shoppingListsViewModel,
                 listId = listId
             )

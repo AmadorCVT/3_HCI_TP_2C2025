@@ -1,16 +1,15 @@
 package com.example.listi.ui.screens.shoppingLists
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.ShoppingListItemRepository
-import com.example.listi.repository.ShoppingListRepository
-import com.example.listi.ui.types.CreateShoppingListItemRequest
-import com.example.listi.ui.types.ShoppingListRequest
-import com.example.listi.ui.types.ShoppingList
+import com.example.listi.ui.types.ShoppingListItemRequest
 import com.example.listi.ui.types.ShoppingListItem
 import com.example.listi.ui.types.UpdateShoppingListItemRequest
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -47,7 +46,6 @@ class ShoppingListItemsViewModel(
             try {
                 _items.value = shoppingListItemRepository.getShoppingListItems(listId) as MutableList<ShoppingListItem>
             } catch (e: Exception) {
-                println("ERRROOOROROROROROROROOROR:")
                 println(e.localizedMessage)
                 _errorMessage.value = e.localizedMessage
             } finally {
@@ -56,7 +54,7 @@ class ShoppingListItemsViewModel(
         }
     }
 
-    fun createShoppingListsItem(listId: Int, item: CreateShoppingListItemRequest) {
+    fun createShoppingListsItem(listId: Int, item: ShoppingListItemRequest) {
         viewModelScope.launch {
             try {
                 shoppingListItemRepository.createShoppingListItem(listId, item)

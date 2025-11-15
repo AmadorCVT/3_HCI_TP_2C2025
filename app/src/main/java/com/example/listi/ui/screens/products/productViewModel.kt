@@ -36,6 +36,9 @@ class ProductViewModel(
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories = _categories.asStateFlow()
 
+    private val _refreshTrigger = MutableStateFlow(0)
+    val refreshTrigger = _refreshTrigger.asStateFlow()
+
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
@@ -69,5 +72,6 @@ class ProductViewModel(
                 loadProducts()
             } catch (_: Exception) {}
         }
+        _refreshTrigger.value++
     }
 }

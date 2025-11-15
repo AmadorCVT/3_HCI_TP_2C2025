@@ -2,6 +2,8 @@ package com.example.listi.ui.types
 
 import java.util.Date
 import com.example.listi.ui.types.Product
+import kotlinx.serialization.Serializable
+
 data class ShoppingListItem(
     val id: Int,
     val unit: String,
@@ -13,12 +15,14 @@ data class ShoppingListItem(
     val product: Product
 )
 
-data class CreateShoppingListItemRequest(
+@Serializable
+data class ShoppingListItemRequest(
     val unit: String,
     val quantity: Int,
     val productId: Int
 )
 
+@Serializable
 data class UpdateShoppingListItemRequest(
     val unit: String,
     val quantity: Int,

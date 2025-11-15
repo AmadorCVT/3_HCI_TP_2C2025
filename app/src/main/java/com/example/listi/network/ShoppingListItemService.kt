@@ -8,7 +8,7 @@ interface ShoppingListItemService {
 
     // Crear nueva ShoppingListItem
     @POST("/api/shopping-lists/{id}/items")
-    suspend fun createShoppingListItem(@Body request: CreateShoppingListItemRequest): Response<ShoppingListItemResponse>
+    suspend fun createShoppingListItem(@Body request: ShoppingListItemRequest): Response<ShoppingListItemResponse>
 
     // Obtener lista de categorías
     @GET("/api/shopping-lists/{id}/items")

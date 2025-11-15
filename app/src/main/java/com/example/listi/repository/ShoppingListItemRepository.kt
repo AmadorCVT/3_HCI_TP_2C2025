@@ -1,7 +1,7 @@
 package com.example.listi.repository
 
 import com.example.listi.network.ShoppingListItemService
-import com.example.listi.ui.types.CreateShoppingListItemRequest
+import com.example.listi.ui.types.ShoppingListItemRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
@@ -34,7 +34,7 @@ class ShoppingListItemRepository(private val api: ShoppingListItemService) {
 
     suspend fun createShoppingListItem(
         listId: Int,
-        request: CreateShoppingListItemRequest
+        request: ShoppingListItemRequest
     ): ShoppingListItem {
         return withContext(Dispatchers.IO) {
             val response = api.createShoppingListItem(request)

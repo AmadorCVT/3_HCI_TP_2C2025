@@ -25,6 +25,7 @@
     <!-- Products screen -->
     <string name="quantity">Cantidad</string>
     <string name="unit">Unidad</string>
+    <string name="select_product">Seleccionar producto</string>
 
     <!-- Profile screen -->
     <string name="profile_change_photo">Cambiar foto de perfil</string>
@@ -60,6 +61,9 @@
     <string name="error_password_reset_failed">No se pudo restablecer la contraseña</string>
     <string name="error_profile_fetch">No se pudo obtener perfil</string>
     <string name="error_profile_connection">Error de conexión al obtener perfil</string>
+    <string name="error_loading_lists">No se pudo cargar las listas</string>
+    <string name="error_loading_items">No se pudo cargar los items</string>
+    <string name="error">Error</string>
 
     <!-- Login screen -->
     <string name="email_label">Email</string>
