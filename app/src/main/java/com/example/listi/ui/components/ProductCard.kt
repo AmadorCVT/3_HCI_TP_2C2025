@@ -31,13 +31,13 @@ fun ProductCard(
     var selectedCategory by remember { mutableStateOf(product.category) }
 
     //TODO: simplify
-    val formattedDate = remember(product.createdAt) {
-        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        parser.timeZone = TimeZone.getTimeZone("UTC")
-        val date = parser.parse(product.createdAt)
-        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        date?.let { formatter.format(it) } ?: product.createdAt
-    }
+//    val formattedDate = remember(product.createdAt) {
+//        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+//        parser.timeZone = TimeZone.getTimeZone("UTC")
+//        val date = parser.parse(product.createdAt)
+//        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+//        date?.let { formatter.format(it) } ?: product.createdAt
+//    }
 
     Surface(
         modifier = modifier

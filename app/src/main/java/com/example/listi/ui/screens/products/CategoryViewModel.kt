@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.flow.asStateFlow
 
 
 class CategoryViewModelFactory(
@@ -36,6 +37,9 @@ class CategoryViewModel(
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
+
+    private val _refreshTrigger = MutableStateFlow(0)
+    val refreshTrigger = _refreshTrigger.asStateFlow()
 
     init {
         loadCategories()
@@ -69,5 +73,6 @@ class CategoryViewModel(
                 _errorMessage.value = e.message ?: "Error al crear categoría"
             }
         }
+        _refreshTrigger.value++
     }
 }

@@ -11,14 +11,9 @@ data class Product(
     val category: Category
 )
 @Serializable
-data class CreateProductRequest(
+data class ProductRequest(
     val name: String,
     val category: CategoryReference
-)
-@Serializable
-data class UpdateProductRequest(
-    val name: String,
-    val category: CategoryReference,
 )
 
 @Serializable

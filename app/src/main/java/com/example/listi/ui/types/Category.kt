@@ -7,10 +7,12 @@ import java.util.Date
 data class CreateCategoryRequest(
     val name: String
 )
+
 @Serializable
 data class UpdateCategoryRequest(
     val name: String
 )
+
 @Serializable
 data class CategoryResponse(
     val id: Int,

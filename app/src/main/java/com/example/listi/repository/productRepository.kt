@@ -1,9 +1,8 @@
 package com.example.listi.repository
 
 import com.example.listi.data.api.ProductService
-import com.example.listi.ui.types.CreateProductRequest
+import com.example.listi.ui.types.ProductRequest
 import com.example.listi.ui.types.Product
-import com.example.listi.ui.types.UpdateProductRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
@@ -30,7 +29,7 @@ class ProductRepository(private val api: ProductService) {
         }
     }
 
-    suspend fun createProduct(request: CreateProductRequest): Product {
+    suspend fun createProduct(request: ProductRequest): Product {
         return withContext(Dispatchers.IO) {
             val response = api.createProduct(request).awaitResponse()
             if (response.isSuccessful) {
@@ -44,7 +43,7 @@ class ProductRepository(private val api: ProductService) {
         }
     }
 
-    suspend fun updateProduct(id: Int, request: UpdateProductRequest): Product {
+    suspend fun updateProduct(id: Int, request: ProductRequest): Product {
         return withContext(Dispatchers.IO) {
             val response = api.updateProduct(id, request).awaitResponse()
             if (response.isSuccessful) {

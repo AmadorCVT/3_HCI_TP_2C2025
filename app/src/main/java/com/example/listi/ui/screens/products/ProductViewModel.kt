@@ -9,7 +9,7 @@ import com.example.listi.repository.ProductRepository
 import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.CategoryReference
-import com.example.listi.ui.types.UpdateProductRequest
+import com.example.listi.ui.types.ProductRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -59,12 +59,26 @@ class ProductViewModel(
         }
     }
 
+    fun createProduct(product: ProductRequest) {
+        viewModelScope.launch {
+            try {
+                productRepository.createProduct(ProductRequest(
+                        name = product.name,
+                        category = product.category
+                    )
+                )
+                loadProducts()
+            } catch (_: Exception) {}
+        }
+        _refreshTrigger.value++
+    }
+
     fun updateProductCategory(product: Product, newCategory: Category) {
         viewModelScope.launch {
             try {
                 productRepository.updateProduct(
                     id = product.id,
-                    request = UpdateProductRequest(
+                    request = ProductRequest(
                         name = product.name,
                         category = CategoryReference(newCategory.id)
                     )

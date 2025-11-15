@@ -25,7 +25,9 @@
     <!-- Products screen -->
     <string name="quantity">Cantidad</string>
     <string name="unit">Unidad</string>
+    <string name="create_product">Añadir producto</string>
     <string name="select_product">Seleccionar producto</string>
+    <string name="select_category">Seleccionar categoría</string>
 
     <!-- Profile screen -->
     <string name="profile_change_photo">Cambiar foto de perfil</string>

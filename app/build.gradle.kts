@@ -87,6 +87,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.7.5")
     implementation(libs.androidx.compose.material3.window.size.class1)
     implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.material3)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,9 +1,8 @@
 package com.example.listi.data.api
 
-import com.example.listi.ui.types.CreateProductRequest
+import com.example.listi.ui.types.ProductRequest
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ProductListResponse
-import com.example.listi.ui.types.UpdateProductRequest
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -12,7 +11,7 @@ interface ProductService {
     // ---- Crear un producto ----
     @POST("api/products")
     fun createProduct(
-        @Body body: CreateProductRequest
+        @Body body: ProductRequest
     ): Call<Product>
 
     // ---- Obtener lista de productos con filtros opcionales ----
@@ -36,7 +35,7 @@ interface ProductService {
     @PUT("api/products/{id}")
     fun updateProduct(
         @Path("id") id: Int,
-        @Body body: UpdateProductRequest
+        @Body body: ProductRequest
     ): Call<Product>
 
     // ---- Eliminar un producto ----
