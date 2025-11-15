@@ -26,6 +26,7 @@ data class Category(
     val name: String,
     val createdAt: String,
     val updatedAt: String,
+    val metadata: String? = null,
 )
 @Serializable
 data class Pagination(

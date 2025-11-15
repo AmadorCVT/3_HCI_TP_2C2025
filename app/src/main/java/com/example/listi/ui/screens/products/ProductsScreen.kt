@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -16,10 +17,13 @@ import com.example.listi.ui.components.AddCategoryDialog
 import com.example.listi.ui.components.ProductCard
 import com.example.listi.ui.components.ScrollableFilterMenu
 import com.example.listi.repository.CategoryRepository
+import com.example.listi.ui.components.DeleteDialog
 import com.example.listi.ui.components.GreenAddButton
 import com.example.listi.ui.components.ProductDialog
 import com.example.listi.ui.screens.shoppingLists.ShoppingListsCards
+import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ProductRequest
+import com.example.listi.ui.types.ShoppingList
 import kotlinx.coroutines.launch
 
 
@@ -45,10 +49,14 @@ fun ProductsScreen(
     val categoryError by categoryViewModel.errorMessage.collectAsState()
     val categoryRefreshTrigger  by categoryViewModel.refreshTrigger.collectAsState()
 
+    var productToModify by remember { mutableStateOf<Product?>(null) }
+
     var selectedCategory by remember { mutableStateOf<String?>(null) }
 
     var showAddCategoryDialog by remember { mutableStateOf(false) }
     var showAddProductDialog by remember { mutableStateOf(false) }
+    var showEditProductDialog by remember { mutableStateOf(false) }
+    var showDeleteProductDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(productRefreshTrigger) {
         viewModel.loadProducts()
@@ -61,17 +69,19 @@ fun ProductsScreen(
     LaunchedEffect(errorMessage) {
         errorMessage?.let {
             scope.launch {
-                snackbarHostState.showSnackbar(connectionError)
+                snackbarHostState.showSnackbar(errorMessage.toString())
             }
         }
+        viewModel.clearError()
     }
 
     LaunchedEffect(categoryError) {
         categoryError?.let {
             scope.launch {
-                snackbarHostState.showSnackbar(connectionError)
+                snackbarHostState.showSnackbar(errorMessage.toString())
             }
         }
+        categoryViewModel.clearError()
     }
 
 
@@ -97,6 +107,31 @@ fun ProductsScreen(
                         },
                         categories = categories
                     )
+                showEditProductDialog ->
+                    productToModify?.let {
+                        ProductDialog(
+                            product = productToModify,
+                            onDismissRequest = { showEditProductDialog = false },
+                            onConfirmation = { productRequest ->
+                                viewModel.updateProduct(productToModify!!.id, productRequest)
+                                showEditProductDialog= false
+                                productToModify = null
+                            },
+                            categories = categories
+                        )
+                    }
+                showDeleteProductDialog ->
+                    productToModify?.let {
+                        DeleteDialog(
+                            name = productToModify!!.name,
+                            onDismiss = { showDeleteProductDialog = false },
+                            onConfirm = {
+                                viewModel.deleteProduct(productToModify!!.id)
+                                showDeleteProductDialog= false
+                                productToModify = null
+                            }
+                        )
+                    }
             }
             val categoryNames = listOf("Todos") + categories.map { it.name }
 
@@ -129,7 +164,14 @@ fun ProductsScreen(
                                     onCategoryChange = { prod, newCat ->
                                         viewModel.updateProductCategory(prod, newCat)
                                     },
-                                    onMenuClick = {  }
+                                    onEditClick = {
+                                        productToModify = it
+                                        showEditProductDialog = true
+                                    },
+                                    onDeleteClick = {
+                                        productToModify = it
+                                        showDeleteProductDialog = true
+                                    }
                                 )
                             }
                         }

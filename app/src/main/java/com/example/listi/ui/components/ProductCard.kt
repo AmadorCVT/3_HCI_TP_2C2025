@@ -2,12 +2,14 @@ package com.example.listi.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import com.example.listi.R
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
+import com.example.listi.ui.types.ShoppingList
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.TimeZone
@@ -24,20 +27,25 @@ fun ProductCard(
     product: Product,
     categories: List<Category>,
     onCategoryChange: (Product, Category) -> Unit,
-    onMenuClick: (Product) -> Unit,
+    onEditClick: (Product) -> Unit,
+    onDeleteClick:(Product)->Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf(product.category) }
 
-    //TODO: simplify
-//    val formattedDate = remember(product.createdAt) {
-//        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-//        parser.timeZone = TimeZone.getTimeZone("UTC")
-//        val date = parser.parse(product.createdAt)
-//        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-//        date?.let { formatter.format(it) } ?: product.createdAt
-//    }
+    var menuExpanded by remember { mutableStateOf(false) }
+
+    val actions = listOf(
+        ActionItem(
+            label = stringResource(R.string.edit),
+            onClick = { onEditClick(product) }
+        ),
+        ActionItem(
+            label = stringResource(R.string.delete),
+            onClick = { onDeleteClick(product) }
+        )
+    )
 
     Surface(
         modifier = modifier
@@ -95,8 +103,23 @@ fun ProductCard(
             }
 
 
-            IconButton(onClick = { onMenuClick(product) }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "Más opciones")
+
+            Spacer(Modifier.weight(1f))
+
+            // --- Botón de opciones ---
+            Box { // Necesario para posicionar el dropdown en el lugar exacto
+                IconButton(onClick = { menuExpanded = true }) {
+                    Icon(
+                        ImageVector.vectorResource(R.drawable.more_vert_foreground),
+                        contentDescription = "Options"
+                    )
+                }
+
+                ReusedDropdownMenu(
+                    expanded = menuExpanded,
+                    onDismiss = { menuExpanded = false },
+                    actions = actions
+                )
             }
         }
     }
@@ -125,6 +148,7 @@ fun ProductCardPreview() {
         product = sampleProduct,
         categories = sampleCategories,
         onCategoryChange = { _, _ -> },
-        onMenuClick = {}
+        onEditClick = {},
+        onDeleteClick = {},
     )
 }

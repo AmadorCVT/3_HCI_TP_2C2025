@@ -17,6 +17,11 @@ data class ProductRequest(
 )
 
 @Serializable
+data class ProductResponse(
+    val product: Product
+)
+
+@Serializable
 data class CategoryReference(
     val id: Int
 )

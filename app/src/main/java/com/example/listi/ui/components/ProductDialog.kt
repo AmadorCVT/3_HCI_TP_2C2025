@@ -65,6 +65,8 @@ fun ProductDialog(
 
     if (product != null) {
         name = product.name
+        categoryId = product.category.id
+        selectedCategoryName = product.category.name
     }
 
     Dialog(

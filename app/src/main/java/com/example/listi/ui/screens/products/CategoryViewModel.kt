@@ -45,6 +45,10 @@ class CategoryViewModel(
         loadCategories()
     }
 
+    fun clearError() {
+        _errorMessage.value = null
+    }
+
     fun loadCategories(forceRefresh: Boolean = false) {
         viewModelScope.launch {
             _isLoading.value = true

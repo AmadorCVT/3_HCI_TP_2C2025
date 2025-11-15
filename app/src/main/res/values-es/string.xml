@@ -11,9 +11,12 @@
     <string name="search_friends">Buscar amigos</string>
     <string name="more_options">Más opciones</string>
     <string name="edit">Editar</string>
+    <string name="share">Compartir</string>
     <string name="delete">Eliminar</string>
     <string name="not_specified">No especificado</string>
     <string name="name">Nombre</string>
+    <string name="delete_confirmation">¿Desea borrar </string>
+    <string name="confirm">Confirmar</string>
 
     <!-- Shopping lists screen -->
     <string name="active_lists">Activo</string>

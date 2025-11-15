@@ -36,6 +36,9 @@ class FriendsViewModel(
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
+    private val _refreshTrigger = MutableStateFlow(0)
+    val refreshTrigger = _refreshTrigger.asStateFlow()
+
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 

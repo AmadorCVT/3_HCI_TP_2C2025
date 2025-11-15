@@ -45,6 +45,10 @@ class ProductViewModel(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
+    fun clearError() {
+        _errorMessage.value = null
+    }
+
     fun loadProducts() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -63,6 +67,34 @@ class ProductViewModel(
         viewModelScope.launch {
             try {
                 productRepository.createProduct(ProductRequest(
+                        name = product.name,
+                        category = product.category
+                    )
+                )
+                loadProducts()
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
+        }
+        _refreshTrigger.value++
+    }
+
+    fun deleteProduct(productId: Int) {
+        viewModelScope.launch {
+            try {
+                productRepository.deleteProduct(productId)
+                loadProducts()
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
+        }
+        _refreshTrigger.value++
+    }
+
+    fun updateProduct(productId: Int, product: ProductRequest) {
+        viewModelScope.launch {
+            try {
+                productRepository.updateProduct(productId, ProductRequest(
                         name = product.name,
                         category = product.category
                     )

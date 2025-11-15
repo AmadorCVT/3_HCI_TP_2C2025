@@ -59,7 +59,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.ui.platform.LocalConfiguration
-import com.example.listi.ui.components.DeleteShoppingListDialog
+import com.example.listi.ui.components.DeleteDialog
 import com.example.listi.ui.components.EditShoppingListDialog
 
 
@@ -277,8 +277,8 @@ fun ShoppingListsCards(
         )
     }
     if (listToDelete != null) {
-        DeleteShoppingListDialog(
-            listName = listToDelete!!.name,
+        DeleteDialog(
+            name = listToDelete!!.name,
             onDismiss = { listToDelete = null },
             onConfirm = {
                 shoppingListViewModel.deleteShoppingLists(listToDelete!!.id)

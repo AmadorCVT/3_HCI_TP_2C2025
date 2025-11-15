@@ -3,6 +3,7 @@ package com.example.listi.data.api
 import com.example.listi.ui.types.ProductRequest
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ProductListResponse
+import com.example.listi.ui.types.ProductResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -36,7 +37,7 @@ interface ProductService {
     fun updateProduct(
         @Path("id") id: Int,
         @Body body: ProductRequest
-    ): Call<Product>
+    ): Call<ProductResponse>
 
     // ---- Eliminar un producto ----
     @DELETE("api/products/{id}")

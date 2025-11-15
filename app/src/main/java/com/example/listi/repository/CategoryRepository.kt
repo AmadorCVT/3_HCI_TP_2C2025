@@ -40,7 +40,7 @@ class CategoryRepository(private val api: CategoryService) {
                 val created = Category(
                     id = createdResponse.id,
                     name = createdResponse.name,
-
+                    metadata = null,
                     createdAt = dateFormat.format(Date()),
                     updatedAt = dateFormat.format(Date())
                 )
@@ -60,6 +60,7 @@ class CategoryRepository(private val api: CategoryService) {
                 Category(
                     id = result.id,
                     name = result.name,
+                    metadata = null,
                     createdAt = dateFormat.format(Date()),
                     updatedAt = dateFormat.format(Date())
                 )
@@ -77,6 +78,7 @@ class CategoryRepository(private val api: CategoryService) {
                 val updated = Category(
                     id = result.id,
                     name = result.name,
+                    metadata = null,
                     createdAt = dateFormat.format(Date()),
                     updatedAt = dateFormat.format(Date())
                 )

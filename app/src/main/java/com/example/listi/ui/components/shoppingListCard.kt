@@ -13,8 +13,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 
 import androidx.compose.ui.unit.dp
@@ -40,15 +43,15 @@ fun ShoppingListCard(
 
     val actions = listOf(
         ActionItem(
-            label = "Editar",
+            label = stringResource(R.string.edit),
             onClick = { onEditClick(shoppingList) }
         ),
         ActionItem(
-            label = "Compartir",
+            label = stringResource(R.string.share),
             onClick = { onShareClick(shoppingList) }
         ),
         ActionItem(
-            label = "Borrar",
+            label = stringResource(R.string.delete),
             onClick = { onDeleteClick(shoppingList) }
         )
     )
@@ -100,7 +103,7 @@ fun ShoppingListCard(
             Box { // Necesario para posicionar el dropdown en el lugar exacto
                 IconButton(onClick = { menuExpanded = true }) {
                     Icon(
-                        painterResource(R.drawable.more_vert_foreground),
+                        ImageVector.vectorResource(R.drawable.more_vert_foreground),
                         contentDescription = "Options"
                     )
                 }

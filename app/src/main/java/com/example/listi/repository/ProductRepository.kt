@@ -3,6 +3,7 @@ package com.example.listi.repository
 import com.example.listi.data.api.ProductService
 import com.example.listi.ui.types.ProductRequest
 import com.example.listi.ui.types.Product
+import com.example.listi.ui.types.ProductResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
@@ -43,13 +44,13 @@ class ProductRepository(private val api: ProductService) {
         }
     }
 
-    suspend fun updateProduct(id: Int, request: ProductRequest): Product {
+    suspend fun updateProduct(id: Int, request: ProductRequest): ProductResponse {
         return withContext(Dispatchers.IO) {
             val response = api.updateProduct(id, request).awaitResponse()
             if (response.isSuccessful) {
                 val updated = response.body()!!
                 cachedProducts = cachedProducts?.map {
-                    if (it.id == id) updated else it
+                    if (it.id == id) updated.product else it
                 }
                 updated
             } else {
