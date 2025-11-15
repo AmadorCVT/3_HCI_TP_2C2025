@@ -39,6 +39,7 @@ fun ProductsScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val productRefreshTrigger  by viewModel.refreshTrigger.collectAsState()
+    val connectionError = stringResource(R.string.error_connection)
 
     val categories by categoryViewModel.categories.collectAsState()
     val categoryError by categoryViewModel.errorMessage.collectAsState()
@@ -60,7 +61,7 @@ fun ProductsScreen(
     LaunchedEffect(errorMessage) {
         errorMessage?.let {
             scope.launch {
-                snackbarHostState.showSnackbar(errorMessage.toString())
+                snackbarHostState.showSnackbar(connectionError)
             }
         }
     }
@@ -68,7 +69,7 @@ fun ProductsScreen(
     LaunchedEffect(categoryError) {
         categoryError?.let {
             scope.launch {
-                snackbarHostState.showSnackbar(categoryError.toString())
+                snackbarHostState.showSnackbar(connectionError)
             }
         }
     }

@@ -68,7 +68,9 @@ class ProductViewModel(
                     )
                 )
                 loadProducts()
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
         }
         _refreshTrigger.value++
     }
@@ -84,7 +86,9 @@ class ProductViewModel(
                     )
                 )
                 loadProducts()
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
         }
         _refreshTrigger.value++
     }
