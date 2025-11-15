@@ -3,6 +3,7 @@ package com.example.listi.ui.screens.shoppingLists
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -87,7 +89,6 @@ private val shoppingListsPreview = listOf(
         Date().toString())
 )
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ShoppingListsScreen(
     modifier: Modifier = Modifier,
@@ -113,9 +114,10 @@ fun ShoppingListsScreen(
         shoppingListsError?.let {
             snackbarHostState.showSnackbar(shoppingListsError.toString())
         }
+        // TODO: Clear error after showing
     }
 
-    val openCreateDialog = remember { mutableStateOf(false) }
+    val openCreateDialog = rememberSaveable { mutableStateOf(false) }
 
     when {
         openCreateDialog.value -> {
@@ -133,15 +135,14 @@ fun ShoppingListsScreen(
     // Scafold para el snackbar
     Scaffold(
         snackbarHost = { SnackbarHost( snackbarHostState) }
-    ) {
-        ShoppingListsCards(modifier, shoppingLists, onNavigateToDetails)
-
-        GreenAddButton(
-            {
-                openCreateDialog.value = true
-            },
-            modifier
-        )
+    ) { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues)) {
+            ShoppingListsCards(modifier, shoppingLists, onNavigateToDetails)
+            GreenAddButton(
+                { openCreateDialog.value = true },
+                modifier
+            )
+        }
     }
 
 }
