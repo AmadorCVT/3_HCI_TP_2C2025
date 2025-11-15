@@ -22,10 +22,13 @@ import com.example.listi.ui.components.BottomBar
 import com.example.listi.ui.components.DrawerBar
 import com.example.listi.ui.components.RailBar
 import com.example.listi.ui.navigation.AppNavGraph
+import com.example.listi.ui.navigation.ROUTE_FRIENDS
 import com.example.listi.ui.navigation.ROUTE_LISTS
 import com.example.listi.ui.navigation.ROUTE_LOGIN
 import com.example.listi.ui.navigation.ROUTE_PASSWORD
 import com.example.listi.ui.navigation.ROUTE_PASSWORD_CODE
+import com.example.listi.ui.navigation.ROUTE_PRODUCTS
+import com.example.listi.ui.navigation.ROUTE_PROFILE
 import com.example.listi.ui.navigation.ROUTE_REGISTER
 import com.example.listi.ui.navigation.ROUTE_VERIFY
 import com.example.listi.ui.theme.ListiTheme
@@ -66,13 +69,13 @@ fun ListiApp(
         Scaffold(
             topBar = {
                 if (!isTablet) {   // celular -> topbar
-                    if (currentRoute !in noBarsRoutes)
+                    if (currentRoute in barsRoutes)
                         AppTopBar(currentRoute)
                 }
             },
             bottomBar = {
                 if (!isTablet) {   // celular -> bottombar
-                    if (currentRoute !in noBarsRoutes)
+                    if (currentRoute in barsRoutes)
                         BottomBar(
                             currentRoute = currentRoute,
                             onNavigateToRoute = { route ->
@@ -109,10 +112,9 @@ fun ListiApp(
     }
 }
 
-private val noBarsRoutes = listOf(
-    ROUTE_LOGIN, ROUTE_REGISTER, ROUTE_VERIFY, ROUTE_PASSWORD_CODE, ROUTE_PASSWORD
+private val barsRoutes = listOf(
+    ROUTE_LISTS, ROUTE_PRODUCTS, ROUTE_FRIENDS, ROUTE_PROFILE
 )
-
 
 @Composable
 fun NavigationRailBar(

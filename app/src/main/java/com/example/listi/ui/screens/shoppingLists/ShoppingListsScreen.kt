@@ -99,6 +99,7 @@ fun ShoppingListsScreen(
     // Para mostrar errores
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val connectionError = stringResource(R.string.error_connection)
 
     val refreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
     val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
@@ -112,11 +113,11 @@ fun ShoppingListsScreen(
     // Si sale un mensaje de error, mostrarlo
     LaunchedEffect(shoppingListsError) {
         shoppingListsError?.let {
-            snackbarHostState.showSnackbar(shoppingListsError.toString())
+            scope.launch {
+                snackbarHostState.showSnackbar(connectionError)
+            }
         }
-        // TODO: Clear error after showing
     }
-
     val openCreateDialog = rememberSaveable { mutableStateOf(false) }
 
     when {
@@ -132,7 +133,7 @@ fun ShoppingListsScreen(
         }
     }
 
-    // Scafold para el snackbar
+    // Scaffold para el snackbar
     Scaffold(
         snackbarHost = { SnackbarHost( snackbarHostState) }
     ) { paddingValues ->

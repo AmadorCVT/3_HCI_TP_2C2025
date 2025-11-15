@@ -3,6 +3,7 @@ package com.example.listi.ui.screens.shoppingLists
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +23,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -106,6 +109,7 @@ fun ShoppingListDetailsScreen(
     // Para mostrar errores
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val connectionError = stringResource(R.string.error_connection)
 
     val openCreateDialog = remember { mutableStateOf(false) }
 
@@ -137,26 +141,10 @@ fun ShoppingListDetailsScreen(
     LaunchedEffect(shoppingListItemsError) {
         shoppingListItemsError?.let {
             scope.launch {
-                snackbarHostState.showSnackbar(shoppingListItemsError.toString())
+                snackbarHostState.showSnackbar(connectionError)
             }
         }
     }
-
-    Column(
-        modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp),
-        verticalArrangement = Arrangement.Top
-    ) {
-        ShoppingListItemsHeader(modifier, shoppingLists.first { it.id == listId })
-        AddedShoppingListItem(modifier, shoppingListItems)
-    }
-
-    GreenAddButton(
-        {
-            openCreateDialog.value = true
-        }
-    )
 
     when {
         openCreateDialog.value -> {
@@ -164,6 +152,29 @@ fun ShoppingListDetailsScreen(
                 onDismissRequest = { openCreateDialog.value = false },
                 onConfirmation = {},
                 products = products
+            )
+        }
+    }
+
+    // Scaffold para el snackbar
+    Scaffold(
+        snackbarHost = { SnackbarHost( snackbarHostState) }
+    ) { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Top
+            ) {
+                ShoppingListItemsHeader(modifier, shoppingLists.first { it.id == listId })
+                AddedShoppingListItem(modifier, shoppingListItems)
+            }
+
+            GreenAddButton(
+                {
+                    openCreateDialog.value = true
+                }
             )
         }
     }
