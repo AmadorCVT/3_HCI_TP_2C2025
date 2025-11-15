@@ -8,6 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -275,8 +276,8 @@ fun ProfileScreen(
                                     onClick = { isEditing = true },
                                     modifier = Modifier.align(Alignment.TopEnd),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.primary,
-                                        contentColor = MaterialTheme.colorScheme.onPrimary
+                                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                                     ),
                                     shape = RoundedCornerShape(20.dp),
                                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
@@ -319,6 +320,7 @@ fun ProfileScreen(
                                 .size(110.dp)
                                 .clip(CircleShape)
                                 .background(MaterialTheme.colorScheme.primaryContainer)
+                                .border(width = 3.dp, color = androidx.compose.ui.res.colorResource(id = R.color.profile_border_green), shape = CircleShape)
                                 .clickable(enabled = isEditing) { if (isEditing) pickImageLauncher.launch("image/*") },
                             contentAlignment = Alignment.Center
                         ) {
@@ -338,6 +340,18 @@ fun ProfileScreen(
                                     fontWeight = FontWeight.Bold
                                 )
                             }
+                        }
+
+                        // Indicador pequeño para cambiar la foto cuando se está editando
+                        if (isEditing) {
+                            Text(
+                                text = stringResource(R.string.profile_change_photo),
+                                modifier = Modifier
+                                    .padding(top = 8.dp)
+                                    .clickable { pickImageLauncher.launch("image/*") },
+                                color = MaterialTheme.colorScheme.primary,
+                                fontSize = 12.sp
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(12.dp))
