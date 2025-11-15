@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
@@ -22,13 +23,15 @@ import androidx.compose.ui.unit.dp
 import com.example.listi.ui.navigation.AppDestinations
 import com.example.listi.ui.navigation.ROUTE_LOGIN
 
-
+//TODO: cuando seleccionas un lugar es lila, como el predeterminado de MD3
 @Composable
 fun RailBar(
     currentRoute: String,
     onNavigateToRoute: (String) -> Unit
 ) {
     NavigationRail(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         header = {
             Column(
                 modifier = Modifier.padding(vertical = 16.dp),
@@ -37,15 +40,18 @@ fun RailBar(
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "User Profile",
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier.size(64.dp),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Username") // Placeholder
+                Text(
+                    text = "Username",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
         }
     ) {
         AppDestinations.entries.forEach { item ->
-            // Ignorar las secciones de autenticacion
             if (item.route != ROUTE_LOGIN)
                 NavigationRailItem(
                     icon = {
@@ -54,8 +60,6 @@ fun RailBar(
                             contentDescription = stringResource(item.contentDescription)
                         )
                     },
-//                    label = { Text(text = stringResource(item.label)) },
-//                    alwaysShowLabel = true,
                     selected = currentRoute == item.route,
                     onClick = { onNavigateToRoute(item.route) }
                 )
