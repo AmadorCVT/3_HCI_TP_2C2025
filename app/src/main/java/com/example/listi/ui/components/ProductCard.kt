@@ -82,7 +82,7 @@ fun ProductCard(
                     modifier = Modifier.height(28.dp),
                     contentPadding = PaddingValues(4.dp)
                 ) {
-                    Text(selectedCategory.name, fontSize = 12.sp)
+                    Text(selectedCategory?.name ?: "-", fontSize = 12.sp)
                 }
 
                 DropdownMenu(

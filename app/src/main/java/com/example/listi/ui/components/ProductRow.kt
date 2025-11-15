@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,7 +31,8 @@ import com.example.listi.R
 @Composable
 fun ProductRow(
     item: ShoppingListItem,
-    onCheckedChange: ((Boolean) -> Unit)? = null
+    onCheckedChange: () -> Unit,
+    onDelete: () -> Unit
 ) {
     var checked by remember { mutableStateOf(item.purchased) }
 
@@ -50,12 +52,13 @@ fun ProductRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
                 // Checkmark
                 Box(
                     modifier = Modifier
@@ -63,8 +66,7 @@ fun ProductRow(
                         .clip(CircleShape)
                         .background(if (checked) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent)
                         .clickable {
-                            checked = !checked
-                            onCheckedChange?.invoke(checked)
+                            onCheckedChange()
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -86,6 +88,8 @@ fun ProductRow(
                     }
                 }
 
+                Spacer(Modifier.width(16.dp))
+
                 // Texto producto
                 Text(
                     text = item.product.name,
@@ -94,20 +98,27 @@ fun ProductRow(
                 )
             }
 
-            // Cantidad
             Text(
-                text = item.quantity.toString(),
-                color = Color.DarkGray,
-                style = MaterialTheme.typography.bodyMedium
+                item.quantity.toString(),
+                modifier = Modifier.weight(0.5f),
+                color = Color.DarkGray
             )
 
-            // Unidad
             Text(
-                text = item.unit,
-                color = Color.DarkGray,
-                style = MaterialTheme.typography.bodyMedium
+                item.unit,
+                modifier = Modifier.weight(0.5f),
+                color = Color.DarkGray
             )
+
+            IconButton(onClick = { onDelete() }) {
+                Icon(
+                    ImageVector.vectorResource(R.drawable.delete_foreground),
+                    contentDescription = "Delete",
+                    modifier = Modifier.size(32.dp)
+                )
+            }
         }
+
     }
 }
 
@@ -144,5 +155,5 @@ fun ProductRowPreview() {
         product = sampleProduct
     )
 
-    ProductRow(item = sampleItem)
+    ProductRow(item = sampleItem, {}, {})
 }

@@ -8,7 +8,7 @@ data class Product(
     val name: String,
     val createdAt: String,
     val updatedAt: String,
-    val category: Category
+    val category: Category? = null
 )
 @Serializable
 data class ProductRequest(

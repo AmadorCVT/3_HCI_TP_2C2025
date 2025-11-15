@@ -63,7 +63,10 @@ class ShoppingListItemsViewModel(
             try {
                 shoppingListItemRepository.createShoppingListItem(listId, item)
                 loadShoppingListItems(listId)
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                println(e.localizedMessage)
+                _errorMessage.value = e.localizedMessage
+            }
         }
         _refreshTrigger.value++
     }
@@ -73,8 +76,8 @@ class ShoppingListItemsViewModel(
             try {
                 shoppingListItemRepository.toggleStatusShoppingListItem(listId, itemId)
                 loadShoppingListItems(listId)
-            } catch (_: Exception) {
-
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
             }
         }
         _refreshTrigger.value++
@@ -85,19 +88,21 @@ class ShoppingListItemsViewModel(
             try {
                 shoppingListItemRepository.updateShoppingListItem(listId, itemId, item)
                 loadShoppingListItems(listId)
-            } catch (_: Exception) {
-
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
             }
         }
         _refreshTrigger.value++
     }
 
-    fun deleteShoppingLists(listId: Int, itemId: Int) {
+    fun deleteShoppingListItem(listId: Int, itemId: Int) {
         viewModelScope.launch {
             try {
                 shoppingListItemRepository.deleteShoppingListItem(listId, itemId)
                 loadShoppingListItems(listId)
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
         }
         _refreshTrigger.value++
     }

@@ -1,6 +1,7 @@
 package com.example.listi.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,8 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +40,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.listi.R
+import com.example.listi.ui.screens.shoppingLists.AddedShoppingListItem
+import com.example.listi.ui.screens.shoppingLists.ShoppingListItemsHeader
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ProductReference
@@ -71,121 +76,139 @@ fun ShoppingListItemDialog(
         unit = shoppingListItem.unit
         quantity = shoppingListItem.quantity.toString()
     }
+    // Scaffold para el snackbar
+    Scaffold(
+        snackbarHost = { SnackbarHost( snackbarHostState) }
+    ) { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues)) {
+            Dialog(
+                onDismissRequest = {
+                    onDismissRequest()
+                },
 
-    Dialog(
-        onDismissRequest = {
-            onDismissRequest()
-        },
-
-    ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(450.dp)
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = stringResource(R.string.add_lists_item),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(16.dp),
-                )
-
-                OutlinedTextField(
-                    value = quantity,
-                    onValueChange = { quantity = it },
-                    label = { Text(stringResource(R.string.quantity)) },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(dimensionResource(R.dimen.medium_padding))
-                )
-
-                OutlinedTextField(
-                    value = unit,
-                    onValueChange = { unit = it },
-                    label = { Text(stringResource(R.string.unit)) },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(dimensionResource(R.dimen.medium_padding))
-                )
-
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = { expanded = !expanded },
+                ) {
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(dimensionResource(R.dimen.medium_padding))
+                        .height(450.dp)
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(16.dp),
                 ) {
-                    OutlinedTextField(
-                        value = selectedProductName,
-                        onValueChange = {},
-                        readOnly = true,
-                        label = { Text(stringResource(R.string.select_product)) },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        modifier = Modifier.fillMaxWidth()
-                            .menuAnchor(ExposedDropdownMenuAnchorType.SecondaryEditable)
-                    )
-                    ExposedDropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        products.forEach { product ->
-                            DropdownMenuItem(
-                                text = { Text(product.name) },
-                                onClick = {
-                                    selectedProductName = product.name
-                                    productId = product.id
-                                    expanded = false
-                                }
-                            )
-                        }
-                    }
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                ) {
-                    OutlinedButton(
-                        onClick = { onDismissRequest()}
-                    ) {
-                        Text(text = stringResource(R.string.logout_confirm_cancel),
-                            color = MaterialTheme.colorScheme.surfaceVariant)
-                    }
-                    Button(
-                        onClick = {
-                            if (productId < 0 ) {
-                                onDismissRequest()
-                            } else {
-                                onConfirmation(
-                                    ShoppingListItemRequest(
-                                        unit = unit,
-                                        quantity = quantity.toInt(),
-                                        product = ProductReference(productId)
-                                    )
-                                )
-                            }
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            contentColor = MaterialTheme.colorScheme.onError
+                        Text(
+                            text = stringResource(R.string.add_lists_item),
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.padding(16.dp),
                         )
-                    ) {
-                        Text(text = stringResource(R.string.save))
+
+                        OutlinedTextField(
+                            value = quantity,
+                            onValueChange = { quantity = it },
+                            label = { Text(stringResource(R.string.quantity)) },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(dimensionResource(R.dimen.medium_padding))
+                        )
+
+                        OutlinedTextField(
+                            value = unit,
+                            onValueChange = { unit = it },
+                            label = { Text(stringResource(R.string.unit)) },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(dimensionResource(R.dimen.medium_padding))
+                        )
+
+                        ExposedDropdownMenuBox(
+                            expanded = expanded,
+                            onExpandedChange = { expanded = !expanded },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(dimensionResource(R.dimen.medium_padding))
+                        ) {
+                            OutlinedTextField(
+                                value = selectedProductName,
+                                onValueChange = {},
+                                readOnly = true,
+                                label = { Text(stringResource(R.string.select_product)) },
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                                modifier = Modifier.fillMaxWidth()
+                                    .menuAnchor(ExposedDropdownMenuAnchorType.SecondaryEditable)
+                            )
+                            ExposedDropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false }
+                            ) {
+                                products.forEach { product ->
+                                    DropdownMenuItem(
+                                        text = { Text(product.name) },
+                                        onClick = {
+                                            selectedProductName = product.name
+                                            productId = product.id
+                                            expanded = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                        ) {
+                            OutlinedButton(
+                                onClick = { onDismissRequest()}
+                            ) {
+                                Text(text = stringResource(R.string.logout_confirm_cancel),
+                                    color = MaterialTheme.colorScheme.surfaceVariant)
+                            }
+                            Button(
+                                onClick = {
+                                    if (productId < 0 ) {
+                                        onDismissRequest()
+                                    } else {
+                                        var quantityInt = 0
+
+                                        // Primero chequear que sea un entero
+                                        try {
+                                            quantityInt = quantity.toInt()
+                                        } catch (e: Exception) {
+                                            scope.launch {
+                                                snackbarHostState.showSnackbar(e.toString())
+                                            }
+                                        }
+
+                                        onConfirmation(
+                                            ShoppingListItemRequest(
+                                                unit = unit,
+                                                quantity = quantityInt ,
+                                                product = ProductReference(productId)
+                                            )
+                                        )
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                    contentColor = MaterialTheme.colorScheme.onError
+                                )
+                            ) {
+                                Text(text = stringResource(R.string.save))
+                            }
+                        }
                     }
                 }
             }
         }
     }
+
 }
 
 @Preview(showBackground = true, device = "spec:width=411dp,height=891dp")
