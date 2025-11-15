@@ -24,12 +24,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,6 +49,9 @@ import com.example.listi.ui.types.User
 import com.example.listi.R
 import java.io.ByteArrayOutputStream
 import androidx.core.graphics.scale
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.layout.onGloballyPositioned
 
 @Composable
 fun ProfileScreen(
@@ -77,9 +80,7 @@ fun ProfileScreen(
     // Derived display fields from current user
     val name = user?.let { "${it.name} ${it.surname}" } ?: ""
     val email = user?.email ?: ""
-    val sex = user?.metadata?.get("sex") ?: stringResource(R.string.not_specified)
-    val birthDate = user?.metadata?.get("birthDate") ?: stringResource(R.string.profile_placeholder_dash)
-    val initials = user?.let {
+     val initials = user?.let {
         val n = it.name.trim()
         val s = it.surname.trim()
         "${n.firstOrNull()?.uppercaseChar() ?: 'A'}${s.firstOrNull()?.uppercaseChar() ?: 'C'}"
@@ -180,199 +181,238 @@ fun ProfileScreen(
             }
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .verticalScroll(rememberScrollState())
-                .padding(8.dp)
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            Spacer(modifier = Modifier.height(8.dp))
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx() }
+            var contentHeightPx by remember { mutableStateOf(0f) }
+            val needsScroll = contentHeightPx > maxHeightPx
+            val scrollState = rememberScrollState()
 
-            // Card con colores del tema
-            Card(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .then(if (needsScroll) Modifier.verticalScroll(scrollState) else Modifier)
+                    .padding(8.dp)
+                    .padding(innerPadding)
+                    .onGloballyPositioned { coords ->
+                        contentHeightPx = coords.size.height.toFloat()
+                    },
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
             ) {
-                Column(
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Card con colores del tema
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(horizontal = 8.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 4.dp)) {
-                        IconButton(
-                            onClick = { isEditing = !isEditing },
-                            modifier = Modifier.align(Alignment.TopEnd)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Edit,
-                                contentDescription = stringResource(R.string.profile_edit_button),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .size(110.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primaryContainer)
-                            .clickable(enabled = isEditing) { if (isEditing) pickImageLauncher.launch("image/*") },
-                        contentAlignment = Alignment.Center
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        if (profilePhotoBitmap != null) {
-                            Image(
-                                bitmap = profilePhotoBitmap.asImageBitmap(),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(CircleShape)
-                            )
-                        } else {
-                            Text(
-                                text = initials,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                fontSize = 36.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    // Editable name and surname
-                    if (isEditing) {
-                        OutlinedTextField(
-                            value = editName,
-                            onValueChange = { editName = it },
-                            label = { Text(stringResource(R.string.profile_name_label)) },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        OutlinedTextField(
-                            value = editSurname,
-                            onValueChange = { editSurname = it },
-                            label = { Text(stringResource(R.string.profile_surname_label)) },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        // Save / Cancel
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            ElevatedButton(onClick = {
-                                // Save changes
-                                // Construir metadata nueva fusionando existente y foto pendiente
-                                val existing = user?.metadata?.toMutableMap() ?: mutableMapOf()
-                                if (pendingPhotoBase64 != null) {
-                                    existing["profile_photo"] = pendingPhotoBase64!!
-                                }
-                                authViewModel?.updateProfile(editName.trim(), editSurname.trim(), existing)
-                                // limpiar pending
-                                pendingPhotoBase64 = null
-                                isEditing = false
-                             }) {
-                                Text(text = stringResource(R.string.save))
-                            }
-
-                            TextButton(onClick = {
-                                // Cancel edits, reset fields
-                                isEditing = false
-                                editName = user?.name ?: ""
-                                editSurname = user?.surname ?: ""
-                            }) {
-                                Text(text = stringResource(R.string.cancel))
-                            }
-                        }
-
-                    } else {
-                        // Display fields read-only
-                        ProfileField(label = stringResource(R.string.profile_name_label), value = if (name.isBlank()) stringResource(R.string.profile_placeholder_dash) else name)
-                        Spacer(modifier = Modifier.height(30.dp))
-
-                        ProfileField(label = stringResource(R.string.profile_email_label), value = if (email.isBlank()) stringResource(R.string.profile_placeholder_dash) else email)
-                        Spacer(modifier = Modifier.height(30.dp))
-
-                        // Sexo and birthdate unchanged
-                        ProfileField(label = stringResource(R.string.profile_sex_label), value = sex)
-                        Spacer(modifier = Modifier.height(30.dp))
-
-                        ProfileField(label = stringResource(R.string.profile_birthdate_label), value = birthDate)
-                        Spacer(modifier = Modifier.height(30.dp))
-                    }
-
-                    // Idioma
-                    LanguageSelectorField(
-                        selectedLanguage = selectedLanguage,
-                        onLanguageChange = { onLanguageChange -> selectedLanguage = onLanguageChange },
-                        spanishLabel = spanishLabel,
-                        englishLabel = englishLabel,
-                        profileLanguageLabel = profileLanguageLabel
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Eliminado: Row con botón de logout dentro del body para evitar duplicado
-
-            Spacer(modifier = Modifier.height(80.dp)) // espacio extra para que el contenido no quede oculto detrás del bottomBar
-
-            if (showLogoutDialog) {
-                AlertDialog(
-                    onDismissRequest = { showLogoutDialog = false },
-                    title = { Text(text = stringResource(R.string.logout_confirm_title)) },
-                    text = { Text(text = stringResource(R.string.logout_confirm_message)) },
-                    confirmButton = {
-                        Button(
-                            onClick = {
-                                // Ejecutar logout si el ViewModel está presente
-                                authViewModel?.logout()
-                                showLogoutDialog = false
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error,
-                                contentColor = MaterialTheme.colorScheme.onError
-                            )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 4.dp)
                         ) {
-                            Text(text = stringResource(R.string.logout_confirm_confirm))
+                            if (!isEditing) {
+                                ElevatedButton(
+                                    onClick = { isEditing = true },
+                                    modifier = Modifier.align(Alignment.TopEnd),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.primary,
+                                        contentColor = MaterialTheme.colorScheme.onPrimary
+                                    ),
+                                    shape = RoundedCornerShape(20.dp),
+                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Edit,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(text = stringResource(R.string.edit), fontSize = 14.sp)
+                                }
+                            } else {
+                                ElevatedButton(
+                                    onClick = {
+                                        isEditing = false
+                                        pendingPhotoBase64 = null
+                                        editName = user?.name ?: ""
+                                        editSurname = user?.surname ?: ""
+                                    },
+                                    modifier = Modifier.align(Alignment.TopEnd),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    ),
+                                    shape = RoundedCornerShape(20.dp),
+                                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Close,
+                                        contentDescription = stringResource(R.string.cancel),
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            }
                         }
-                    },
-                    dismissButton = {
-                        OutlinedButton(onClick = { showLogoutDialog = false }) {
-                            Text(text = stringResource(R.string.logout_confirm_cancel))
-                        }
-                    }
-                )
-            }
 
-            // Dialogo cuando la imagen es demasiado grande (usa la variable showImageTooLargeDialog)
-            if (showImageTooLargeDialog) {
-                AlertDialog(
-                    onDismissRequest = { showImageTooLargeDialog = false },
-                    title = { Text(text = "Image too large") },
-                    text = { Text(text = "The selected image exceeds the 2 MB limit. Please choose a smaller file.") },
-                    confirmButton = {
-                        Button(onClick = { showImageTooLargeDialog = false }) {
-                            Text(text = "OK")
-                        }
-                    }
-                )
-            }
 
+                        Box(
+                            modifier = Modifier
+                                .size(110.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.primaryContainer)
+                                .clickable(enabled = isEditing) { if (isEditing) pickImageLauncher.launch("image/*") },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (profilePhotoBitmap != null) {
+                                Image(
+                                    bitmap = profilePhotoBitmap.asImageBitmap(),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clip(CircleShape)
+                                )
+                            } else {
+                                Text(
+                                    text = initials,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    fontSize = 36.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // Editable name and surname
+                        if (isEditing) {
+                            OutlinedTextField(
+                                value = editName,
+                                onValueChange = { editName = it },
+                                label = { Text(stringResource(R.string.profile_name_label)) },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            OutlinedTextField(
+                                value = editSurname,
+                                onValueChange = { editSurname = it },
+                                label = { Text(stringResource(R.string.profile_surname_label)) },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            // Save / Cancel
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                ElevatedButton(onClick = {
+                                    // Save changes
+                                    // Construir metadata nueva fusionando existente y foto pendiente
+                                    val existing = user?.metadata?.toMutableMap() ?: mutableMapOf()
+                                    if (pendingPhotoBase64 != null) {
+                                        existing["profile_photo"] = pendingPhotoBase64!!
+                                    }
+                                    authViewModel?.updateProfile(editName.trim(), editSurname.trim(), existing)
+                                    // limpiar pending
+                                    pendingPhotoBase64 = null
+                                    isEditing = false
+                                 }) {
+                                    Text(text = stringResource(R.string.save))
+                                }
+
+                                TextButton(onClick = {
+                                    // Cancel edits, reset fields
+                                    isEditing = false
+                                    editName = user?.name ?: ""
+                                    editSurname = user?.surname ?: ""
+                                }) {
+                                    Text(text = stringResource(R.string.cancel))
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                        } else {
+                            // Display fields read-only
+                            ProfileField(label = stringResource(R.string.profile_name_label), value = if (name.isBlank()) stringResource(R.string.profile_placeholder_dash) else name)
+                            Spacer(modifier = Modifier.height(10.dp))
+
+
+                            ProfileField(label = stringResource(R.string.profile_email_label), value = if (email.isBlank()) stringResource(R.string.profile_placeholder_dash) else email)
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                        }
+
+                        // Idioma
+                        LanguageSelectorField(
+                            selectedLanguage = selectedLanguage,
+                            onLanguageChange = { onLanguageChange -> selectedLanguage = onLanguageChange },
+                            spanishLabel = spanishLabel,
+                            englishLabel = englishLabel,
+                            profileLanguageLabel = profileLanguageLabel
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Eliminado: Row con botón de logout dentro del body para evitar duplicado
+
+                Spacer(modifier = Modifier.height(80.dp)) // espacio extra para que el contenido no quede oculto detrás del bottomBar
+
+                if (showLogoutDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showLogoutDialog = false },
+                        title = { Text(text = stringResource(R.string.logout_confirm_title)) },
+                        text = { Text(text = stringResource(R.string.logout_confirm_message)) },
+                        confirmButton = {
+                            Button(
+                                onClick = {
+                                    // Ejecutar logout si el ViewModel está presente
+                                    authViewModel?.logout()
+                                    showLogoutDialog = false
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.error,
+                                    contentColor = MaterialTheme.colorScheme.onError
+                                )
+                            ) {
+                                Text(text = stringResource(R.string.logout_confirm_confirm))
+                            }
+                        },
+                        dismissButton = {
+                            OutlinedButton(onClick = { showLogoutDialog = false }) {
+                                Text(text = stringResource(R.string.logout_confirm_cancel))
+                            }
+                        }
+                    )
+                }
+
+                // Dialogo cuando la imagen es demasiado grande (usa la variable showImageTooLargeDialog)
+                if (showImageTooLargeDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showImageTooLargeDialog = false },
+                        title = { Text(text = "Image too large") },
+                        text = { Text(text = "The selected image exceeds the 2 MB limit. Please choose a smaller file.") },
+                        confirmButton = {
+                            Button(onClick = { showImageTooLargeDialog = false }) {
+                                Text(text = "OK")
+                            }
+                        }
+                    )
+                }
+
+            }
         }
     }
 }
