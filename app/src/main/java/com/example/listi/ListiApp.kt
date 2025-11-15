@@ -2,10 +2,12 @@ package com.example.listi
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -17,6 +19,8 @@ import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.AuthRepository
 import com.example.listi.ui.components.AppTopBar
 import com.example.listi.ui.components.BottomBar
+import com.example.listi.ui.components.DrawerBar
+import com.example.listi.ui.components.RailBar
 import com.example.listi.ui.navigation.AppNavGraph
 import com.example.listi.ui.navigation.ROUTE_LISTS
 import com.example.listi.ui.navigation.ROUTE_LOGIN
@@ -28,54 +32,110 @@ import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.screens.auth.AuthViewModel
 import com.example.listi.ui.screens.auth.AuthViewModelFactory
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
+@Composable
+fun isTablet(): Boolean {
+    val config = LocalConfiguration.current
+    val smallestWidthDp = config.smallestScreenWidthDp
+    return smallestWidthDp >= 600
+}
+
+@Composable
+fun isLandscape(): Boolean {
+    val orientation = LocalConfiguration.current.orientation
+    return orientation == Configuration.ORIENTATION_LANDSCAPE
+}
+
 @Composable
 fun ListiApp(
     context: Context
 ) {
 
     ListiTheme {
-        val navController = rememberNavController()
 
-        // Backstack entry -> ruta actual (String)
+        val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route ?: ROUTE_LISTS
 
-        // ViewModel + Repository
         val authRepository = AuthRepository(context)
-        val authViewModel: AuthViewModel = viewModel(
-            factory = AuthViewModelFactory(authRepository)
-        )
+        val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(authRepository))
+
+        val isTablet = isTablet()
+        val isLandscape = isLandscape()
 
         Scaffold(
             topBar = {
-                if (currentRoute != ROUTE_LOGIN && currentRoute != ROUTE_REGISTER && currentRoute!= ROUTE_VERIFY && currentRoute!= ROUTE_PASSWORD_CODE && currentRoute!= ROUTE_PASSWORD)
-                    AppTopBar(currentRoute)
+                if (!isTablet) {   // celular -> topbar
+                    if (currentRoute !in noBarsRoutes)
+                        AppTopBar(currentRoute)
+                }
             },
             bottomBar = {
-                if (currentRoute != ROUTE_LOGIN && currentRoute != ROUTE_REGISTER && currentRoute != ROUTE_VERIFY && currentRoute!= ROUTE_PASSWORD_CODE && currentRoute!= ROUTE_PASSWORD)
-                    BottomBar(
-                        currentRoute = currentRoute,
-                        onNavigateToRoute = { route ->
-                            var options: NavOptions? = null
-                            if (route == ROUTE_LISTS) {
-                                options = navOptions {
-                                    popUpTo(ROUTE_LISTS) { inclusive = true }
-                                }
+                if (!isTablet) {   // celular -> bottombar
+                    if (currentRoute !in noBarsRoutes)
+                        BottomBar(
+                            currentRoute = currentRoute,
+                            onNavigateToRoute = { route ->
+                                navController.navigate(route)
                             }
-                            navController.navigate(route, options)
-                        }
+                        )
+                }
+            },
+            content = { innerPadding ->
+
+                // TABLET LANDSCAPE → NavigationRail
+                if (isTablet && !isLandscape) {
+                    NavigationRailBar(
+                        currentRoute = currentRoute,
+                        onNavigateToRoute = { navController.navigate(it) }
                     )
+                }
+
+                // TABLET PORTRAIT → Navigation Drawer
+                if (isTablet && isLandscape) {
+                    NavigationDrawerBar(
+                        currentRoute = currentRoute,
+                        onNavigateToRoute = { navController.navigate(it) }
+                    )
+                }
+
+                AppNavGraph(
+                    navController = navController,
+                    authViewModel = authViewModel,
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
-        ) { innerPadding ->
-            AppNavGraph(
-                navController = navController,
-                authViewModel = authViewModel,
-                modifier = Modifier.padding(innerPadding)
-            )
-        }
+        )
     }
 }
+
+private val noBarsRoutes = listOf(
+    ROUTE_LOGIN, ROUTE_REGISTER, ROUTE_VERIFY, ROUTE_PASSWORD_CODE, ROUTE_PASSWORD
+)
+
+
+@Composable
+fun NavigationRailBar(
+    currentRoute: String,
+    onNavigateToRoute: (String) -> Unit
+) {
+    RailBar(
+        currentRoute = currentRoute,
+        onNavigateToRoute = onNavigateToRoute
+    )
+}
+
+@Composable
+fun NavigationDrawerBar(
+    currentRoute: String,
+    onNavigateToRoute: (String) -> Unit
+) {
+    DrawerBar(
+        currentRoute = currentRoute,
+        onNavigateToRoute = onNavigateToRoute
+    )
+}
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ViewModelConstructorInComposable")
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
