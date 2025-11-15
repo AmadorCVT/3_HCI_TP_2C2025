@@ -54,6 +54,10 @@ import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.User
 import kotlinx.coroutines.launch
 import java.util.Date
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.ui.platform.LocalConfiguration
 
 
 private val user1 = User(1, "Ama", "Doe", "ama@mail.com", null, null);
@@ -72,7 +76,7 @@ private val shoppingListsPreview = listOf(
     ShoppingList(2,"Lista super",
         "Una lista",
         metadata = "",
-        true,
+        false,
         user1,
         arrayOf(user3, user2),
         Date().toString(),
@@ -81,7 +85,7 @@ private val shoppingListsPreview = listOf(
     ShoppingList(3, "Juntada",
         "Una lista",
         metadata = "",
-        true,
+        false,
         user1,
         arrayOf(user1, user3),
         Date().toString(),
@@ -191,22 +195,35 @@ fun ShoppingListsCards(
                 Text(stringResource(R.string.saved_lists))
             }
         }
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.small_padding) / 4),
+        val screenWidth = LocalConfiguration.current.screenWidthDp
+        val maxCardWidth = 350   //
+        val columns = (screenWidth / maxCardWidth).coerceAtLeast(1)
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(columns),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(horizontal = padding, vertical = padding)
         ) {
             items(
                 items = filteredLists,
                 key = { it.id }
             ) { item ->
-                ShoppingListCard(item, Modifier.padding(10.dp).clickable { onShoppingListDetails(item.id) })
+                ShoppingListCard(
+                    item,
+                    Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .clickable { onShoppingListDetails(item.id) }
+                )
             }
         }
+
     }
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=900dp,height=1400dp")
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=900dp,height=1400dp, orientation=landscape")
 @Composable
 fun ShoppingListsPreview() {
     ListiTheme {

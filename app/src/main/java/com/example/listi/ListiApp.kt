@@ -81,8 +81,23 @@ fun ListiApp(
         val isLandscape = isLandscape()
 
         Scaffold(
-            topBar = { /* igual que antes */ },
-            bottomBar = { /* igual que antes */ },
+            topBar = {
+                if (!isTablet) {   // celular -> topbar
+                    if (currentRoute in noBarsRoutes)
+                        AppTopBar(currentRoute)
+                }
+            },
+            bottomBar = {
+                if (!isTablet) {   // celular -> bottombar
+                    if (currentRoute in noBarsRoutes)
+                        BottomBar(
+                            currentRoute = currentRoute,
+                            onNavigateToRoute = { route ->
+                                navController.navigate(route)
+                            }
+                        )
+                }
+            },
             content = { innerPadding ->
 
                 // Tablet horizontal

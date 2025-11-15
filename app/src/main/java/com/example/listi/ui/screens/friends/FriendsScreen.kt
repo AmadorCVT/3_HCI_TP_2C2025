@@ -138,6 +138,8 @@ fun FriendsCardList(
 
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=900dp,height=1400dp")
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=900dp,height=1400dp, orientation=landscape")
 @Composable
 fun FriendsScreenPreview() {
     ListiTheme {
