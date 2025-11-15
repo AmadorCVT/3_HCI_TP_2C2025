@@ -70,8 +70,8 @@ private val item1 = ShoppingListItem(
     2,
     true,
     "asd22",
-    Date(),
-    Date(),
+    Date().toString(),
+    Date().toString(),
     Product(
         2,
         "Papas",
@@ -85,8 +85,8 @@ private val item2 = ShoppingListItem(
     2,
     true,
     "asd22",
-    Date(),
-    Date(),
+    Date().toString(),
+    Date().toString(),
     Product(
         2,
         "Papas",

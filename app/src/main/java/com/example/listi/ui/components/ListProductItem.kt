@@ -140,8 +140,8 @@ fun ProductRowPreview() {
         quantity = 2,
         purchased = false,
         lastPurchasedAt = dateString,
-        createdAt = Date(),
-        updatedAt = Date(),
+        createdAt = Date().toString(),
+        updatedAt = Date().toString(),
         product = sampleProduct
     )
 

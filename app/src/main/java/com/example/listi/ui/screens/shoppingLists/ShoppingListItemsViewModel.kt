@@ -27,7 +27,7 @@ class ShoppingListItemsViewModel(
     private val shoppingListItemRepository: ShoppingListItemRepository,
 ) : ViewModel() {
 
-    private val _items = MutableStateFlow<MutableList<ShoppingListItem>>(mutableListOf())
+    private val _items = MutableStateFlow<List<ShoppingListItem>>(emptyList())
     val items = _items.asStateFlow()
 
     // Para decirle a la UI cuando recomponerse
@@ -44,7 +44,7 @@ class ShoppingListItemsViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _items.value = shoppingListItemRepository.getShoppingListItems(listId) as MutableList<ShoppingListItem>
+                _items.value = shoppingListItemRepository.getShoppingListItems(listId, true)
             } catch (e: Exception) {
                 println(e.localizedMessage)
                 _errorMessage.value = e.localizedMessage
@@ -69,7 +69,9 @@ class ShoppingListItemsViewModel(
             try {
                 shoppingListItemRepository.updateShoppingListItem(listId, itemId, item)
                 loadShoppingListItems(listId)
-            } catch (_: Exception) {}
+            } catch (_: Exception) {
+
+            }
         }
         _refreshTrigger.value++
     }
