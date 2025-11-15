@@ -20,6 +20,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,64 +42,67 @@ import com.example.listi.ui.types.ShoppingListRequest
 @Composable
 fun ShoppingListItemDialog(
     shoppingListItem: ShoppingListItem? = null,
-    title: String,
+    products: List<Product>,
     onDismissRequest: () -> Unit,
     onConfirmation: (ShoppingListRequest) -> Unit,
 ) {
 
-   // var product by remember { mutableStateOf(Product(0, )) }
+    var product by remember { mutableStateOf(products.first()) }
     var unit by remember { mutableStateOf("") }
-    var quantity by remember { mutableStateOf(0) }
+    var quantity by remember { mutableStateOf("") }
 
     if (shoppingListItem != null) {
-      //  product = shoppingListItem.product
+        product = shoppingListItem.product
         unit = shoppingListItem.unit
-        quantity = shoppingListItem.quantity
+        quantity = shoppingListItem.quantity.toString()
     }
-//
-//    Dialog(
-//        onDismissRequest = {
-//            onDismissRequest()
-//        },
-//
-//    ) {
-//        Card(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(450.dp)
-//                .padding(16.dp),
-//            shape = RoundedCornerShape(16.dp),
-//        ) {
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxSize(),
-//                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//            ) {
-//                Text(
-//                    text = title,
-//                    style = MaterialTheme.typography.titleMedium,
-//                    modifier = Modifier.padding(16.dp),
-//                )
-//                OutlinedTextField(
-//                    value = name,
-//                    onValueChange = { name = it },
-//                    label = { Text(stringResource(R.string.name)) },
-//                    singleLine = true,
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-//                    modifier = Modifier.fillMaxWidth()
-//                        .padding(dimensionResource(R.dimen.medium_padding))
-//                )
-//                OutlinedTextField(
-//                    value = description,
-//                    onValueChange = { description = it },
-//                    label = { Text(stringResource(R.string.generic_description)) },
-//                    singleLine = true,
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-//                    modifier = Modifier.fillMaxWidth()
-//                        .padding(dimensionResource(R.dimen.medium_padding))
-//                )
-//
+
+    Dialog(
+        onDismissRequest = {
+            onDismissRequest()
+        },
+
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(450.dp)
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = stringResource(R.string.add_lists_item),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(16.dp),
+                )
+
+                OutlinedTextField(
+                    value = quantity,
+                    onValueChange = { quantity = it },
+                    label = { Text(stringResource(R.string.quantity)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(dimensionResource(R.dimen.medium_padding))
+                )
+
+                OutlinedTextField(
+                    value = unit,
+                    onValueChange = { unit = it },
+                    label = { Text(stringResource(R.string.unit)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(dimensionResource(R.dimen.medium_padding))
+                )
+
+
 //                Row (
 //                    verticalAlignment = Alignment.CenterVertically,
 //                    horizontalArrangement = Arrangement.spacedBy(24.dp),
@@ -133,20 +137,14 @@ fun ShoppingListItemDialog(
 //                    }
 //                }
 //            }
-//        }
-//
-//    }
+            }
+        }
+    }
 }
 
-//@Preview(showBackground = true, device = "spec:width=411dp,height=891dp")
-//@Composable
-//fun ShoppingListDialogPreview() {
-//    ListiTheme() {
-//        ShoppingListDialog(
-//            null,
-//            "Create new list",
-//            {},
-//            {},
-//        )
-//    }
-//}
+@Preview(showBackground = true, device = "spec:width=411dp,height=891dp")
+@Composable
+fun ShoppingListItemDialogPreview() {
+    ListiTheme() {
+    }
+}

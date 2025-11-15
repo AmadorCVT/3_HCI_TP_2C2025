@@ -75,30 +75,29 @@ fun AppNavGraph(
 
 
         // Para que compartan el mismo view model
-            composable(ROUTE_LISTS) {
-                ShoppingListsScreen(
-                    shoppingListViewModel = shoppingListsViewModel,
-                    onNavigateToDetails = { listId ->
-                        navController.navigate("${Constants.ROUTE_LIST_DETAILS}/$listId")
-                    }
-                )
-            }
+        composable(ROUTE_LISTS) {
+            ShoppingListsScreen(
+                shoppingListViewModel = shoppingListsViewModel,
+                onNavigateToDetails = { listId ->
+                    navController.navigate("${Constants.ROUTE_LIST_DETAILS}/$listId")
+                }
+            )
+        }
 
-            composable(
-                route = "${Constants.ROUTE_LIST_DETAILS}/{${Constants.LIST_ID_ARG}}",
-                arguments = listOf(
-                    navArgument(Constants.LIST_ID_ARG) {
-                        type = NavType.IntType
-                    }
-                )) { entry ->
-                val listId = entry.arguments!!.getInt(Constants.LIST_ID_ARG)
-
-                ShoppingListDetailsScreen(
-                    modifier,
-                    shoppingListViewModel = shoppingListsViewModel,
-                    listId = listId
-                )
-            }
+        composable(
+            route = "${Constants.ROUTE_LIST_DETAILS}/{${Constants.LIST_ID_ARG}}",
+            arguments = listOf(
+                navArgument(Constants.LIST_ID_ARG) {
+                    type = NavType.IntType
+                }
+            )) { entry ->
+            val listId = entry.arguments!!.getInt(Constants.LIST_ID_ARG)
+            ShoppingListDetailsScreen(
+                modifier,
+                shoppingListViewModel = shoppingListsViewModel,
+                listId = listId
+            )
+        }
 
         composable(ROUTE_PRODUCTS) {
             ProductsScreen(
