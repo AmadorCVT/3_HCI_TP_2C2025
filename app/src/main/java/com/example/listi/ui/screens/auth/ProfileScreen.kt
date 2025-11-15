@@ -27,8 +27,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +55,14 @@ import androidx.core.graphics.scale
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun ProfileScreen(
@@ -75,16 +86,36 @@ fun ProfileScreen(
     var editName by remember { mutableStateOf(user?.name ?: "") }
     var editSurname by remember { mutableStateOf(user?.surname ?: "") }
 
-   var pendingPhotoBase64 by remember { mutableStateOf<String?>(null) }
+    var pendingPhotoBase64 by remember { mutableStateOf<String?>(null) }
 
-    // Derived display fields from current user
+     var showChangePasswordDialog by remember { mutableStateOf(false) }
+    var currentPassword by remember { mutableStateOf("") }
+    var newPass by remember { mutableStateOf("") }
+    var confirmPass by remember { mutableStateOf("") }
+    var changeError by remember { mutableStateOf<String?>(null) }
+
+    val changeErrorEmptyStr = stringResource(R.string.profile_change_password_error_empty)
+    val changeErrorMismatchStr = stringResource(R.string.profile_change_password_error_mismatch)
+    val changeErrorTooShortStr = stringResource(R.string.profile_change_password_error_too_short)
+
+   val changePasswordSuccessMsg = stringResource(R.string.change_password_success)
+    val changePasswordFailureMsg = stringResource(R.string.change_password_failure)
+
+     var showCurrentPassword by remember { mutableStateOf(false) }
+    var showNewPassword by remember { mutableStateOf(false) }
+    var showConfirmPassword by remember { mutableStateOf(false) }
+
+    var passwordOperationCompleted by remember { mutableStateOf(false) }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val name = user?.let { "${it.name} ${it.surname}" } ?: ""
     val email = user?.email ?: ""
-     val initials = user?.let {
+    val initials = user?.let {
         val n = it.name.trim()
         val s = it.surname.trim()
-        "${n.firstOrNull()?.uppercaseChar() ?: 'A'}${s.firstOrNull()?.uppercaseChar() ?: 'C'}"
-    } ?: "AC"
+        "${n.firstOrNull()?.uppercaseChar() ?: ' '}${s.firstOrNull()?.uppercaseChar() ?: ' '}"
+    } ?: " "
 
     val context = LocalContext.current
 
@@ -141,7 +172,7 @@ fun ProfileScreen(
                     pendingPhotoBase64 = base64
                 }
             } catch (_: Exception) {
-             }
+            }
         }
     }
 
@@ -159,7 +190,7 @@ fun ProfileScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
-             Box(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surface)
@@ -179,7 +210,9 @@ fun ProfileScreen(
                     Text(text = stringResource(R.string.logout))
                 }
             }
-        }
+        },
+        // Conectar el SnackbarHost al Scaffold para mostrar los snackbars
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { innerPadding ->
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val maxHeightPx = with(LocalDensity.current) { maxHeight.toPx() }
@@ -216,13 +249,29 @@ fun ProfileScreen(
                             .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        // Top-left: botón para cambiar contraseña
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(end = 4.dp)
                         ) {
-                            if (!isEditing) {
+                            // botón en la esquina superior izquierda
+                            Box(modifier = Modifier.align(Alignment.TopStart)) {
                                 ElevatedButton(
+                                    onClick = { showChangePasswordDialog = true },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    ),
+                                    shape = RoundedCornerShape(20.dp),
+                                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
+                                ) {
+                                    Text(text = stringResource(R.string.profile_change_password), fontSize = 12.sp)
+                                }
+                            }
+
+                            if (!isEditing) {
+                                 ElevatedButton(
                                     onClick = { isEditing = true },
                                     modifier = Modifier.align(Alignment.TopEnd),
                                     colors = ButtonDefaults.buttonColors(
@@ -241,9 +290,9 @@ fun ProfileScreen(
                                     Text(text = stringResource(R.string.edit), fontSize = 14.sp)
                                 }
                             } else {
-                                ElevatedButton(
+                                 ElevatedButton(
                                     onClick = {
-                                        isEditing = false
+                                         isEditing = false
                                         pendingPhotoBase64 = null
                                         editName = user?.name ?: ""
                                         editSurname = user?.surname ?: ""
@@ -264,7 +313,6 @@ fun ProfileScreen(
                                 }
                             }
                         }
-
 
                         Box(
                             modifier = Modifier
@@ -325,7 +373,7 @@ fun ProfileScreen(
                                     // limpiar pending
                                     pendingPhotoBase64 = null
                                     isEditing = false
-                                 }) {
+                                }) {
                                     Text(text = stringResource(R.string.save))
                                 }
 
@@ -354,7 +402,7 @@ fun ProfileScreen(
                         // Idioma
                         LanguageSelectorField(
                             selectedLanguage = selectedLanguage,
-                            onLanguageChange = { onLanguageChange -> selectedLanguage = onLanguageChange },
+                            onLanguageChange = { lang -> selectedLanguage = lang },
                             spanishLabel = spanishLabel,
                             englishLabel = englishLabel,
                             profileLanguageLabel = profileLanguageLabel
@@ -365,8 +413,6 @@ fun ProfileScreen(
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
-
-                // Eliminado: Row con botón de logout dentro del body para evitar duplicado
 
                 Spacer(modifier = Modifier.height(80.dp)) // espacio extra para que el contenido no quede oculto detrás del bottomBar
 
@@ -410,6 +456,132 @@ fun ProfileScreen(
                             }
                         }
                     )
+                }
+
+                // Diálogo para cambio de contraseña
+                if (showChangePasswordDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showChangePasswordDialog = false },
+                        title = { Text(text = stringResource(R.string.change_password_dialog_title)) },
+                        text = {
+                            Column {
+                                OutlinedTextField(
+                                    value = currentPassword,
+                                    onValueChange = { currentPassword = it },
+                                    label = { Text(stringResource(R.string.profile_current_password)) },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    visualTransformation = if (showCurrentPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                    trailingIcon = {
+                                        IconButton(onClick = { showCurrentPassword = !showCurrentPassword }) {
+                                            val icon = if (showCurrentPassword) Icons.Filled.VisibilityOff else Icons.Filled.Visibility
+                                            Icon(imageVector = icon, contentDescription = null)
+                                        }
+                                    }
+                                )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                OutlinedTextField(
+                                    value = newPass,
+                                    onValueChange = { newPass = it },
+                                    label = { Text(stringResource(R.string.change_password_new_label)) },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    visualTransformation = if (showNewPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                    trailingIcon = {
+                                        IconButton(onClick = { showNewPassword = !showNewPassword }) {
+                                            val icon = if (showNewPassword) Icons.Filled.VisibilityOff else Icons.Filled.Visibility
+                                            Icon(imageVector = icon, contentDescription = null)
+                                        }
+                                    }
+                                )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                OutlinedTextField(
+                                    value = confirmPass,
+                                    onValueChange = { confirmPass = it },
+                                    label = { Text(stringResource(R.string.change_password_confirm_label)) },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                    trailingIcon = {
+                                        IconButton(onClick = { showConfirmPassword = !showConfirmPassword }) {
+                                            val icon = if (showConfirmPassword) Icons.Filled.VisibilityOff else Icons.Filled.Visibility
+                                            Icon(imageVector = icon, contentDescription = null)
+                                        }
+                                    }
+                                )
+
+                                changeError?.let { errorMessage ->
+                                    Text(
+                                        text = errorMessage,
+                                        color = MaterialTheme.colorScheme.error,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        modifier = Modifier.padding(top = 8.dp)
+                                    )
+                                }
+                            }
+                        },
+                        confirmButton = {
+                            Button(
+                                onClick = {
+                                    // Validar campos antes de enviar
+                                    if (currentPassword.isBlank() || newPass.isBlank() || confirmPass.isBlank()) {
+                                        changeError = changeErrorEmptyStr
+                                    } else if (newPass != confirmPass) {
+                                        changeError = changeErrorMismatchStr
+                                    } else if (newPass.length < 8) {
+                                        changeError = changeErrorTooShortStr
+                                    } else {
+                                        // Llamar a changePassword (actual -> nueva)
+                                        passwordOperationCompleted = true
+                                        authViewModel?.changePassword(currentPassword.trim(), newPass.trim())
+                                        // no cerrar el diálogo aquí; lo cerramos cuando recibamos la respuesta y mostremos el snackbar
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                )
+                            ) {
+                                Text(text = stringResource(R.string.change_password_submit))
+                            }
+                        },
+                        dismissButton = {
+                            OutlinedButton(onClick = {
+                                showChangePasswordDialog = false
+                                changeError = null
+                            }) {
+                                Text(text = stringResource(R.string.change_password_cancel))
+                            }
+                        }
+                    )
+                }
+
+                // Mostrar resultado (éxito / error) después de intentar cambiar la contraseña
+                val passwordChanged = authViewModel?.uiState?.passwordChanged ?: false
+                val passwordErrorMessage = authViewModel?.uiState?.errorMessage
+
+                if (passwordOperationCompleted && (passwordChanged || passwordErrorMessage != null)) {
+                    LaunchedEffect(passwordOperationCompleted, passwordChanged, passwordErrorMessage) {
+                        showChangePasswordDialog = false
+                        currentPassword = ""
+                        newPass = ""
+                        confirmPass = ""
+                        changeError = null
+
+                        val message = if (passwordChanged) {
+                            changePasswordSuccessMsg
+                        } else {
+                            passwordErrorMessage ?: changePasswordFailureMsg
+                        }
+                         snackbarHostState.showSnackbar(message, duration = SnackbarDuration.Short)
+
+                        authViewModel?.clearPasswordChangeState()
+                        passwordOperationCompleted = false
+                    }
                 }
 
             }
@@ -459,49 +631,34 @@ private fun LanguageButton(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    if (isSelected) {
-        Button(
-            onClick = onClick,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.height(32.dp),
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            )
-        ) {
-            Text(text = text, fontSize = 12.sp)
-        }
-    } else {
-        OutlinedButton(
-            onClick = onClick,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.height(32.dp),
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-            border = ButtonDefaults.outlinedButtonBorder(enabled = true).copy(width = 1.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colorScheme.primary
-            )
-        ) {
-            Text(text = text, fontSize = 12.sp)
-        }
+    val shape = RoundedCornerShape(16.dp)
+    val colors = ButtonDefaults.buttonColors(
+        containerColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+        contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+    )
+
+    Button(
+        onClick = onClick,
+        colors = colors,
+        shape = shape,
+        modifier = Modifier.height(36.dp)
+    ) {
+        Text(text = text, fontSize = 14.sp)
     }
 }
 
 @Composable
 private fun ProfileField(label: String, value: String) {
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = label,
-            modifier = Modifier.width(100.dp),
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
         )
         Text(
             text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
     }
@@ -509,6 +666,6 @@ private fun ProfileField(label: String, value: String) {
 
 @Preview(showBackground = true)
 @Composable
-fun ProfileScreenPreview() {
-    ProfileScreen()
+fun PreviewProfileScreen() {
+   ProfileScreen()
 }

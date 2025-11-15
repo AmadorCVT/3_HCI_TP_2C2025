@@ -293,4 +293,28 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
             }
         }
     }
+
+    fun changePassword(currentPassword: String, newPassword: String) {
+        viewModelScope.launch {
+            uiState = uiState.copy(isLoading = true,)
+            try {
+                val response = authRepository.changePassword(currentPassword, newPassword)
+                if (response.isSuccessful) {
+                    uiState = uiState.copy(passwordChanged = true,)
+                } else {
+                    uiState = uiState.copy(errorMessage = "No se pudo cambiar la contraseña",)
+                }
+            } catch (e: Exception) {
+                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión",)
+            } finally {
+                uiState = uiState.copy()
+            }
+        }
+    }
+
+    // Limpia los indicadores relacionados con el cambio de contraseña (usado por la UI para resetear mensajes)
+    fun clearPasswordChangeState() {
+        uiState = uiState.copy(passwordChanged = false, errorMessage = null)
+    }
+
 }
