@@ -69,4 +69,21 @@
     <string name="email_label">Email</string>
     <string name="password_label">Contraseña</string>
     <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+
+    <!-- Change password dialog -->
+    <string name="profile_change_password">Cambiar contraseña</string>
+    <string name="change_password_dialog_title">Cambiar contraseña</string>
+    <string name="change_password_verification_code_label">Código de verificación</string>
+    <string name="change_password_new_label">Nueva contraseña</string>
+    <string name="change_password_confirm_label">Confirmar contraseña</string>
+    <string name="error_changing_password">No se pudo cambiar la contraseña</string><string name="change_password_submit">Change</string>
+    <string name="change_password_cancel">Cancelar</string>
+    <string name="profile_verification_code">Codigo de verificacion</string>
+    <string name="profile_new_password">Nueva Contraseña</string>
+    <string name="profile_current_password">Actual Contraseña</string>
+    <string name="profile_confirm_password">Confirmar Contraseña</string>
+    <string name="profile_change_password_error_empty">Todos los campos son requeridos</string>
+    <string name="profile_change_password_error_mismatch">Las contraseñas no coinciden</string>
+    <string name="profile_change_password_error_too_short">La contraseña debe contener al menos 8 caracteres</string>
+
 </resources>

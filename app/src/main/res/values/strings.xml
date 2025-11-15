@@ -38,6 +38,8 @@
     <string name="profile_placeholder_dash">-</string>
     <string name="profile_language_label">Language:</string>
     <string name="profile_surname_label">Surname:</string>
+    <string name="profile_change_password">Change password</string>
+    <string name="profile_reset_password">Reset password</string>
 
     <!-- Languages -->
     <string name="language_spanish">Spanish</string>
@@ -74,4 +76,22 @@
     <string name="profile_image_too_large_title">Image too large</string>
     <string name="profile_image_too_large_message">The selected image exceeds the 2 MB limit. Please choose a smaller file.</string>
     <string name="ok">OK</string>
+
+    <!-- Change password dialog strings -->
+    <string name="change_password_dialog_title">Change password</string>
+    <string name="change_password_verification_code_label">Verification code</string>
+    <string name="change_password_new_label">New password</string>
+    <string name="change_password_confirm_label">Confirm password</string>
+    <string name="change_password_submit">Change</string>
+    <string name="change_password_cancel">Cancel</string>
+    <string name="profile_verification_code">Verification code</string>
+    <string name="profile_new_password">New password</string>
+    <string name="profile_current_password">Current password</string>
+    <string name="profile_confirm_password">Confirm password</string>
+    <string name="profile_change_password_error_empty">All fields are required</string>
+    <string name="profile_change_password_error_mismatch">Passwords do not match</string>
+    <string name="profile_change_password_error_too_short">Password must be at least 8 characters</string>
+    <string name="error_changing_password">Password couldn\'t be changed</string>
+    <string name="change_password_success">Password changed successfully</string>
+    <string name="change_password_failure">Could not change password</string>
 </resources>
