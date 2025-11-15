@@ -409,20 +409,10 @@ fun ProfileScreen(
 
 
                             ProfileField(label = stringResource(R.string.profile_email_label), value = if (email.isBlank()) stringResource(R.string.profile_placeholder_dash) else email)
-                            Spacer(modifier = Modifier.height(10.dp))
-
+                           
                         }
 
-                        // Idioma
-                        LanguageSelectorField(
-                            selectedLanguage = selectedLanguage,
-                            onLanguageChange = { lang -> selectedLanguage = lang },
-                            spanishLabel = spanishLabel,
-                            englishLabel = englishLabel,
-                            profileLanguageLabel = profileLanguageLabel
-                        )
 
-                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
 

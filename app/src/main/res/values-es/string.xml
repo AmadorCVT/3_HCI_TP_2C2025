@@ -47,6 +47,11 @@
     <string name="profile_language_label">Idioma:</string>
     <string name="save">Guardar</string>
     <string name="cancel">Cancelar</string>
+    <string name="profile_reset_password">Resetear Contraseña</string>
+    <string name="profile_image_too_large_title">Imagen demasiado grande</string>
+    <string name="profile_image_too_large_message">La imagen seleccionada excede el limite de 2 MB. Porfavor escoja un archivo mas pequeño.</string>
+    <string name="ok">OK</string>
+
 
     <!-- Languages -->
     <string name="language_spanish">Español</string>
@@ -83,7 +88,8 @@
     <string name="change_password_verification_code_label">Código de verificación</string>
     <string name="change_password_new_label">Nueva contraseña</string>
     <string name="change_password_confirm_label">Confirmar contraseña</string>
-    <string name="error_changing_password">No se pudo cambiar la contraseña</string><string name="change_password_submit">Change</string>
+    <string name="change_password_submit">Cambiar</string>
+    <string name="error_changing_password">No se pudo cambiar la contraseña</string>
     <string name="change_password_cancel">Cancelar</string>
     <string name="profile_verification_code">Codigo de verificacion</string>
     <string name="profile_new_password">Nueva Contraseña</string>
@@ -92,5 +98,7 @@
     <string name="profile_change_password_error_empty">Todos los campos son requeridos</string>
     <string name="profile_change_password_error_mismatch">Las contraseñas no coinciden</string>
     <string name="profile_change_password_error_too_short">La contraseña debe contener al menos 8 caracteres</string>
+    <string name="change_password_success">Contraseña cambiada correctamente</string>
+    <string name="change_password_failure">No se pudo cambiar la contraseña</string>
 
 </resources>
