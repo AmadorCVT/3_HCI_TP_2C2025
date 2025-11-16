@@ -18,8 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
-import com.example.listi.ui.theme.LightGreen
+import com.example.listi.ui.theme.ListiGreen
 import com.example.listi.ui.theme.DarkGrey
+import com.example.listi.ui.theme.DarkGray
 import kotlinx.coroutines.launch
 
 @Composable
@@ -36,7 +37,7 @@ fun VerifyAccountScreen(
     val currentUser by authViewModel.currentUser.collectAsState()
 
     var code by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf(currentUser?.email ?: "") }
+    var email by remember { mutableStateOf(uiState.currentUser?.email ?: "") }
 
     val verifySuccessMessage = stringResource(R.string.verification_sucess)
 
@@ -51,6 +52,7 @@ fun VerifyAccountScreen(
     LaunchedEffect(errorMessage) {
         errorMessage?.let {
             scope.launch { snackbarHostState.showSnackbar(it) }
+            authViewModel.clearErrorMessage()
         }
     }
 
@@ -58,132 +60,89 @@ fun VerifyAccountScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
 
-        Surface(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(padding)
+                .padding(horizontal = 32.dp, vertical = 24.dp)
+                .padding(padding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
 
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
 
-                Card(
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    elevation = CardDefaults.cardElevation(4.dp),
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .wrapContentHeight()
-                ) {
+            Text(
+                text = "Verificar cuenta",
+                fontWeight = FontWeight.Bold,
+                fontSize = 26.sp,
+                color = DarkGreen,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
 
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 24.dp, vertical = 32.dp)
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+            Text(
+                text = "Ingresá tu correo y enviá el código de verificación.",
+                fontSize = 15.sp,
+                color = DarkGrey,
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
 
 
-                        Text(
-                            text = "Verificar cuenta",
-                            style = MaterialTheme.typography.headlineSmall.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = DarkGreen
-                            ),
-                            textAlign = TextAlign.Center
-                        )
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                placeholder = { Text("Email") },
+                singleLine = true,
+                leadingIcon = {
+                    Icon(Icons.Default.Email, contentDescription = null, tint = DarkGreen)
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-                        Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(16.dp))
 
-                        Text(
-                            text = "Ingresá tu correo y enviá el código de verificación.",
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                color = DarkGrey,
-                                fontSize = 14.sp
-                            ),
-                            textAlign = TextAlign.Center
-                        )
-
-                        Spacer(Modifier.height(24.dp))
-
-
-                        OutlinedTextField(
-                            value = email,
-                            onValueChange = { email = it },
-                            placeholder = { Text("Email") },
-                            leadingIcon = {
-                                Icon(Icons.Default.Email, contentDescription = null, tint = DarkGreen)
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = LightGreen,
-                                unfocusedBorderColor = Color.LightGray,
-                                focusedTextColor = Color.Black,
-                                unfocusedTextColor = Color.Black,
-                                cursorColor = DarkGreen
-                            )
-                        )
-
-                        Spacer(Modifier.height(16.dp))
-
-
-                        Button(
-                            onClick = {
-                                if (email.isNotBlank()) {
-                                    authViewModel.resendVerificationCode(email)
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar("Código enviado a $email")
-                                    }
-                                } else {
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar("Ingresá un email válido")
-                                    }
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = LightGreen,
-                                contentColor = DarkGreen
-                            ),
-                            shape = RoundedCornerShape(10.dp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp)
-                        ) {
-                            Text("ENVIAR CÓDIGO")
+            Button(
+                onClick = {
+                    if (email.isNotBlank()) {
+                        authViewModel.resendVerificationCode(email)
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Código enviado a $email")
                         }
+                    } else {
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Ingresá un email válido")
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ListiGreen,
+                    contentColor = Color.White
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text("ENVIAR CÓDIGO")
+            }
 
-                        Spacer(Modifier.height(28.dp))
+            Spacer(Modifier.height(24.dp))
 
-                        // ----------------------------------------
-                        // ✔️ CAMPO CÓDIGO
-                        // ----------------------------------------
-                        OutlinedTextField(
-                            value = code,
-                            onValueChange = { code = it },
-                            placeholder = { Text("Código de verificación") },
-                            leadingIcon = {
-                                Icon(
-                                    Icons.Default.CheckCircle,
-                                    contentDescription = null,
-                                    tint = DarkGreen
-                                )
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = LightGreen,
-                                unfocusedBorderColor = Color.LightGray,
-                                focusedTextColor = Color.Black,
-                                unfocusedTextColor = Color.Black,
-                                cursorColor = DarkGreen
-                            )
-                        )
 
-                        Spacer(Modifier.height(24.dp))
+            OutlinedTextField(
+                value = code,
+                onValueChange = { code = it },
+                placeholder = { Text("Código de verificación") },
+                singleLine = true,
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.CheckCircle,
+                        contentDescription = null,
+                        tint = DarkGreen
+                    )
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(24.dp))
 
 
                         Button(

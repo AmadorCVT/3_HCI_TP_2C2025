@@ -47,9 +47,13 @@ import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.Alignment
 import com.example.listi.ui.navigation.Constants
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -126,7 +130,7 @@ fun ListiApp(
                 }
             },
             bottomBar = {
-                if (!isTablet) {   // celular -> bottombar
+                if (!isTablet) {
                     if (currentRoute in noBarsRoutes &&  currentRoute != "${Constants.ROUTE_LIST_DETAILS}/{${Constants.LIST_ID_ARG}}")
                         BottomBar(
                             currentRoute = currentRoute,
@@ -175,7 +179,6 @@ fun ListiApp(
                 }
 
                 // Tablet vertical
-                // Tablet horizontal
                 if (isTablet && isLandscape) {
                     if (currentRoute in noBarsRoutes) {
                         Row(modifier = Modifier.fillMaxSize()) {
@@ -212,17 +215,67 @@ fun ListiApp(
                 }
 
 
-                // Celular
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                ) {
-                    AppNavGraph(
-                        navController = navController,
-                        authViewModel = authViewModel,
-                        startDestination = startDestination!!,
-                        modifier = Modifier.fillMaxSize()
+                // Solo funciona el swipe para celulares
+                val pagerRoutes = listOf(
+                    ROUTE_LISTS,
+                    ROUTE_PRODUCTS,
+                    ROUTE_FRIENDS,
+                    ROUTE_PROFILE
+                )
+
+                val usePager = !isTablet && currentRoute in pagerRoutes
+                var pagerState: PagerState? = null
+
+                if (usePager) {
+                    val initialIndex = pagerRoutes.indexOf(currentRoute)
+                    val state = rememberPagerState(
+                        initialPage = initialIndex,
+                        pageCount = { pagerRoutes.size }
                     )
+                    pagerState = state
+
+                    val coroutine = rememberCoroutineScope()
+
+                    LaunchedEffect(state.currentPage) {
+                        val newRoute = pagerRoutes[state.currentPage]
+                        if (newRoute != currentRoute) {
+                            navController.navigate(newRoute)
+                        }
+                    }
+
+                    LaunchedEffect(currentRoute) {
+                        val targetIndex = pagerRoutes.indexOf(currentRoute)
+                        if (targetIndex != state.currentPage) {
+                            coroutine.launch { state.scrollToPage(targetIndex) }
+                        }
+                    }
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                ) {
+                    if (usePager) {
+                        HorizontalPager(
+                            state = pagerState!!,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            AppNavGraph(
+                                navController = navController,
+                                authViewModel = authViewModel,
+                                startDestination = startDestination!!,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    } else {
+                        AppNavGraph(
+                            navController = navController,
+                            authViewModel = authViewModel,
+                            startDestination = startDestination!!,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
             }
         )
