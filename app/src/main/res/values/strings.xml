@@ -37,6 +37,7 @@
     <string name="reseted">List reseted</string>
     <string name="error_purchase">No items purchased in the shopping list</string>
     <string name="error_item">Item already exists</string>
+    <string name="send">Send</string>
 
     <!-- Products screen -->
     <string name="quantity">Quantity</string>
@@ -56,6 +57,7 @@
     <string name="profile_placeholder_dash">-</string>
     <string name="profile_language_label">Language:</string>
     <string name="profile_surname_label">Surname:</string>
+    <string name="password">Password</string>
     <string name="profile_change_password">Change password</string>
     <string name="profile_reset_password">Reset password</string>
 

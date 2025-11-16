@@ -37,6 +37,7 @@
     <string name="reseted">Lista reiniciada</string>
     <string name="error_purchase">No se compro ningún objeto de la lista</string>
     <string name="error_item">El objeto que se quiere agregar ya existe</string>
+    <string name="send">Enviar</string>
 
     <!-- Products screen -->
     <string name="quantity">Cantidad</string>
@@ -58,7 +59,8 @@
     <string name="profile_language_label">Idioma:</string>
     <string name="save">Guardar</string>
     <string name="cancel">Cancelar</string>
-    <string name="profile_reset_password">Resetear Contraseña</string>
+    <string name="password">Contraseña</string>
+    <string name="profile_reset_password">Resetear contraseña</string>
     <string name="profile_image_too_large_title">Imagen demasiado grande</string>
     <string name="profile_image_too_large_message">La imagen seleccionada excede el limite de 2 MB. Porfavor escoja un archivo mas pequeño.</string>
     <string name="ok">OK</string>

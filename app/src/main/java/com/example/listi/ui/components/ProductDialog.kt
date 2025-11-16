@@ -90,7 +90,7 @@ fun ProductDialog(
             ) {
                 Text(
                     text = stringResource(R.string.create_product),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.padding(16.dp),
                 )
                 OutlinedTextField(

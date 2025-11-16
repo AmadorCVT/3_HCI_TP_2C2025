@@ -22,7 +22,8 @@ fun DeleteDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = stringResource(R.string.delete))
+            Text(text = stringResource(R.string.delete),
+            style = MaterialTheme.typography.headlineMedium)
         },
         text = {
             Text(text = "$delete_confirm \"$name\"?")

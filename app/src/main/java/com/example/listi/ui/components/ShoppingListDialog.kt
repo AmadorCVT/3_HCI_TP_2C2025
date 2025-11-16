@@ -75,7 +75,7 @@ fun ShoppingListDialog(
             ) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.padding(16.dp),
                 )
                 OutlinedTextField(

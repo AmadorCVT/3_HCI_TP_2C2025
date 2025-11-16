@@ -2,18 +2,21 @@ package com.example.listi.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
+import com.example.listi.R
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listi.ui.theme.DarkGreen
@@ -32,8 +35,8 @@ fun ShareListDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "Compartir lista \"$listName\"",
-                fontSize = 18.sp,
+                text = "${stringResource(R.string.share)} \"$listName\"",
+                style = MaterialTheme.typography.headlineMedium,
                 color = DarkGreen
             )
         },
@@ -44,7 +47,12 @@ fun ShareListDialog(
                     onValueChange = { email = it },
                     placeholder = { Text("Email") },
                     leadingIcon = {
-                        Icon(Icons.Filled.Email, contentDescription = null, tint = DarkGreen)
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.mail_foreground),
+                            tint = DarkGreen,
+                            contentDescription = "mail",
+                            modifier = Modifier.size(24.dp)
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -66,17 +74,17 @@ fun ShareListDialog(
                     onSend(email)
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = LightGreen,
-                    contentColor = DarkGreen
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onError
                 ),
                 shape = RoundedCornerShape(10.dp)
             ) {
-                Text(text = "Enviar")
+                Text(text = stringResource(R.string.share))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(text = "Cancelar", color = DarkGrey)
+                Text(text =stringResource(R.string.cancel), color = DarkGrey)
             }
         },
         shape = RoundedCornerShape(12.dp)

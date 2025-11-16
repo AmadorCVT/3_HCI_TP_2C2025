@@ -7,16 +7,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -99,7 +99,10 @@ fun LoginScreen(
                 onValueChange = { email = it },
                 label = { Text(stringResource(R.string.email_label)) },
                 singleLine = true,
-                leadingIcon = { Icon(Icons.Default.Email, contentDescription = stringResource(R.string.email_label)) },
+                leadingIcon = { Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.mail_foreground),
+                    contentDescription = stringResource(R.string.email_label),
+                    modifier = Modifier.size(24.dp)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -109,9 +112,12 @@ fun LoginScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text(stringResource(R.string.password_label)) },
+                label = { Text(stringResource(R.string.password)) },
                 singleLine = true,
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = stringResource(R.string.password_label)) },
+                leadingIcon = { Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.lock_foreground),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = stringResource(R.string.password)) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )

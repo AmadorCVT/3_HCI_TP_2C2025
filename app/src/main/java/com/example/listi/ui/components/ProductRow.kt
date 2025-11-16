@@ -114,7 +114,7 @@ fun ProductRow(
                 Icon(
                     ImageVector.vectorResource(R.drawable.delete_foreground),
                     contentDescription = "Delete",
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
