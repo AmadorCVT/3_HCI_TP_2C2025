@@ -30,9 +30,14 @@ fun BottomBar(
                         )
                     },
                      colors = NavigationBarItemDefaults.colors(
-                         indicatorColor = MaterialTheme.colorScheme.surfaceVariant
+                         selectedIconColor = MaterialTheme.colorScheme.surface,
+                         selectedTextColor = MaterialTheme.colorScheme.surface,
+                         indicatorColor = MaterialTheme.colorScheme.surfaceVariant,
+                         unselectedIconColor = MaterialTheme.colorScheme.secondary,
+                         unselectedTextColor = MaterialTheme.colorScheme.secondary
                      ),
-                    label = { Text(text = stringResource(item.label)) },
+
+                     label = { Text(text = stringResource(item.label)) },
                     alwaysShowLabel = true,
                     selected = currentRoute == item.route,
                     onClick = { onNavigateToRoute(item.route) }
