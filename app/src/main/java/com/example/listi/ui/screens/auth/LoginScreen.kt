@@ -28,12 +28,13 @@ import androidx.compose.ui.unit.sp
 import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.ListiGreen
-import com.example.listi.ui.theme.LightGreen
+import com.example.listi.ui.theme.DarkGrey
 import com.example.listi.ui.theme.DarkGray
 import com.example.listi.ui.theme.White
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalConfiguration
 import android.content.res.Configuration
+import com.example.listi.ui.theme.LightGreen
 
 @Composable
 fun LoginScreen(
@@ -126,27 +127,27 @@ fun LoginScreen(
                     val titleFontSize = if (isLandscape) 22.sp else 28.sp
                     val iconSize = if (isLandscape) 20.dp else 24.dp
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = horizontalPadding, vertical = verticalPadding)
-                            .verticalScroll(rememberScrollState()),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = if (isLandscape) Arrangement.SpaceEvenly else Arrangement.Center
-                    ) {
-                        Surface(
-                            color = ListiGreen,
-                            shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier.padding(bottom = spacerSmall)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.app_name),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = colorResource(id = R.color.white),
-                                fontSize = titleFontSize,
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                            )
-                        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = horizontalPadding, vertical = verticalPadding)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = if (isLandscape) Arrangement.SpaceEvenly else Arrangement.Center
+        ) {
+            Surface(
+                color = ListiGreen,
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.padding(bottom = spacerSmall)
+            ) {
+                Text(
+                    text = stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = White,
+                    fontSize = titleFontSize,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                )
+            }
 
                         if (!isLandscape) {
                             Spacer(modifier = Modifier.height(spacerMedium))
@@ -192,28 +193,25 @@ fun LoginScreen(
 
                         val isLoginEnabled = email.isNotBlank() && password.isNotBlank()
 
-                        Button(
-                            onClick = {
-                                if (isLoginEnabled) (onLoginClick?.invoke(email, password)
-                                    ?: authViewModel.login(email, password))
-                            },
-                            enabled = isLoginEnabled,
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = if (isLoginEnabled) ListiGreen else LightGreen,
-                                contentColor = White
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(buttonHeight),
-                            shape = MaterialTheme.shapes.medium
-                        ) {
-                            Text(
-                                text = stringResource(R.string.login),
-                                color = if (isLoginEnabled) White else DarkGray,
-                                fontSize = if (isLandscape) 16.sp else 18.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
+            Button(
+                onClick = { if (isLoginEnabled) (onLoginClick?.invoke(email, password) ?: authViewModel.login(email, password)) },
+                enabled = isLoginEnabled,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isLoginEnabled) ListiGreen else LightGreen,
+                    contentColor = White
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(buttonHeight),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(
+                    text = stringResource(R.string.login),
+                    color = if (isLoginEnabled) White else DarkGray,
+                    fontSize = if (isLandscape) 16.sp else 18.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
 
 
                         TextButton(onClick = { onForgotPasswordClick?.invoke() }) {
