@@ -21,6 +21,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,7 +48,6 @@ fun RecoverPasswordScreenCode(
     authViewModel: AuthViewModel,
     goRestorePassword: (() -> Unit)? = null
 ) {
-    val uiState = authViewModel.uiState
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -58,15 +58,18 @@ fun RecoverPasswordScreenCode(
     val instructionsSentMessage = stringResource(R.string.sent_instruction)
     val fillFieldsMessage = stringResource(R.string.fill_fields)
 
-    LaunchedEffect(uiState.forgotCodeSent) {
-        if (uiState.forgotCodeSent) {
+    val forgotCodeSent by authViewModel.forgotCodeSent.collectAsState()
+    val errorMessage by authViewModel.errorMessage.collectAsState()
+
+    LaunchedEffect(forgotCodeSent) {
+        if (forgotCodeSent) {
             snackbarHostState.showSnackbar(instructionsSentMessage)
             goRestorePassword?.invoke()
         }
     }
 
-    LaunchedEffect(uiState.errorMessage) {
-        uiState.errorMessage?.let {
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let {
             snackbarHostState.showSnackbar(it)
         }
     }

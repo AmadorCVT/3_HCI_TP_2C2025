@@ -1,5 +1,7 @@
 package com.example.listi.ui.screens.friends
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -48,7 +50,7 @@ class FriendsViewModel(
             try {
                 val shoppingLists = shoppingListRepository.getShoppingLists(false)
 
-                val user = authViewModel.uiState.currentUser
+                val user = authViewModel.currentUser.value
 
                 for (item in shoppingLists) {
                     println("ljkashdkjlahsdkjhsad")

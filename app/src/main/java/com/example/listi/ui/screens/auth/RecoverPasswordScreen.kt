@@ -41,6 +41,8 @@ import kotlinx.coroutines.launch
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.example.listi.R
 
@@ -50,7 +52,6 @@ fun ResetPasswordScreen(
     authViewModel: AuthViewModel,
     goLogin: (() -> Unit)? = null
 ) {
-    val uiState = authViewModel.uiState
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -60,17 +61,20 @@ fun ResetPasswordScreen(
     val passwordUpdatedMessage = stringResource(R.string.password_updated)
     val fillFieldsMessage = stringResource(R.string.fill_fields)
 
+    val passwordChanged by authViewModel.passwordChanged.collectAsState()
+    val errorMessage by authViewModel.errorMessage.collectAsState()
+
     // Cuando la contraseña fue cambiada exitosamente → volver al login
-    LaunchedEffect(uiState.passwordChanged) {
-        if (uiState.passwordChanged) {
+    LaunchedEffect(passwordChanged) {
+        if (passwordChanged) {
             snackbarHostState.showSnackbar(passwordUpdatedMessage)
             goLogin?.invoke()
         }
     }
 
     // Mostrar errores
-    LaunchedEffect(uiState.errorMessage) {
-        uiState.errorMessage?.let {
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let {
             snackbarHostState.showSnackbar(it)
         }
     }

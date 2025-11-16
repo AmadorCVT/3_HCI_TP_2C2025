@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +21,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import androidx.compose.ui.res.stringResource
+import com.example.listi.R
 import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.CategoryRepository
 import com.example.listi.ui.screens.auth.LoginScreen
@@ -124,9 +127,9 @@ fun AppNavGraph(
         }
 
         composable(ROUTE_LOGIN) {
-            val uiState = authViewModel.uiState
+            val isLogged by authViewModel.isLogged.collectAsState()
 
-            if (uiState.isLogged) {
+            if (isLogged) {
                 LaunchedEffect(Unit) {
                     navController.navigate(ROUTE_LISTS) {
                         popUpTo(ROUTE_LOGIN) { inclusive = true }
@@ -164,7 +167,13 @@ fun AppNavGraph(
                 goRestorePassword = { navController.navigate(ROUTE_PASSWORD) })
         }
     }
+
+
+    val pressToExit = stringResource(R.string.press_to_exit)
+
+    // Aca usamos un toast porque no hay manera sencilla de incorporar un scaffold para el snackbar
     BackHandler(enabled = true) {
+
         val currentRoute = navController.currentBackStackEntry?.destination?.route
 
         if (currentRoute in exitRoutes) {
@@ -174,7 +183,7 @@ fun AppNavGraph(
             if (now - lastBackPressed < 2000) {
                 (context as Activity).finish()
             } else {
-                Toast.makeText(context, "Toca otra vez para salir", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, pressToExit, Toast.LENGTH_SHORT).show()
                 lastBackPressed = now
             }
 

@@ -1,6 +1,8 @@
 package com.example.listi.ui.screens.auth
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Email
@@ -9,9 +11,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.ListiGreen
 import com.example.listi.ui.theme.DarkGrey
@@ -23,22 +28,29 @@ fun VerifyAccountScreen(
     authViewModel: AuthViewModel,
     goLogin: (() -> Unit)? = null,
 ) {
-    val uiState = authViewModel.uiState
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
+    val isVerified by authViewModel.isVerified.collectAsState()
+    val isLoading by authViewModel.isLoading.collectAsState()
+    val errorMessage by authViewModel.errorMessage.collectAsState()
+    val currentUser by authViewModel.currentUser.collectAsState()
 
     var code by remember { mutableStateOf("") }
     var email by remember { mutableStateOf(uiState.currentUser?.email ?: "") }
 
-    LaunchedEffect(uiState.isVerified) {
-        if (uiState.isVerified) {
-            scope.launch { snackbarHostState.showSnackbar("Cuenta verificada correctamente") }
+    val verifySuccessMessage = stringResource(R.string.verification_sucess)
+
+    LaunchedEffect(isVerified) {
+        if (isVerified) {
+            scope.launch { snackbarHostState.showSnackbar(verifySuccessMessage) }
             goLogin?.invoke()
         }
     }
 
-    LaunchedEffect(uiState.errorMessage) {
-        uiState.errorMessage?.let {
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let {
             scope.launch { snackbarHostState.showSnackbar(it) }
             authViewModel.clearErrorMessage()
         }
@@ -61,14 +73,14 @@ fun VerifyAccountScreen(
             Text(
                 text = "Verificar cuenta",
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineSmall,
+                fontSize = 26.sp,
                 color = DarkGreen,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
             Text(
                 text = "Ingresá tu correo y enviá el código de verificación.",
-                style = MaterialTheme.typography.bodyLarge,
+                fontSize = 15.sp,
                 color = DarkGrey,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
@@ -114,7 +126,7 @@ fun VerifyAccountScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            
+
             OutlinedTextField(
                 value = code,
                 onValueChange = { code = it },
@@ -133,34 +145,43 @@ fun VerifyAccountScreen(
             Spacer(Modifier.height(24.dp))
 
 
-            val isEnabled = code.isNotBlank()
-
-            Button(
-                onClick = { authViewModel.verifyAccount(code) },
-                enabled = isEnabled,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isEnabled) ListiGreen else DarkGrey,
-                    contentColor = if (isEnabled) Color.White else DarkGray
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = MaterialTheme.shapes.medium
-            ) {
-                if (uiState.isLoading) {
-                    CircularProgressIndicator(
-                        color = Color.White,
-                        strokeWidth = 2.dp,
-                        modifier = Modifier.size(24.dp)
-                    )
-                } else {
-                    Text(
-                        text = "VERIFICAR CUENTA",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.SemiBold
-                    )
+                        Button(
+                            onClick = {
+                                if (code.isNotBlank()) {
+                                    authViewModel.verifyAccount(code)
+                                } else {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar("Ingresá el código enviado.")
+                                    }
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = LightGreen,
+                                contentColor = DarkGreen
+                            ),
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                        ) {
+                            if (isLoading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    color = DarkGreen,
+                                    strokeWidth = 2.dp
+                                )
+                            } else {
+                                Text(
+                                    text = "VERIFICAR CUENTA",
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 }
+
