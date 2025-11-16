@@ -110,6 +110,7 @@ fun ShoppingListsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val connectionError = stringResource(R.string.error_connection)
     val itemError = stringResource(R.string.error_item)
+    val mailError = stringResource(R.string.error_mail)
 
     val isLoading by shoppingListViewModel.isLoading.collectAsState()
     val refreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
@@ -129,6 +130,7 @@ fun ShoppingListsScreen(
 
             when(shoppingListsError) {
                 "409" ->  message = itemError
+                "400" -> message = mailError
                 else -> connectionError
             }
 
