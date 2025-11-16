@@ -61,14 +61,14 @@ fun VerifyAccountScreen(
             Text(
                 text = "Verificar cuenta",
                 fontWeight = FontWeight.Bold,
-                fontSize = 26.sp,
+                style = MaterialTheme.typography.headlineSmall,
                 color = DarkGreen,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
             Text(
                 text = "Ingresá tu correo y enviá el código de verificación.",
-                fontSize = 15.sp,
+                style = MaterialTheme.typography.bodyLarge,
                 color = DarkGrey,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
@@ -156,7 +156,7 @@ fun VerifyAccountScreen(
                 } else {
                     Text(
                         text = "VERIFICAR CUENTA",
-                        fontSize = 15.sp,
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold
                     )
                 }

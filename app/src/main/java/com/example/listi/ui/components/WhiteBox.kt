@@ -34,7 +34,7 @@ fun WhiteBoxWithText(
         } else {
             Text(
                 text = text,
-                fontSize = 16.sp,
+                style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Normal,
                 color = MaterialTheme.colorScheme.onSurface
             )

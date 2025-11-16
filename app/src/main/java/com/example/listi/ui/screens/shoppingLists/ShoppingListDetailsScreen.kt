@@ -269,7 +269,7 @@ fun ShoppingListDetailsScreen(
                         Text(
                             text = stringResource(R.string.purchase),
                             color = White,
-                            fontSize = 15.sp,
+                            style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -289,7 +289,7 @@ fun ShoppingListDetailsScreen(
                         Text(
                             text = stringResource(R.string.reset),
                             color = White,
-                            fontSize = 18.sp,
+                            style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -455,7 +455,7 @@ fun ShoppingListDetailsPreview() {
                         Text(
                             text = stringResource(R.string.reset),
                             color = White,
-                            fontSize = 18.sp,
+                            style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.SemiBold
                         )
                     }

@@ -63,25 +63,28 @@ fun FriendCard(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Text(text = friendName, fontSize = 18.sp)
+        Text(text = friendName,
+            style = MaterialTheme.typography.headlineSmall,
+            )
 
         Spacer(modifier = Modifier.weight(1f))
 
-//        // Botón menú de tres puntos
-//        Box {
-//            IconButton(onClick = { menuExpanded = true }) {
-//                Image(Icons.Default.MoreVert, contentDescription = "Más opciones")
-//            }
-//
-//            ReusedDropdownMenu(
-//                expanded = menuExpanded,
-//                onDismiss = { menuExpanded = false },
-//                actions = listOf(
-//                    ActionItem("Editar") { /* TODO */ },
-//                    ActionItem("Eliminar") { /* TODO */ }
-//                )
-//            )
-//        }
+        // Botón menú de tres puntos
+        //TODO: hacer que funcione lo de elminar
+        Box {
+            IconButton(onClick = { menuExpanded = true }) {
+                Image(Icons.Default.MoreVert, contentDescription = "Más opciones")
+            }
+
+            ReusedDropdownMenu(
+                expanded = menuExpanded,
+                onDismiss = { menuExpanded = false },
+                actions = listOf(
+
+                    ActionItem("Eliminar") { /* TODO */ }
+                )
+            )
+        }
     }
 }
 
