@@ -17,6 +17,9 @@
     <string name="name">Nombre</string>
     <string name="delete_confirmation">¿Desea borrar </string>
     <string name="confirm">Confirmar</string>
+    <string name="mail_already_registered">El mail ya esta registrado en otra cuenta</string>
+    <string name="same_password">Las contraseñas deben ser iguales</string>
+    <string name="verification_sucess">Cuenta verificada correctamente</string>
 
     <!-- Shopping lists screen -->
     <string name="active_lists">Activo</string>

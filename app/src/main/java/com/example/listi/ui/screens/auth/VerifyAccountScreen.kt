@@ -11,10 +11,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.LightGreen
 import com.example.listi.ui.theme.DarkGrey
@@ -25,24 +27,29 @@ fun VerifyAccountScreen(
     authViewModel: AuthViewModel,
     goLogin: (() -> Unit)? = null,
 ) {
-    val uiState = authViewModel.uiState
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    val isVerified by authViewModel.isVerified.collectAsState()
+    val isLoading by authViewModel.isLoading.collectAsState()
+    val errorMessage by authViewModel.errorMessage.collectAsState()
+    val currentUser by authViewModel.currentUser.collectAsState()
+
     var code by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf(uiState.currentUser?.email ?: "") }
+    var email by remember { mutableStateOf(currentUser?.email ?: "") }
 
+    val verifySuccessMessage = stringResource(R.string.verification_sucess)
 
-    LaunchedEffect(uiState.isVerified) {
-        if (uiState.isVerified) {
-            scope.launch { snackbarHostState.showSnackbar("Cuenta verificada correctamente") }
+    LaunchedEffect(isVerified) {
+        if (isVerified) {
+            scope.launch { snackbarHostState.showSnackbar(verifySuccessMessage) }
             goLogin?.invoke()
         }
     }
 
 
-    LaunchedEffect(uiState.errorMessage) {
-        uiState.errorMessage?.let {
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let {
             scope.launch { snackbarHostState.showSnackbar(it) }
         }
     }
@@ -198,7 +205,7 @@ fun VerifyAccountScreen(
                                 .fillMaxWidth()
                                 .height(50.dp)
                         ) {
-                            if (uiState.isLoading) {
+                            if (isLoading) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.size(20.dp),
                                     color = DarkGreen,

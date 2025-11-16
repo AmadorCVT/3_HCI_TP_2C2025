@@ -59,6 +59,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -67,7 +69,7 @@ import com.example.listi.ui.theme.ListiGreen
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    authViewModel: AuthViewModel? = null
+    authViewModel: AuthViewModel
 ) {
     // obtener recursos localizados una sola vez en el contexto composable
     val spanishLabel = stringResource(R.string.language_spanish)
@@ -78,7 +80,7 @@ fun ProfileScreen(
 
     var showLogoutDialog by remember { mutableStateOf(false) }
 
-    val user: User? = authViewModel?.uiState?.currentUser
+    val user by authViewModel.currentUser.collectAsState()
 
     var isEditing by remember { mutableStateOf(false) }
 
@@ -561,8 +563,8 @@ fun ProfileScreen(
                 }
 
                 // Mostrar resultado (éxito / error) después de intentar cambiar la contraseña
-                val passwordChanged = authViewModel?.uiState?.passwordChanged ?: false
-                val passwordErrorMessage = authViewModel?.uiState?.errorMessage
+                val passwordChanged by authViewModel.passwordChanged.collectAsState()
+                val passwordErrorMessage by authViewModel.errorMessage.collectAsState()
 
                 if (passwordOperationCompleted && (passwordChanged || passwordErrorMessage != null)) {
                     LaunchedEffect(passwordOperationCompleted, passwordChanged, passwordErrorMessage) {
@@ -667,5 +669,5 @@ private fun ProfileField(label: String, value: String) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewProfileScreen() {
-   ProfileScreen()
+   //ProfileScreen()
 }

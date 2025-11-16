@@ -57,6 +57,7 @@ fun FriendsScreen(
     val itemError = stringResource(R.string.error_item)
 
     val isLoading by shoppingListViewModel.isLoading.collectAsState()
+    val currentUser by authViewModel.currentUser.collectAsState()
     val refreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
     val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
     val shoppingListsError by shoppingListViewModel.errorMessage.collectAsState()
@@ -65,7 +66,7 @@ fun FriendsScreen(
         shoppingListViewModel.loadShoppingLists()
     }
 
-    val userId = authViewModel.uiState.currentUser?.id
+    val userId = currentUser?.id
     val friends: List<Friend> = remember(shoppingLists) {
         shoppingLists
             .flatMap { it.sharedWith.toList() }

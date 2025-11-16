@@ -84,8 +84,8 @@ fun ListiApp(
 
         val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(authRepository))
 
-        val isLogged = authViewModel.uiState.isLogged
-        val isLoading = authViewModel.uiState.isLoading
+        val isLogged by authViewModel.isLogged.collectAsState()
+        val isLoading by authViewModel.isLoading.collectAsState()
 
         LaunchedEffect(Unit) {
             val savedToken = authRepository.getSavedToken()

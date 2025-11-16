@@ -46,8 +46,6 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val uiState = authViewModel.uiState
-
     val snackbarHostState = remember { SnackbarHostState() }
 
     val configuration = LocalConfiguration.current

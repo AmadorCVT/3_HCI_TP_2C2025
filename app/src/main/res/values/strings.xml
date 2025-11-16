@@ -17,6 +17,9 @@
     <string name="name">Name</string>
     <string name="delete_confirmation">Do you wish to delete </string>
     <string name="confirm">Confirm</string>
+    <string name="mail_already_registered">Mail already registered</string>
+    <string name="same_password">Passwords must be equal</string>
+    <string name="verification_sucess">Account successfully verified</string>
 
     <!-- Shopping lists screen -->
     <string name="active_lists">Active</string>

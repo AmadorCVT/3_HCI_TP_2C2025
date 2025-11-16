@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -126,9 +127,9 @@ fun AppNavGraph(
         }
 
         composable(ROUTE_LOGIN) {
-            val uiState = authViewModel.uiState
+            val isLogged by authViewModel.isLogged.collectAsState()
 
-            if (uiState.isLogged) {
+            if (isLogged) {
                 LaunchedEffect(Unit) {
                     navController.navigate(ROUTE_LISTS) {
                         popUpTo(ROUTE_LOGIN) { inclusive = true }

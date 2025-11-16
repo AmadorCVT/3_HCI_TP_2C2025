@@ -41,15 +41,14 @@ class AuthRepository(private val context: Context) {
             password = password,
             metadata = emptyMap()
         )
-        Log.d("RegisterScreen", "REGISTER")
-
-        return try {
+        return withContext(Dispatchers.IO) {
             val response = service.registerUser(request)
-            Log.d("RegisterScreen", "Response recibida correctamente")
-            response
-        } catch (e: Exception) {
-            Log.e("RegisterScreen", "Error dentro de service.registerUser()", e)
-            throw e
+
+            if (response.isSuccessful) {
+                response
+            } else {
+                throw Exception(response.code().toString())
+            }
         }
     }
 
