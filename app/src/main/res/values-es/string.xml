@@ -37,6 +37,7 @@
     <string name="reseted">Lista reiniciada</string>
     <string name="error_purchase">No se compro ningún objeto de la lista</string>
     <string name="error_item">El objeto que se quiere agregar ya existe</string>
+    <string name="error_mail">Mail invalido</string>
     <string name="send">Enviar</string>
 
     <!-- Products screen -->

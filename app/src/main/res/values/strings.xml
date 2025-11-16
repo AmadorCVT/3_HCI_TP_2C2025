@@ -37,6 +37,7 @@
     <string name="reseted">List reseted</string>
     <string name="error_purchase">No items purchased in the shopping list</string>
     <string name="error_item">Item already exists</string>
+    <string name="error_mail">Invalid mail</string>
     <string name="send">Send</string>
 
     <!-- Products screen -->
