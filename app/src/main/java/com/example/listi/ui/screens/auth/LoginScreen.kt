@@ -57,11 +57,12 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-
-            contentDescription = "Logo"
-        )
+        //TODO: arreglar tamaño
+//        Image(
+//            painter = painterResource(id = R.drawable.logo),
+//
+//            contentDescription = "Logo"
+//        )
         Text(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.titleMedium,

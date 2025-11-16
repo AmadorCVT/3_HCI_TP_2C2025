@@ -43,11 +43,6 @@ fun RailBar(
                     modifier = Modifier.size(64.dp),
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Username",
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
             }
         }
     ) {
