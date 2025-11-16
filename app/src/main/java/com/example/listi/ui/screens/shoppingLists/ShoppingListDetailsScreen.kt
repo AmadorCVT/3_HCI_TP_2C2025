@@ -71,7 +71,7 @@ import com.example.listi.ui.types.ShoppingListItemRequest
 import kotlinx.coroutines.launch
 import java.util.Date
 
-// Source: https://www.waseefakhtar.com/android/form-using-jetpack-compose-and-material-design/
+
 
 private val item1 = ShoppingListItem(
     1,
@@ -115,36 +115,33 @@ fun ShoppingListDetailsScreen(
     listId: Int
 ) {
 
-    // Para mostrar errores
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val errorColor = MaterialTheme.colorScheme.error
-    val connectionError = stringResource(R.string.error_connection)
-    val pruchaseError = stringResource(R.string.error_purchase)
-    val addError = stringResource(R.string.error_item)
 
     val openCreateDialog = remember { mutableStateOf(false) }
     val openDeleteDialog = remember { mutableStateOf(false) }
     val itemToDelete = remember { mutableStateOf<ShoppingListItem?>(null) }
 
-    // Buscar la lista que nos piden
     val shoppingListItems by shoppingListItemsViewModel.items.collectAsState()
     val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
     val products by productViewModel.products.collectAsState()
 
     val isLoading by shoppingListItemsViewModel.isLoading.collectAsState()
+
     val listsRefreshTrigger by shoppingListItemsViewModel.refreshTrigger.collectAsState()
     val itemsRefreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
-    val productRefreshTrigger  by productViewModel.refreshTrigger.collectAsState()
+    val productRefreshTrigger by productViewModel.refreshTrigger.collectAsState()
 
     val shoppingListError by shoppingListViewModel.errorMessage.collectAsState()
     val shoppingListItemsError by shoppingListItemsViewModel.errorMessage.collectAsState()
 
-    // Para notificar al usuario
+    val connectionError = stringResource(R.string.error_connection)
+    val addError = stringResource(R.string.error_item)
+    val purchaseError = stringResource(R.string.error_purchase)
     val purchasedMessage = stringResource(R.string.purchased)
-    val resetedMessage = stringResource(R.string.reseted)
+    val resetMessage = stringResource(R.string.reseted)
 
-    // Apenas se abre o cambie el refreshTrigger quiero que se haga fetch
+
     LaunchedEffect(itemsRefreshTrigger) {
         shoppingListItemsViewModel.loadShoppingListItems(listId)
     }
@@ -157,167 +154,155 @@ fun ShoppingListDetailsScreen(
         productViewModel.loadProducts()
     }
 
-    // Si sale un mensaje de error, mostrarlo
+
     LaunchedEffect(shoppingListItemsError) {
         shoppingListItemsError?.let {
-            var message = "Error"
-
-            when(shoppingListItemsError) {
-                "409" ->  message = addError
-                else -> connectionError
-            }
-
-            scope.launch {
-                snackbarHostState.showSnackbar(
-                    message = message
-                )
-            }
+            val msg = if (it == "409") addError else connectionError
+            scope.launch { snackbarHostState.showSnackbar(msg) }
         }
         shoppingListItemsViewModel.clearError()
     }
 
     LaunchedEffect(shoppingListError) {
         shoppingListError?.let {
-            var message = connectionError
-
-            when(shoppingListError) {
-                "400" ->  message = pruchaseError
-                "409" ->  message = addError
+            val msg = when (it) {
+                "400" -> purchaseError
+                "409" -> addError
                 else -> connectionError
             }
-
-            scope.launch {
-                snackbarHostState.showSnackbar(
-                    message = message
-                )
-            }
+            scope.launch { snackbarHostState.showSnackbar(msg) }
         }
         shoppingListViewModel.clearError()
     }
 
-    when {
-        openCreateDialog.value -> {
-            ShoppingListItemDialog(
-                onDismissRequest = { openCreateDialog.value = false },
-                onConfirmation = { shoppingListItemRequest ->
-                    shoppingListItemsViewModel.createShoppingListsItem(listId, shoppingListItemRequest)
-                    openCreateDialog.value = false
-                },
-                products = products
-            )
-        }
-        openDeleteDialog.value -> {
-            DeleteDialog(
-                name = itemToDelete.value?.product?.name ?: "-",
-                onDismiss = {
-                    openDeleteDialog.value = false},
-                onConfirm = {
 
-                    shoppingListItemsViewModel.deleteShoppingListItem(listId,
-                        itemToDelete.value?.id ?: -1
-                    )
-                    openDeleteDialog.value = false
-                }
-            )
-        }
+    when {
+        openCreateDialog.value -> ShoppingListItemDialog(
+            onDismissRequest = { openCreateDialog.value = false },
+            onConfirmation = {
+                shoppingListItemsViewModel.createShoppingListsItem(listId, it)
+                openCreateDialog.value = false
+            },
+            products = products
+        )
+
+        openDeleteDialog.value -> DeleteDialog(
+            name = itemToDelete.value?.product?.name ?: "-",
+            onDismiss = { openDeleteDialog.value = false },
+            onConfirm = {
+                shoppingListItemsViewModel.deleteShoppingListItem(
+                    listId,
+                    itemToDelete.value?.id ?: -1
+                )
+                openDeleteDialog.value = false
+            }
+        )
     }
 
-    when {
-        isLoading -> Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
 
-        else -> {
-            // Scaffold para el snackbar
-            Scaffold(
-                snackbarHost = { SnackbarHost(snackbarHostState) }
-            ) { paddingValues ->
-                Box(modifier = Modifier.padding(paddingValues)) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        ShoppingListItemsHeader(modifier, shoppingLists.first { it.id == listId })
-                        AddedShoppingListItem(
-                            modifier,
-                            shoppingListItems,
-                            onStatusToggle = { itemId, purchased ->
-                                shoppingListItemsViewModel.toggleStatusShoppingListItem(
-                                    listId,
-                                    itemId,
-                                    purchased
-                                )
-                            },
-                            onDelete = { item ->
-                                itemToDelete.value = item
-                                openDeleteDialog.value = true
-                            }
+    if (isLoading) {
+        Box(Modifier.fillMaxSize(), Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+
+
+                ShoppingListItemsHeader(
+                    list = shoppingLists.first { it.id == listId }
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+
+                AddedShoppingListItem(
+                    items = shoppingListItems,
+                    onStatusToggle = { id, purchased ->
+                        shoppingListItemsViewModel.toggleStatusShoppingListItem(
+                            listId,
+                            id,
+                            purchased
                         )
+                    },
+                    onDelete = {
+                        itemToDelete.value = it
+                        openDeleteDialog.value = true
+                    },
+                    modifier = Modifier.weight(1f)
+                )
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                Spacer(Modifier.height(12.dp))
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                        Button(
-                            onClick = {
-                                shoppingListViewModel.purchaseShoppingLists(listId)
-                                scope.launch {
-                                    snackbarHostState.showSnackbar(
-                                        message = purchasedMessage
-                                    )
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp),
-                            shape = MaterialTheme.shapes.medium
-                        ) {
-                            Text(
-                                text = stringResource(R.string.purchase),
-                                color = White,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
 
-                        Spacer(modifier = Modifier.height(12.dp))
-
-
-                        Button(
-                            onClick = {
-                                shoppingListViewModel.resetShoppingLists(listId)
-                                scope.launch {
-                                    snackbarHostState.showSnackbar(
-                                        message = resetedMessage
-                                    )
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp),
-                            shape = MaterialTheme.shapes.medium
-                        ) {
-                            Text(
-                                text = stringResource(R.string.reset),
-                                color = White,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
+                    Button(
+                        onClick = {
+                            shoppingListViewModel.purchaseShoppingLists(listId)
+                            scope.launch {
+                                snackbarHostState.showSnackbar(purchasedMessage)
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(50.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.purchase),
+                            color = White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
-                        }
 
-                    GreenAddButton(
-                        {
-                            openCreateDialog.value = true
-                        }
-                    )
+                    Button(
+                        onClick = {
+                            shoppingListViewModel.resetShoppingLists(listId)
+                            scope.launch {
+                                snackbarHostState.showSnackbar(resetMessage)
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(50.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.reset),
+                            color = White,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                 }
             }
+
+
+            GreenAddButton(
+                onClick = { openCreateDialog.value = true },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+            )
         }
     }
 }
@@ -349,7 +334,7 @@ fun AddedShoppingListItem(
     onStatusToggle: (Int, Boolean) -> (Unit),
     onDelete: (ShoppingListItem) -> (Unit)
 ) {
-    // === WhiteBox con los productos ===
+
     WhiteBoxWithText(
         text = "",
         modifier = Modifier
@@ -413,8 +398,76 @@ fun HeaderRow() {
 
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
-fun AddShoppingListsScreenPreview() {
+fun ShoppingListDetailsPreview() {
     ListiTheme {
-        AddedShoppingListItem(Modifier, ShoppingListItemsPreview, { a, b -> Unit}, {})
+        Box(modifier = Modifier.fillMaxSize()) {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+
+                // Simula encabezado
+                Text(
+                    text = "Shopping list example",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+
+                // 🟩 EXACTO COMO EN TU PANTALLA REAL
+                AddedShoppingListItem(
+                    items = ShoppingListItemsPreview,
+                    onStatusToggle = { _, _ -> },
+                    onDelete = {},
+                    modifier = Modifier.weight(1f)
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+
+                    Button(
+                        onClick = { },
+                        colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(50.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.purchase),
+                            color = White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+
+                    Button(
+                        onClick = { },
+                        colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(50.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.reset),
+                            color = White,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+            }
+
+            GreenAddButton(
+                onClick = {},
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+            )
+        }
     }
 }
