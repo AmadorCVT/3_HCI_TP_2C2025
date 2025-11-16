@@ -151,6 +151,8 @@
     <string name="route_verify_title">Verificacion</string>
     <string name="route_password_code_title">Codigo de  Contraseña</string>
     <string name="route_password_title">Restorar Contraseña</string>
+    <string name="delete_category_dialog_title">Borrar categoria</string>
+    <string name="delete_category_dialog">¿Está seguro que quiere borrar la categoría</string>
 
 
 </resources>
