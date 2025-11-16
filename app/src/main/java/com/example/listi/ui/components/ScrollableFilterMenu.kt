@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,69 +22,132 @@ import androidx.compose.ui.unit.dp
 import com.example.listi.ui.theme.DarkGrey
 import com.example.listi.ui.theme.Green
 import com.example.listi.ui.theme.White
+import com.example.listi.ui.types.Category
 
 @Composable
 fun ScrollableFilterMenu(
     modifier: Modifier = Modifier,
-    items: List<String>,
-    onItemClick: (String?) -> Unit, // puede ser null si se deselecciona
+    items: List<Category>,
+    onItemClick: (Category?) -> Unit,
     onFixedButtonClick: () -> Unit,
+    onDeleteCategory: (Int) -> Unit = {}
 ) {
-    var selectedCategory by remember { mutableStateOf<String?>(null) }
+    var selectedCategory by remember { mutableStateOf<Category?>(null) }
 
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(
-            onClick = onFixedButtonClick,
+    var deleteMode by remember { mutableStateOf(false) }
+
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var categoryToDelete by remember { mutableStateOf<Category?>(null) }
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
             modifier = Modifier
-                .size(40.dp)
-                .background(
-                    color = Green,
-                    shape = CircleShape
-                )
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Agregar categoría",
-                tint = White
-            )
-        }
 
-        LazyRow(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(items) { label ->
-                val isSelected = selectedCategory == label
+            IconButton(
+                onClick = {
+                    deleteMode = false
+                    onFixedButtonClick()
+                },
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(color = Green, shape = CircleShape)
+            ) {
+                Icon(Icons.Default.Add, "Agregar categoría", tint = White)
+            }
 
-                FilterChip(
-                    text = label,
-                    isSelected = isSelected,
-                    onClick = {
-                        selectedCategory = if (isSelected) null else label
-                        onItemClick(selectedCategory)
-                    }
+            Spacer(modifier = Modifier.width(8.dp))
+
+
+            IconButton(
+                onClick = { deleteMode = !deleteMode },
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        color = if (deleteMode) Color(0xFFFFCDD2) else Color.Transparent,
+                        shape = CircleShape
+                    )
+            ) {
+                Icon(
+                    Icons.Default.Delete,
+                    "Borrar categoría",
+                    tint = if (deleteMode) Color.Red else DarkGrey
                 )
             }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            LazyRow(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(items) { category ->
+                    val isSelected = selectedCategory?.id == category.id
+
+                    FilterChipWithDeleteBehavior(
+                        text = category.name,
+                        isSelected = isSelected,
+                        deleteMode = deleteMode,
+                        onClick = {
+                            if (deleteMode) {
+                                categoryToDelete = category
+                                showDeleteDialog = true
+                            } else {
+                                selectedCategory = if (isSelected) null else category
+                                onItemClick(selectedCategory)
+                            }
+                        }
+                    )
+                }
+            }
+        }
+
+
+        if (showDeleteDialog && categoryToDelete != null) {
+            DeleteCategoryDialog(
+                categoryName = categoryToDelete!!.name,
+                onDismiss = {
+                    showDeleteDialog = false
+                    categoryToDelete = null
+                },
+                onConfirm = {
+                    onDeleteCategory(categoryToDelete!!.id)
+                    showDeleteDialog = false
+                    deleteMode = false
+                    categoryToDelete = null
+                }
+            )
         }
     }
 }
 
 @Composable
-fun FilterChip(
+private fun FilterChipWithDeleteBehavior(
     text: String,
     isSelected: Boolean,
+    deleteMode: Boolean,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (isSelected) Green else Color.Transparent
-    val borderColor = if (isSelected) Green else DarkGrey
-    val textColor = if (isSelected) White else DarkGrey
+    val backgroundColor = when {
+        deleteMode -> Color.Transparent
+        isSelected -> Green
+        else -> Color.Transparent
+    }
+    val borderColor = when {
+        deleteMode -> if (isSelected) Color.Red else DarkGrey
+        isSelected -> Green
+        else -> DarkGrey
+    }
+    val textColor = when {
+        deleteMode -> if (isSelected) Color.Red else DarkGrey
+        isSelected -> White
+        else -> DarkGrey
+    }
 
     Surface(
         shape = RoundedCornerShape(50),
@@ -109,11 +173,16 @@ fun FilterChip(
 @Preview(showBackground = true)
 @Composable
 fun ScrollableFilterMenuPreview() {
-    MaterialTheme {
-        ScrollableFilterMenu(
-            items = listOf("Lácteos", "Verduras", "Panificados", "Carnes", "Bebidas"),
-            onItemClick = {},
-            onFixedButtonClick = {}
-        )
-    }
+    val sample = listOf(
+        Category(1, "Lácteos", "", "", ""),
+        Category(2, "Verduras", "null", "", ""),
+        Category(3, "Panificados", "null", "", "")
+    )
+
+    ScrollableFilterMenu(
+        items = sample,
+        onItemClick = {},
+        onFixedButtonClick = {},
+        onDeleteCategory = {}
+    )
 }

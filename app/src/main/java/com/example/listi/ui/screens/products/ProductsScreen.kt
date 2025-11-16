@@ -41,7 +41,7 @@ fun ProductsScreen(
         factory = CategoryViewModelFactory(CategoryRepository(RetrofitInstance.categoryService))
     )
 ) {
-    // Para mostrar errores
+
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -158,7 +158,7 @@ fun ProductsScreen(
                         )
                     }
             }
-            val categoryNames = listOf("Todos") + categories.map { it.name }
+            val categories =  categories.map { it }
 
             // Scaffold para el snackbar
             Scaffold(
@@ -169,9 +169,10 @@ fun ProductsScreen(
                     Column(Modifier.fillMaxSize()) {
 
                         ScrollableFilterMenu(
-                            items = categoryNames,
-                            onItemClick = { selectedCategory = it },
-                            onFixedButtonClick = { showAddCategoryDialog = true }
+                            items = categories,
+                            onItemClick = { selectedCategory = it?.name },
+                            onFixedButtonClick = { showAddCategoryDialog = true },
+                            onDeleteCategory ={categoryViewModel.deleteCategory(it)}
                         )
 
                         val filteredProducts = if (selectedCategory != null && selectedCategory != "Todos")

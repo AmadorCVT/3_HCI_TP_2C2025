@@ -7,10 +7,9 @@ import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.CreateCategoryRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.flow.asStateFlow
-
 
 class CategoryViewModelFactory(
     private val repository: CategoryRepository
@@ -67,16 +66,33 @@ class CategoryViewModel(
     fun addCategory(name: String) {
         viewModelScope.launch {
             try {
-                // 1) Crear categoría
                 repository.createCategory(CreateCategoryRequest(name = name))
-
-                // 2) Recargar lista (asegura que queda actualizada)
                 loadCategories(forceRefresh = true)
-
             } catch (e: Exception) {
                 _errorMessage.value = e.message ?: "Error al crear categoría"
             }
         }
+
+        _refreshTrigger.value++
+    }
+
+
+    fun deleteCategory(id: Int) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+
+            try {
+                repository.deleteCategory(id)
+                loadCategories(forceRefresh = true) // refrescar lista
+
+            } catch (e: Exception) {
+                _errorMessage.value = e.message ?: "Error al borrar categoría"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+
         _refreshTrigger.value++
     }
 }
