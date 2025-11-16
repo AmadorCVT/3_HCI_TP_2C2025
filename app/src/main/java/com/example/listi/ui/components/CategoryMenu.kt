@@ -19,8 +19,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.listi.R
+import com.example.listi.ui.theme.DarkGreen
+import com.example.listi.ui.theme.DarkGrey
+import com.example.listi.ui.theme.White
 
 @Composable
 fun ScrollableFilterMenu(
@@ -47,7 +51,7 @@ fun ScrollableFilterMenu(
                 )
         ) {
             Icon(
-                imageVector = Icons.Default.Add, // ← AHORA ES +
+                imageVector = Icons.Default.Add,
                 contentDescription = "Agregar categoría",
                 tint = Color.Black
             )
@@ -81,9 +85,9 @@ fun FilterChip(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (isSelected) Color(0xFF4CAF50) else Color(0xFFF5F5F5)
-    val borderColor = if (isSelected) Color(0xFF388E3C) else Color(0xFFE0E0E0)
-    val textColor = if (isSelected) Color.White else Color.Black
+    val backgroundColor = if (isSelected) DarkGreen else Color.Transparent
+    val borderColor = if (isSelected) DarkGreen else DarkGrey
+    val textColor = if (isSelected) White else DarkGrey
 
     Surface(
         shape = RoundedCornerShape(50),
@@ -103,5 +107,17 @@ fun FilterChip(
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ScrollableFilterMenuPreview() {
+    MaterialTheme {
+        ScrollableFilterMenu(
+            items = listOf("Lácteos", "Verduras", "Panificados", "Carnes", "Bebidas"),
+            onItemClick = {},
+            onFixedButtonClick = {}
+        )
     }
 }
