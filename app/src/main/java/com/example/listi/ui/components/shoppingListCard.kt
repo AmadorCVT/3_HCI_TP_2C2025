@@ -13,14 +13,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 
+
+
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.listi.R
 import com.example.listi.ui.theme.*
 
@@ -75,27 +80,60 @@ fun ShoppingListCard(
                 .padding(dimensionResource(R.dimen.medium_padding))
         ) {
 
-            // --- Nombre + usuarios ---
-            Column(horizontalAlignment = Alignment.Start) {
+
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.weight(1f)
+            ) {
 
                 Text(
-                    shoppingList.name,
+                    text = shoppingList.name,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, //TODO: no me anda el color
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
                     maxLines = 1,
-                    style = Typography.bodyMedium,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                LazyRow {
-                    items(shoppingList.sharedWith) { user ->
-                        Text(
-                            "${user.name}, ",
-                            maxLines = 1,
-                            style = Typography.labelMedium,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                Spacer(modifier = Modifier.height(2.dp))
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+
+                    //TODO: mostrar mas de 3 letras
+                    val count = shoppingList.sharedWith.size
+                    val usersText = when {
+                        count == 0 -> "Sin usuarios"
+                        count == 1 -> shoppingList.sharedWith[0].name
+                        count == 2 -> "${shoppingList.sharedWith[0].name}, ${shoppingList.sharedWith[1].name}"
+                        else -> {
+                            val first = shoppingList.sharedWith[0].name
+                            val second = shoppingList.sharedWith[1].name
+                            "$first, $second y ${count - 2} más"
+                        }
                     }
+
+                    Text(
+                        text = usersText,
+                        maxLines = 1,
+                        style = Typography.labelMedium,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    val dateText = shoppingList.createdAt.take(10)
+                        .replace("-", "/")
+
+                    Text(
+                        text = dateText,
+                        maxLines = 1,
+                        style = Typography.labelMedium,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
+
 
             Spacer(Modifier.weight(1f))
 
