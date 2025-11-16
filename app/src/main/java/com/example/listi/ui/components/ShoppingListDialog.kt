@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.listi.R
 import com.example.listi.ui.theme.ListiTheme
+import com.example.listi.ui.types.ProductRequest
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.ShoppingListRequest
 
@@ -41,7 +42,7 @@ fun ShoppingListDialog(
     shoppingList: ShoppingList? = null,
     title: String,
     onDismissRequest: () -> Unit,
-    onConfirmation: (ShoppingListRequest) -> Unit,
+    onConfirmation: (ShoppingListRequest) -> Unit
 ) {
 
     var name by remember { mutableStateOf("") }

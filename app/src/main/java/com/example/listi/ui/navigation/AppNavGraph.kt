@@ -105,6 +105,7 @@ fun AppNavGraph(
                 modifier,
                 productViewModel = productViewModel,
                 shoppingListViewModel = shoppingListsViewModel,
+                categoryViewModel = categoryViewModel,
                 listId = listId
             )
         }

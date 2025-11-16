@@ -43,8 +43,10 @@ import com.example.listi.R
 import com.example.listi.ui.screens.shoppingLists.AddedShoppingListItem
 import com.example.listi.ui.screens.shoppingLists.ShoppingListItemsHeader
 import com.example.listi.ui.theme.ListiTheme
+import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ProductReference
+import com.example.listi.ui.types.ProductRequest
 import com.example.listi.ui.types.ShoppingListItem
 import com.example.listi.ui.types.ShoppingListItemRequest
 import com.example.listi.ui.types.ShoppingListRequest
@@ -55,9 +57,13 @@ import kotlinx.coroutines.launch
 fun ShoppingListItemDialog(
     shoppingListItem: ShoppingListItem? = null,
     products: List<Product>,
+    categories: List<Category>,
     onDismissRequest: () -> Unit,
     onConfirmation: (ShoppingListItemRequest) -> Unit,
+    addProduct: (ProductRequest) -> Unit,
 ) {
+
+    val openCreateProduct = remember { mutableStateOf(false) }
 
     // Para el snackbar
     val scope = rememberCoroutineScope()
@@ -81,6 +87,18 @@ fun ShoppingListItemDialog(
         snackbarHost = { SnackbarHost( snackbarHostState) }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
+            when {
+                openCreateProduct.value ->
+                    ProductDialog(
+                        onDismissRequest = { openCreateProduct.value = false },
+                        onConfirmation = { productRequest ->
+                            addProduct(productRequest)
+                            openCreateProduct.value = false
+                        },
+                        categories = categories
+                    )
+            }
+
             Dialog(
                 onDismissRequest = {
                     onDismissRequest()
@@ -90,7 +108,7 @@ fun ShoppingListItemDialog(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(450.dp)
+                        .height(550.dp)
                         .padding(16.dp),
                     shape = RoundedCornerShape(16.dp),
                 ) {
@@ -159,6 +177,12 @@ fun ShoppingListItemDialog(
                             }
                         }
 
+                        OutlinedButton(
+                            onClick = { openCreateProduct.value = true }
+                        ) {
+                            Text(text = stringResource(R.string.create_product),
+                                color = MaterialTheme.colorScheme.secondary)
+                        }
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth(),
