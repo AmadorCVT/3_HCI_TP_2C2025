@@ -47,6 +47,8 @@ import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.Alignment
 import com.example.listi.ui.navigation.Constants
 
 
@@ -74,7 +76,8 @@ fun ListiApp(
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route ?: ROUTE_LISTS
 
-        val authRepository = AuthRepository(context)
+        val context = LocalContext.current
+        val authRepository = remember { AuthRepository(context) }
 
         // Chequear si el usuario esta loggeado
         var startDestination by remember { mutableStateOf<String?>(null) }
@@ -82,6 +85,7 @@ fun ListiApp(
         val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(authRepository))
 
         val isLogged = authViewModel.uiState.isLogged
+        val isLoading = authViewModel.uiState.isLoading
 
         LaunchedEffect(Unit) {
             val savedToken = authRepository.getSavedToken()
@@ -94,13 +98,13 @@ fun ListiApp(
         }
 
         if (startDestination == null) {
-            Box(modifier = Modifier.fillMaxSize())
+            Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
             return@ListiTheme
         }
 
         // Borra todo el stack si se hizo logout
         LaunchedEffect(isLogged) {
-            if (!isLogged) {
+            if (!isLoading && !isLogged) {
                 navController.navigate(ROUTE_LOGIN) {
                     popUpTo(0) { inclusive = true }
                     launchSingleTop = true

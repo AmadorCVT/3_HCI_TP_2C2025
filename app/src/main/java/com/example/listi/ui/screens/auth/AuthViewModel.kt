@@ -11,6 +11,8 @@ import com.example.listi.repository.AuthRepository
 import com.example.listi.ui.types.GetUserResponse
 import com.example.listi.ui.types.User
 import com.example.listi.ui.types.UpdateUserRequest
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
@@ -30,29 +32,42 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     var uiState by mutableStateOf(AuthUiState())
         private set
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
+
+    private val _refreshTrigger = MutableStateFlow(0)
+    val refreshTrigger = _refreshTrigger.asStateFlow()
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage = _errorMessage.asStateFlow()
+
+    fun clearError() {
+        _errorMessage.value = null
+    }
 
     fun login(email: String, password: String) {
 
         viewModelScope.launch {
-            uiState = uiState.copy(isLoading = true,)
+            _isLoading.value = true
             try {
                 val response = authRepository.login(email, password)
-                if (response.isSuccessful && response.body() != null) {
-                    val token = response.body()!!.token
-                    uiState = uiState.copy(
-                        isLogged = true,
-                        token = token,
-                    )
-
-                    loadProfile()
-                } else {
-                    uiState = uiState.copy(errorMessage = "Credenciales inválidas",)
+                if (!response.isSuccessful || response.body() == null) {
+                    _errorMessage.value = "1"
+                    return@launch
                 }
+
+                val token = response.body()!!.token
+
+                uiState = uiState.copy(
+                    isLogged = true,
+                    token = token
+                )
+
+                loadProfile()
             } catch (e: Exception) {
-                Log.e("LoginViewModel", "Login failed", e)
-                uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión",)
+                _errorMessage.value = e.localizedMessage
             } finally {
-                uiState = uiState.copy()
+                _isLoading.value = false
             }
         }
     }
@@ -75,6 +90,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
                 }
             } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
                 uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión",)
             } finally {
                 uiState = uiState.copy()
@@ -94,6 +110,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                     uiState = uiState.copy(errorMessage = "Código incorrecto",)
                 }
             } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
                 uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión",)
             } finally {
                 uiState = uiState.copy()
@@ -107,6 +124,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
             try {
                 authRepository.sendVerificationCode(email)
             } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
                 uiState = uiState.copy(errorMessage = e.message ?: "No se pudo reenviar el código",)
             }
         }
@@ -124,6 +142,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                     uiState = uiState.copy(errorMessage = "No se pudo restablecer la contraseña",)
                 }
             } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
                 uiState = uiState.copy(errorMessage = e.message ?: "Error de conexión",)
             } finally {
                 uiState = uiState.copy()
@@ -144,6 +163,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                         forgotCodeSent = true
                     )
                 } else {
+                    _errorMessage.value = "2"
                     uiState = uiState.copy(
                         errorMessage = "No se pudo enviar el código de recuperación",
                     )
@@ -186,7 +206,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                         createdAt = body.createdAt,
                         updatedAt = body.updatedAt
                     )
-                    uiState = uiState.copy(currentUser = user,)
+                    uiState = uiState.copy(currentUser = user, isLogged = true)
                 } else {
 
                     uiState = uiState.copy(errorMessage = "No se pudo obtener perfil",)

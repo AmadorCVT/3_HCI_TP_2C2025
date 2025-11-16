@@ -13,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -33,6 +34,7 @@ import com.example.listi.ui.theme.White
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalConfiguration
 import android.content.res.Configuration
+import com.example.listi.ui.theme.LightGreen
 
 @Composable
 fun LoginScreen(
@@ -43,61 +45,89 @@ fun LoginScreen(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
     val uiState = authViewModel.uiState
+
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
     val configuration = LocalConfiguration.current
 
+    val isLoading by authViewModel.isLoading.collectAsState()
 
-    LaunchedEffect(uiState.errorMessage) {
-        uiState.errorMessage?.let { msg ->
-            scope.launch {
-                snackbarHostState.showSnackbar(msg)
+    val errorMessage by authViewModel.errorMessage.collectAsState()
+    val connectionError = stringResource(R.string.error_connection)
+    val credentialsError = stringResource(R.string.error_credentials_invalid)
+    val codeError = stringResource(R.string.error_could_not_resend)
+    val mailError = stringResource(R.string.error_mail)
+
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let { error ->
+            val message = when (error) {
+                "1" -> credentialsError
+                "400" -> mailError
+                "401" -> credentialsError
+                "2" -> codeError
+                else -> connectionError
             }
 
-            authViewModel.clearErrorMessage()
+            snackbarHostState.showSnackbar(message)
+
+            authViewModel.clearError()
         }
     }
-    // Use a Box as root so the circle+logo can be drawn as an overlay (no layout space consumed)
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Overlay: large green circle and logo positioned at top center and offset so they protrude from top
-        // Mostrar el overlay sólo cuando NO estamos en orientación horizontal
-        if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
-            Box(modifier = Modifier
-                .align(Alignment.TopCenter)
-                .wrapContentSize(), contentAlignment = Alignment.TopCenter) {
-                // Circle (kept as you had it, big and moved upwards)
-                Box(
-                    modifier = Modifier
-                        .size(520.dp)
-                        .offset(y = (-300).dp)
-                        .background(
-                            color = ListiGreen,
-                            shape = CircleShape
-                        )
-                )
 
-                // Logo drawn on top and shifted to sit into the green area
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "Logo",
-                    modifier = Modifier
-                        .size(140.dp)
-                        .offset(y = 18.dp)
-                )
-            }
-        }
+    when {
+        isLoading -> Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
 
-        // Main content: form and buttons — stays centered and is not pushed down by the overlay
-        // Ajustes para orientar en horizontal: menos padding, espaciados más pequeños y botones más cortos
-        val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val horizontalPadding = if (isLandscape) 12.dp else 32.dp
-        val verticalPadding = if (isLandscape) 8.dp else 28.dp
-        val spacerSmall = if (isLandscape) 6.dp else 16.dp
-        val spacerMedium = if (isLandscape) 8.dp else 24.dp
-        val buttonHeight = if (isLandscape) 40.dp else 50.dp
-        val titleFontSize = if (isLandscape) 22.sp else 28.sp
-        val iconSize = if (isLandscape) 20.dp else 24.dp
+        else -> {
+            Scaffold(
+                snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+            ) { padding ->
+                // Use a Box as root so the circle+logo can be drawn as an overlay (no layout space consumed)
+                Box(modifier = Modifier.fillMaxSize()) {
+                    // Overlay: large green circle and logo positioned at top center and offset so they protrude from top
+                    // Mostrar el overlay sólo cuando NO estamos en orientación horizontal
+                    if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .wrapContentSize(), contentAlignment = Alignment.TopCenter
+                        ) {
+                            // Circle (kept as you had it, big and moved upwards)
+                            Box(
+                                modifier = Modifier
+                                    .size(520.dp)
+                                    .offset(y = (-300).dp)
+                                    .background(
+                                        color = ListiGreen,
+                                        shape = CircleShape
+                                    )
+                            )
+
+                            // Logo drawn on top and shifted to sit into the green area
+                            Image(
+                                painter = painterResource(id = R.drawable.logo),
+                                contentDescription = "Logo",
+                                modifier = Modifier
+                                    .size(140.dp)
+                                    .offset(y = 18.dp)
+                            )
+                        }
+                    }
+
+                    // Main content: form and buttons — stays centered and is not pushed down by the overlay
+                    // Ajustes para orientar en horizontal: menos padding, espaciados más pequeños y botones más cortos
+                    val isLandscape =
+                        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+                    val horizontalPadding = if (isLandscape) 12.dp else 32.dp
+                    val verticalPadding = if (isLandscape) 8.dp else 28.dp
+                    val spacerSmall = if (isLandscape) 6.dp else 16.dp
+                    val spacerMedium = if (isLandscape) 8.dp else 24.dp
+                    val buttonHeight = if (isLandscape) 40.dp else 50.dp
+                    val titleFontSize = if (isLandscape) 22.sp else 28.sp
+                    val iconSize = if (isLandscape) 20.dp else 24.dp
 
         Column(
             modifier = Modifier
@@ -121,50 +151,56 @@ fun LoginScreen(
                 )
             }
 
-            if(!isLandscape) {
-                Spacer(modifier = Modifier.height(spacerMedium))
-            }
+                        if (!isLandscape) {
+                            Spacer(modifier = Modifier.height(spacerMedium))
+                        }
 
 
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text(stringResource(R.string.email_label)) },
-                singleLine = true,
-                leadingIcon = { Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.mail_foreground),
-                    contentDescription = stringResource(R.string.email_label),
-                    modifier = Modifier.size(iconSize)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier.fillMaxWidth()
-            )
+                        OutlinedTextField(
+                            value = email,
+                            onValueChange = { email = it },
+                            label = { Text(stringResource(R.string.email_label)) },
+                            singleLine = true,
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.mail_foreground),
+                                    contentDescription = stringResource(R.string.email_label),
+                                    modifier = Modifier.size(iconSize)
+                                )
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
-            Spacer(modifier = Modifier.height(spacerSmall))
+                        Spacer(modifier = Modifier.height(spacerSmall))
 
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text(stringResource(R.string.password)) },
-                singleLine = true,
-                leadingIcon = { Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.lock_foreground),
-                    modifier = Modifier.size(iconSize),
-                    contentDescription = stringResource(R.string.password)) },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
-            )
+                        OutlinedTextField(
+                            value = password,
+                            onValueChange = { password = it },
+                            label = { Text(stringResource(R.string.password)) },
+                            singleLine = true,
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.lock_foreground),
+                                    modifier = Modifier.size(iconSize),
+                                    contentDescription = stringResource(R.string.password)
+                                )
+                            },
+                            visualTransformation = PasswordVisualTransformation(),
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
-            Spacer(modifier = Modifier.height(spacerMedium))
+                        Spacer(modifier = Modifier.height(spacerMedium))
 
 
-            val isLoginEnabled = email.isNotBlank() && password.isNotBlank()
+                        val isLoginEnabled = email.isNotBlank() && password.isNotBlank()
 
             Button(
                 onClick = { if (isLoginEnabled) (onLoginClick?.invoke(email, password) ?: authViewModel.login(email, password)) },
                 enabled = isLoginEnabled,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isLoginEnabled) ListiGreen else DarkGrey,
-                    contentColor = if (isLoginEnabled) White else DarkGray
+                    containerColor = if (isLoginEnabled) ListiGreen else LightGreen,
+                    contentColor = White
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -180,30 +216,33 @@ fun LoginScreen(
             }
 
 
-            TextButton(onClick = { onForgotPasswordClick?.invoke() }) {
-                Text(
-                    text = stringResource(R.string.forgot_password),
-                    color = DarkGreen,
-                    fontSize = if (isLandscape) 12.sp else 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
+                        TextButton(onClick = { onForgotPasswordClick?.invoke() }) {
+                            Text(
+                                text = stringResource(R.string.forgot_password),
+                                color = DarkGreen,
+                                fontSize = if (isLandscape) 12.sp else 14.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
 
-            Spacer(modifier = Modifier.height(spacerSmall))
+                        Spacer(modifier = Modifier.height(spacerSmall))
 
-            OutlinedButton(
-                onClick = { onCreateAccountClick?.invoke() },
-                border = BorderStroke(1.dp, DarkGreen),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(buttonHeight),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = DarkGreen)
-            ) {
-                Text(
-                    text = stringResource(R.string.registration),
-                    fontSize = if (isLandscape) 14.sp else 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
+                        OutlinedButton(
+                            onClick = { onCreateAccountClick?.invoke() },
+                            border = BorderStroke(1.dp, DarkGreen),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(buttonHeight),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = DarkGreen)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.registration),
+                                fontSize = if (isLandscape) 14.sp else 16.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
             }
         }
     }

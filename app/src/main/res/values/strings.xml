@@ -81,7 +81,7 @@
     <string name="error_connection">Connection error</string>
     <string name="error_register_user">Error registering user</string>
     <string name="error_code_incorrect">Incorrect code</string>
-    <string name="error_could_not_resend">Could not resend code</string>
+    <string name="error_could_not_resend">Could not send code</string>
     <string name="error_password_reset_failed">Could not reset password</string>
     <string name="error_profile_fetch">Could not get profile</string>
     <string name="error_profile_connection">Connection error while fetching profile</string>
@@ -95,6 +95,7 @@
     <string name="forgot_password">Forgot your password?</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="error_email">Invalid email</string>
 
 
     <string name="profile_image_too_large_title">Image too large</string>
