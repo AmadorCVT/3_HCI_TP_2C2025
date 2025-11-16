@@ -1,7 +1,5 @@
 package com.example.listi.ui.screens.auth
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -11,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -20,20 +17,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.ui.theme.DarkGreen
-import com.example.listi.ui.theme.LightGreen
+import com.example.listi.ui.theme.ListiGreen
+import com.example.listi.ui.theme.DarkGrey
+import com.example.listi.ui.theme.DarkGray
 import com.example.listi.ui.theme.White
 import com.example.listi.R
-import com.example.listi.repository.AuthRepository
 import kotlinx.coroutines.launch
 
 @Composable
-fun RegisterScreen( authViewModel: AuthViewModel,
-                    goLogin: (() -> Unit)? = null,
-                    goVerifyAccount: (() -> Unit)? = null,) {
+fun RegisterScreen(authViewModel: AuthViewModel,
+                   goLogin: (() -> Unit)? = null,
+                   goVerifyAccount: (() -> Unit)? = null) {
 
-    val context = LocalContext.current
     val viewModel = authViewModel
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -163,15 +159,19 @@ fun RegisterScreen( authViewModel: AuthViewModel,
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        val isCreateEnabled = firstName.isNotBlank() && lastName.isNotBlank() && email.isNotBlank() && password.isNotBlank() && (password == repeatPassword)
+
         Button(
             onClick = {
-
-                if (password == repeatPassword && password.isNotEmpty()) {
+                if (isCreateEnabled) {
                     viewModel.register(firstName, lastName, email, password)
-
                 }
             },
-            colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+            enabled = isCreateEnabled,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isCreateEnabled) ListiGreen else DarkGrey,
+                contentColor = if (isCreateEnabled) White else DarkGray
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
@@ -179,14 +179,14 @@ fun RegisterScreen( authViewModel: AuthViewModel,
         ) {
             if (uiState.isLoading) {
                 CircularProgressIndicator(
-                    color = White,
+                    color = if (isCreateEnabled) White else DarkGray,
                     strokeWidth = 2.dp,
                     modifier = Modifier.size(24.dp)
                 )
             } else {
                 Text(
                     text = "Crear cuenta",
-                    color = White,
+                    color = if (isCreateEnabled) White else DarkGray,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )

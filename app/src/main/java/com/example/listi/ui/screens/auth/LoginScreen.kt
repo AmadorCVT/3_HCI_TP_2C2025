@@ -13,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -28,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.ListiGreen
-import com.example.listi.ui.theme.LightGreen
+import com.example.listi.ui.theme.DarkGrey
 import com.example.listi.ui.theme.DarkGray
 import com.example.listi.ui.theme.White
 import kotlinx.coroutines.launch
@@ -116,7 +115,7 @@ fun LoginScreen(
                 Text(
                     text = stringResource(R.string.app_name),
                     style = MaterialTheme.typography.titleMedium,
-                    color = colorResource(id = R.color.white),
+                    color = White,
                     fontSize = titleFontSize,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                 )
@@ -164,8 +163,8 @@ fun LoginScreen(
                 onClick = { if (isLoginEnabled) (onLoginClick?.invoke(email, password) ?: authViewModel.login(email, password)) },
                 enabled = isLoginEnabled,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isLoginEnabled) ListiGreen else LightGreen,
-                    contentColor = White
+                    containerColor = if (isLoginEnabled) ListiGreen else DarkGrey,
+                    contentColor = if (isLoginEnabled) White else DarkGray
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
