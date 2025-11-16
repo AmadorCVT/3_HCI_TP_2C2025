@@ -1,7 +1,13 @@
 package com.example.listi.ui.navigation
 
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,6 +50,9 @@ fun AppNavGraph(
     authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    var lastBackPressed by remember { mutableStateOf(0L) }
+    val exitRoutes = listOf(ROUTE_LISTS, ROUTE_PRODUCTS, ROUTE_FRIENDS, ROUTE_PROFILE)
 
     // Crear los viewModels asi se pueden pasar entre las vistas que los requieren
     val productViewModel: ProductViewModel =
@@ -142,6 +151,24 @@ fun AppNavGraph(
         composable(ROUTE_PASSWORD_CODE){
             RecoverPasswordScreenCode(authViewModel = authViewModel,
                 goRestorePassword = { navController.navigate(ROUTE_PASSWORD) })
+        }
+    }
+    BackHandler(enabled = true) {
+        val currentRoute = navController.currentBackStackEntry?.destination?.route
+
+        if (currentRoute in exitRoutes) {
+
+            val now = System.currentTimeMillis()
+
+            if (now - lastBackPressed < 2000) {
+                (context as Activity).finish()
+            } else {
+                Toast.makeText(context, "Toca otra vez para salir", Toast.LENGTH_SHORT).show()
+                lastBackPressed = now
+            }
+
+        } else {
+            navController.popBackStack()
         }
     }
 }
