@@ -47,9 +47,12 @@ import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.Alignment
 import com.example.listi.ui.navigation.Constants
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -212,17 +215,52 @@ fun ListiApp(
                 }
 
 
-                // Celular
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                ) {
-                    AppNavGraph(
-                        navController = navController,
-                        authViewModel = authViewModel,
-                        startDestination = startDestination!!,
-                        modifier = Modifier.fillMaxSize()
+                // Solo funciona el swipe para celulares
+                if (!isTablet) {
+
+                    val pagerRoutes = listOf(
+                        ROUTE_LISTS,
+                        ROUTE_PRODUCTS,
+                        ROUTE_FRIENDS,
+                        ROUTE_PROFILE
                     )
+
+                    val pagerIndex = pagerRoutes.indexOf(currentRoute).coerceAtLeast(0)
+                    val pagerState = rememberPagerState(
+                        initialPage = pagerIndex,
+                        pageCount = { pagerRoutes.size }
+                    )
+
+                    val coroutine = rememberCoroutineScope()
+
+                    LaunchedEffect(pagerState.currentPage) {
+                        val newRoute = pagerRoutes[pagerState.currentPage]
+                        if (newRoute != currentRoute) {
+                            navController.navigate(newRoute)
+                        }
+                    }
+
+                    LaunchedEffect(currentRoute) {
+                        val targetIndex = pagerRoutes.indexOf(currentRoute)
+                        if (targetIndex != pagerState.currentPage) {
+                            coroutine.launch { pagerState.scrollToPage(targetIndex) }
+                        }
+                    }
+
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) { _ ->
+
+                        AppNavGraph(
+                            navController = navController,
+                            authViewModel = authViewModel,
+                            startDestination = startDestination!!,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
             }
         )
