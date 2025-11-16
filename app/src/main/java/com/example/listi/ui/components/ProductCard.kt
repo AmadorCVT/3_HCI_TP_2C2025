@@ -71,9 +71,9 @@ fun ProductCard(
 
             Text(
                 text = product.name,
+                style = MaterialTheme.typography.bodyLarge,
                 color = backColor,
                 fontWeight = FontWeight.Bold,
-                fontSize = 17.sp,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1.2f)
@@ -95,7 +95,8 @@ fun ProductCard(
                 ) {
                     Text(
                         selectedCategory?.name ?: "-",
-                        fontSize = 13.sp,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

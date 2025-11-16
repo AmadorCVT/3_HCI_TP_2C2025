@@ -319,7 +319,7 @@ fun ProfileScreen(
                                 Text(
                                     text = initials,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    fontSize = 36.sp,
+                                    style = MaterialTheme.typography.headlineLarge,
                                     fontWeight = FontWeight.Bold
                                 )
                             }
@@ -333,7 +333,7 @@ fun ProfileScreen(
                                     .padding(top = 8.dp)
                                     .clickable { pickImageLauncher.launch("image/*") },
                                 color = MaterialTheme.colorScheme.primary,
-                                fontSize = 12.sp
+                                style = MaterialTheme.typography.headlineSmall
                             )
                         }
 
@@ -645,7 +645,7 @@ private fun LanguageButton(
         shape = shape,
         modifier = Modifier.height(36.dp)
     ) {
-        Text(text = text, fontSize = 14.sp)
+        Text(text = text, style = MaterialTheme.typography.bodyMedium)
     }
 }
 
