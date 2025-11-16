@@ -75,7 +75,38 @@ fun ListiApp(
         val currentRoute = navBackStackEntry?.destination?.route ?: ROUTE_LISTS
 
         val authRepository = AuthRepository(context)
+
+        // Chequear si el usuario esta loggeado
+        var startDestination by remember { mutableStateOf<String?>(null) }
+
         val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(authRepository))
+
+        val isLogged = authViewModel.uiState.isLogged
+
+        LaunchedEffect(Unit) {
+            val savedToken = authRepository.getSavedToken()
+            if (!savedToken.isNullOrBlank()) {
+                authViewModel.loadProfile()
+                startDestination = ROUTE_LISTS     // Loggeado
+            } else {
+                   startDestination = ROUTE_LOGIN     // Sin credenciales
+            }
+        }
+
+        if (startDestination == null) {
+            Box(modifier = Modifier.fillMaxSize())
+            return@ListiTheme
+        }
+
+        // Borra todo el stack si se hizo logout
+        LaunchedEffect(isLogged) {
+            if (!isLogged) {
+                navController.navigate(ROUTE_LOGIN) {
+                    popUpTo(0) { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
+        }
 
         val isTablet = isTablet()
         val isLandscape = isLandscape()
@@ -130,6 +161,7 @@ fun ListiApp(
                                 AppNavGraph(
                                     navController = navController,
                                     authViewModel = authViewModel,
+                                    startDestination = startDestination!!,
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }
@@ -166,6 +198,7 @@ fun ListiApp(
                                 AppNavGraph(
                                     navController = navController,
                                     authViewModel = authViewModel,
+                                    startDestination = startDestination!!,
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }
@@ -183,6 +216,7 @@ fun ListiApp(
                     AppNavGraph(
                         navController = navController,
                         authViewModel = authViewModel,
+                        startDestination = startDestination!!,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
