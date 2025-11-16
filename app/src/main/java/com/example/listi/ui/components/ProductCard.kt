@@ -1,5 +1,6 @@
 package com.example.listi.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.example.listi.R
@@ -15,6 +16,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.listi.ui.theme.DarkGreen
+import com.example.listi.ui.theme.DarkGrey
+import com.example.listi.ui.theme.Green
+import com.example.listi.ui.theme.LightGreen
+import com.example.listi.ui.theme.backColor
 import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ShoppingList
@@ -52,7 +58,7 @@ fun ProductCard(
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = Green,
         shadowElevation = 2.dp
     ) {
 
@@ -65,9 +71,9 @@ fun ProductCard(
 
             Text(
                 text = product.name,
-                color = MaterialTheme.colorScheme.primary,
+                color = backColor,
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
+                fontSize = 18.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f)
@@ -79,10 +85,15 @@ fun ProductCard(
             Box {
                 OutlinedButton(
                     onClick = { expanded = true },
-                    modifier = Modifier.height(28.dp),
-                    contentPadding = PaddingValues(4.dp)
+                    modifier = Modifier.height(28.dp).fillMaxWidth(0.4f)    ,
+                    contentPadding = PaddingValues(4.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = backColor
+                    ),
+                    border = BorderStroke(2.dp, backColor)
                 ) {
-                    Text(selectedCategory.name, fontSize = 12.sp)
+
+                    Text(selectedCategory?.name ?: "-", fontSize = 18.sp)
                 }
 
                 DropdownMenu(
@@ -107,11 +118,12 @@ fun ProductCard(
             Spacer(Modifier.weight(1f))
 
             // --- Botón de opciones ---
-            Box { // Necesario para posicionar el dropdown en el lugar exacto
+            Box {
                 IconButton(onClick = { menuExpanded = true }) {
                     Icon(
                         ImageVector.vectorResource(R.drawable.more_vert_foreground),
-                        contentDescription = "Options"
+                        contentDescription = "Options",
+                        tint = backColor
                     )
                 }
 

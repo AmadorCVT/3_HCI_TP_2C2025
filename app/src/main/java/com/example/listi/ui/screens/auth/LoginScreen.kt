@@ -1,6 +1,7 @@
 package com.example.listi.ui.screens.auth
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +25,7 @@ import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.LightGreen
 import com.example.listi.ui.theme.White
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -33,7 +36,20 @@ fun LoginScreen(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val uiState = authViewModel.uiState
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
+
+    LaunchedEffect(uiState.errorMessage) {
+        uiState.errorMessage?.let { msg ->
+            scope.launch {
+                snackbarHostState.showSnackbar(msg)
+            }
+
+            authViewModel.clearErrorMessage()
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,7 +57,11 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo),
 
+            contentDescription = "Logo"
+        )
         Text(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.titleMedium,
