@@ -25,6 +25,7 @@
     <string name="verification_code_sent">Codigo de verificacion enviado a</string>
     <string name="enter_valid_email">Ingresá un email válido</string>
     <string name="send_code">Enviar codigo</string>
+    <string name="input_code">Ingresá el código enviado</string>
 
     <!-- Shopping lists screen -->
     <string name="active_lists">Activo</string>

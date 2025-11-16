@@ -1,26 +1,22 @@
 package com.example.listi.ui.screens.auth
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.ListiGreen
 import com.example.listi.ui.theme.DarkGrey
-import com.example.listi.ui.theme.DarkGray
 import kotlinx.coroutines.launch
 
 @Composable
@@ -92,7 +88,10 @@ fun VerifyAccountScreen(
                 placeholder = { Text("Email") },
                 singleLine = true,
                 leadingIcon = {
-                    Icon(Icons.Default.Email, contentDescription = null, tint = DarkGreen)
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.mail_foreground),
+                        contentDescription = "Email",
+                        modifier = Modifier.size(24.dp))
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -137,15 +136,16 @@ fun VerifyAccountScreen(
                 singleLine = true,
                 leadingIcon = {
                     Icon(
-                        Icons.Default.CheckCircle,
-                        contentDescription = null,
-                        tint = DarkGreen
-                    )
+                        imageVector = ImageVector.vectorResource(R.drawable.check_circle_foreground),
+                        contentDescription = "check",
+                        modifier = Modifier.size(24.dp))
                 },
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(Modifier.height(24.dp))
+
+            val enterCodeMessage = stringResource(R.string.input_code)
 
             Button(
                 onClick = {
@@ -153,7 +153,7 @@ fun VerifyAccountScreen(
                         authViewModel.verifyAccount(code)
                     } else {
                         scope.launch {
-                            snackbarHostState.showSnackbar("Ingresá el código enviado.")
+                            snackbarHostState.showSnackbar(enterCodeMessage)
                         }
                     }
                           },
@@ -174,7 +174,7 @@ fun VerifyAccountScreen(
                     )
                 } else {
                     Text(
-                        text = "VERIFICAR CUENTA",
+                        text = stringResource(R.string.verify_account),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Medium
                     )

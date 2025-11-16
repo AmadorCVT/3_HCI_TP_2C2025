@@ -20,11 +20,12 @@
     <string name="mail_already_registered">Mail already registered</string>
     <string name="same_password">Passwords must be equal</string>
     <string name="verification_sucess">Account successfully verified</string>
-    <string name="verify_account">Verify your account</string>
+    <string name="verify_account">Verify account</string>
     <string name="email_for_verification">Enter your email for your verification code to be sent</string>
     <string name="verification_code_sent">Verification code sent to</string>
     <string name="enter_valid_email">Enter a valid email</string>
     <string name="send_code">Send code</string>
+    <string name="input_code">Enter code</string>
 
     <!-- Shopping lists screen -->
     <string name="active_lists">Active</string>
