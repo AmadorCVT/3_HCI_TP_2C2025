@@ -131,15 +131,15 @@ fun ShoppingListCard(
                     )
                 }
 
-                Text(
-                    text = "${stringResource(R.string.last_purchased)}: ${
-                        prettyDate(
-                            shoppingList.lastPurchasedAt
-                        )}",
-                    maxLines = 1,
-                    style = Typography.labelMedium,
-                    overflow = TextOverflow.Ellipsis,
-                    )
+//                Text(
+//                    text = "${stringResource(R.string.last_purchased)}: ${
+//                        prettyDate(
+//                            shoppingList.lastPurchasedAt
+//                        )}",
+//                    maxLines = 1,
+//                    style = Typography.labelMedium,
+//                    overflow = TextOverflow.Ellipsis,
+//                    )
 
 
             }

@@ -95,8 +95,6 @@ fun FriendsCardList(
             .padding(16.dp)
     ) {
 
-        Spacer(modifier = Modifier.height(60.dp))
-
         val isLargeScreen = maxWidthDp() > 600
 
         OutlinedTextField(

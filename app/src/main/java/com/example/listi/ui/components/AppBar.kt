@@ -35,14 +35,6 @@ fun AppTopBar(title: String) {
                 )
             }
         },
-        actions = {
-            IconButton(onClick = { /* handle menu */ }) {
-                Icon(
-                    painterResource(R.drawable.person_foreground),
-                    contentDescription = "Profile"
-                )
-            }
-        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer

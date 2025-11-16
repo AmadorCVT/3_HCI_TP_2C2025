@@ -102,6 +102,7 @@ fun ListiApp(
 
                 // Tablet horizontal
                 if (isTablet && !isLandscape) {
+                    if (currentRoute in noBarsRoutes)
                     Row(modifier = Modifier.fillMaxSize()) {
 
                         Surface(
@@ -135,6 +136,7 @@ fun ListiApp(
 
                 // Tablet vertical
                 if (isTablet && isLandscape) {
+                    if (currentRoute in noBarsRoutes)
                     Row(modifier = Modifier.fillMaxSize()) {
                         Surface(
                             modifier = Modifier
