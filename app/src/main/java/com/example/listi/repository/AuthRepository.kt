@@ -5,6 +5,8 @@ import android.util.Log
 import com.example.listi.network.RetrofitInstance
 import com.example.listi.TokenManager
 import com.example.listi.ui.types.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import retrofit2.Response
 
@@ -15,15 +17,19 @@ class AuthRepository(private val context: Context) {
 
 
     suspend fun login(email: String, password: String): Response<LoginResponse> {
-        val response = service.loginUser(LoginRequest(email = email, password = password))
+        return withContext(Dispatchers.IO) {
+            val response = service.loginUser(LoginRequest(email = email, password = password))
 
-        if (response.isSuccessful) {
-            val body = response.body()
-            if (body != null && body.token.isNotBlank()) {
-                tokenManager.saveToken(body.token)
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null && body.token.isNotBlank()) {
+                    tokenManager.saveToken(body.token)
+                }
+                response
+            } else {
+                throw Exception(response.code().toString())
             }
         }
-        return response
     }
 
 
@@ -89,6 +95,8 @@ class AuthRepository(private val context: Context) {
         val response = service.logout()
         if (response.isSuccessful) {
             tokenManager.clearToken()
+        } else {
+            throw Exception(response.code().toString())
         }
         return response
     }

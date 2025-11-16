@@ -86,7 +86,7 @@
     <string name="error_connection">Error de conexión</string>
     <string name="error_register_user">Error al registrar usuario</string>
     <string name="error_code_incorrect">Código incorrecto</string>
-    <string name="error_could_not_resend">No se pudo reenviar el código</string>
+    <string name="error_could_not_resend">No se pudo enviar el código</string>
     <string name="error_password_reset_failed">No se pudo restablecer la contraseña</string>
     <string name="error_profile_fetch">No se pudo obtener perfil</string>
     <string name="error_profile_connection">Error de conexión al obtener perfil</string>

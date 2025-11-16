@@ -74,7 +74,8 @@ fun ListiApp(
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route ?: ROUTE_LISTS
 
-        val authRepository = AuthRepository(context)
+        val context = LocalContext.current
+        val authRepository = remember { AuthRepository(context) }
 
         // Chequear si el usuario esta loggeado
         var startDestination by remember { mutableStateOf<String?>(null) }
@@ -82,6 +83,7 @@ fun ListiApp(
         val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(authRepository))
 
         val isLogged = authViewModel.uiState.isLogged
+        val isLoading = authViewModel.uiState.isLoading
 
         LaunchedEffect(Unit) {
             val savedToken = authRepository.getSavedToken()
@@ -100,7 +102,7 @@ fun ListiApp(
 
         // Borra todo el stack si se hizo logout
         LaunchedEffect(isLogged) {
-            if (!isLogged) {
+            if (!isLoading && !isLogged) {
                 navController.navigate(ROUTE_LOGIN) {
                     popUpTo(0) { inclusive = true }
                     launchSingleTop = true
