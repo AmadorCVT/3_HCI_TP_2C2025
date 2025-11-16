@@ -138,4 +138,16 @@
     <string name="change_password_success">Contraseña cambiada correctamente</string>
     <string name="change_password_failure">No se pudo cambiar la contraseña</string>
 
+    <!-- Top Bar Titles -->
+    <string name="route_lists_title">Listas de Compra</string>
+    <string name="route_products_title">Productos</string>
+    <string name="route_profile_title">Perfil</string>
+    <string name="route_friends_title">Amigos</string>
+    <string name="route_login_title">Login</string>
+    <string name="route_register_title">Registro</string>
+    <string name="route_verify_title">Verificacion</string>
+    <string name="route_password_code_title">Codigo de  Contraseña</string>
+    <string name="route_password_title">Restorar Contraseña</string>
+
+
 </resources>

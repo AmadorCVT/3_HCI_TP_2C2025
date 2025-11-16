@@ -52,6 +52,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.Alignment
+import com.example.listi.ui.components.routeToTitle
 import com.example.listi.ui.navigation.Constants
 import kotlinx.coroutines.launch
 
@@ -123,9 +124,7 @@ fun ListiApp(
             topBar = {
                 if (!isTablet) {
                     if (currentRoute in noBarsRoutes) {
-                        val topBarTitle = if (currentRoute.startsWith("list_details"))
-                        {"Shopping List"} else {currentRoute }
-                        AppTopBar(topBarTitle)
+                        AppTopBar(routeToTitle(currentRoute))
                     }
                 }
             },
