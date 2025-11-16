@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -104,13 +105,24 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = if (isLandscape) Arrangement.SpaceEvenly else Arrangement.Center
         ) {
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.titleMedium,
-                color = if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) colorResource(id = R.color.white) else colorResource(id = R.color.listi_green),
-                fontSize = titleFontSize,
-                modifier = Modifier.padding(bottom = spacerMedium)
-            )
+            Surface(
+                color = colorResource(id = R.color.listi_green),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.padding(bottom = spacerSmall)
+            ) {
+                Text(
+                    text = stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = colorResource(id = R.color.white),
+                    fontSize = titleFontSize,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                )
+            }
+
+            if(!isLandscape) {
+                Spacer(modifier = Modifier.height(spacerMedium))
+            }
+
 
             OutlinedTextField(
                 value = email,
@@ -158,7 +170,6 @@ fun LoginScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(spacerSmall))
 
             TextButton(onClick = { onForgotPasswordClick?.invoke() }) {
                 Text(
