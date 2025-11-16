@@ -25,11 +25,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.IconButton
@@ -64,6 +59,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 
 @Composable
 fun ProfileScreen(
@@ -244,7 +242,9 @@ fun ProfileScreen(
                                     shape = RoundedCornerShape(20.dp),
                                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
                                 ) {
-                                    Text(text = stringResource(R.string.profile_change_password), fontSize = 12.sp)
+                                    Text(text = stringResource(R.string.profile_change_password),
+                                        color = Color.White,
+                                        style = MaterialTheme.typography.bodyMedium)
                                 }
                             }
 
@@ -260,12 +260,15 @@ fun ProfileScreen(
                                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Filled.Edit,
+                                        imageVector = ImageVector.vectorResource(R.drawable.edit_foreground),
                                         contentDescription = null,
+                                        tint = Color.White,
                                         modifier = Modifier.size(18.dp)
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Text(text = stringResource(R.string.edit), fontSize = 14.sp)
+                                    Text(text = stringResource(R.string.edit),
+                                        color = Color.White,
+                                        style = MaterialTheme.typography.bodyMedium)
                                 }
                             } else {
                                  ElevatedButton(
@@ -284,7 +287,7 @@ fun ProfileScreen(
                                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Filled.Close,
+                                        imageVector = ImageVector.vectorResource(R.drawable.close_foreground),
                                         contentDescription = stringResource(R.string.cancel),
                                         modifier = Modifier.size(18.dp)
                                     )
@@ -402,8 +405,8 @@ fun ProfileScreen(
                             ) {
                                 Text(
                                     text = stringResource(R.string.logout),
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
+                                    color = Color.White,
+                                    style = MaterialTheme.typography.bodyLarge)
                             }
                            
                         }
@@ -470,7 +473,7 @@ fun ProfileScreen(
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                                     trailingIcon = {
                                         IconButton(onClick = { showCurrentPassword = !showCurrentPassword }) {
-                                            val icon = if (showCurrentPassword) Icons.Filled.VisibilityOff else Icons.Filled.Visibility
+                                            val icon = if (showCurrentPassword) ImageVector.vectorResource(R.drawable.visibility_off_foreground) else ImageVector.vectorResource(R.drawable.visibility_foreground)
                                             Icon(imageVector = icon, contentDescription = null)
                                         }
                                     }
@@ -487,7 +490,7 @@ fun ProfileScreen(
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                                     trailingIcon = {
                                         IconButton(onClick = { showNewPassword = !showNewPassword }) {
-                                            val icon = if (showNewPassword) Icons.Filled.VisibilityOff else Icons.Filled.Visibility
+                                            val icon = if (showNewPassword) ImageVector.vectorResource(R.drawable.visibility_off_foreground) else ImageVector.vectorResource(R.drawable.visibility_foreground)
                                             Icon(imageVector = icon, contentDescription = null)
                                         }
                                     }
@@ -504,7 +507,7 @@ fun ProfileScreen(
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                                     trailingIcon = {
                                         IconButton(onClick = { showConfirmPassword = !showConfirmPassword }) {
-                                            val icon = if (showConfirmPassword) Icons.Filled.VisibilityOff else Icons.Filled.Visibility
+                                            val icon = if (showConfirmPassword) ImageVector.vectorResource(R.drawable.visibility_off_foreground) else ImageVector.vectorResource(R.drawable.visibility_foreground)
                                             Icon(imageVector = icon, contentDescription = null)
                                         }
                                     }
