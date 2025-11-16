@@ -95,6 +95,7 @@
     <string name="forgot_password">Forgot your password?</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="error_email">Invalid email</string>
 
 
     <string name="profile_image_too_large_title">Image too large</string>

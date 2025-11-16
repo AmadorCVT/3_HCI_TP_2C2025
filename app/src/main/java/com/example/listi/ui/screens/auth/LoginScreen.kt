@@ -59,13 +59,15 @@ fun LoginScreen(
     val connectionError = stringResource(R.string.error_connection)
     val credentialsError = stringResource(R.string.error_credentials_invalid)
     val codeError = stringResource(R.string.error_could_not_resend)
+    val mailError = stringResource(R.string.error_mail)
 
 
     LaunchedEffect(errorMessage) {
         errorMessage?.let { error ->
             val message = when (error) {
                 "1" -> credentialsError
-                "400" -> credentialsError
+                "400" -> mailError
+                "401" -> credentialsError
                 "2" -> codeError
                 else -> connectionError
             }
