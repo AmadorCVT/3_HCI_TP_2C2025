@@ -140,4 +140,15 @@
     <string name="error_changing_password">Password couldn\'t be changed</string>
     <string name="change_password_success">Password changed successfully</string>
     <string name="change_password_failure">Could not change password</string>
+
+    <!-- Top Bar Titles-->
+    <string name="route_lists_title">Shopping Lists</string>
+    <string name="route_products_title">Products</string>
+    <string name="route_profile_title">Profile</string>
+    <string name="route_friends_title">Friends</string>
+    <string name="route_login_title">Login</string>
+    <string name="route_register_title">Register</string>
+    <string name="route_verify_title">Verify</string>
+    <string name="route_password_code_title">Password code</string>
+    <string name="route_password_title">Restore password</string>
 </resources>
