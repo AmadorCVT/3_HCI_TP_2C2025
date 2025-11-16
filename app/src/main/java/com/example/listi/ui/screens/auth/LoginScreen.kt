@@ -13,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -26,7 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
+import com.example.listi.ui.theme.ListiGreen
 import com.example.listi.ui.theme.LightGreen
+import com.example.listi.ui.theme.DarkGray
 import com.example.listi.ui.theme.White
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalConfiguration
@@ -70,7 +73,7 @@ fun LoginScreen(
                         .size(520.dp)
                         .offset(y = (-300).dp)
                         .background(
-                            color = colorResource(id = R.color.listi_green),
+                            color = ListiGreen,
                             shape = CircleShape
                         )
                 )
@@ -106,7 +109,7 @@ fun LoginScreen(
             verticalArrangement = if (isLandscape) Arrangement.SpaceEvenly else Arrangement.Center
         ) {
             Surface(
-                color = colorResource(id = R.color.listi_green),
+                color = ListiGreen,
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.padding(bottom = spacerSmall)
             ) {
@@ -154,9 +157,16 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(spacerMedium))
 
+
+            val isLoginEnabled = email.isNotBlank() && password.isNotBlank()
+
             Button(
-                onClick = { onLoginClick?.invoke(email, password) ?: authViewModel.login(email, password) },
-                colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                onClick = { if (isLoginEnabled) (onLoginClick?.invoke(email, password) ?: authViewModel.login(email, password)) },
+                enabled = isLoginEnabled,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isLoginEnabled) ListiGreen else LightGreen,
+                    contentColor = White
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(buttonHeight),
@@ -164,7 +174,7 @@ fun LoginScreen(
             ) {
                 Text(
                     text = stringResource(R.string.login),
-                    color = White,
+                    color = if (isLoginEnabled) White else DarkGray,
                     fontSize = if (isLandscape) 16.sp else 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )

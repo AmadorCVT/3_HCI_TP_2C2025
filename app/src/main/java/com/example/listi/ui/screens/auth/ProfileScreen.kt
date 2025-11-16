@@ -62,6 +62,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import com.example.listi.ui.theme.ListiGreen
 
 @Composable
 fun ProfileScreen(
@@ -300,7 +301,7 @@ fun ProfileScreen(
                                 .size(110.dp)
                                 .clip(CircleShape)
                                 .background(MaterialTheme.colorScheme.primaryContainer)
-                                .border(width = 3.dp, color = androidx.compose.ui.res.colorResource(id = R.color.profile_border_green), shape = CircleShape)
+                                .border(width = 3.dp, color = ListiGreen, shape = CircleShape)
                                 .clickable(enabled = isEditing) { if (isEditing) pickImageLauncher.launch("image/*") },
                             contentAlignment = Alignment.Center
                         ) {
