@@ -42,6 +42,7 @@
     <string name="send">Enviar</string>
     <string name="remove_share">Remover colaborador</string>
     <string name="select_user">Seleccionar usuario</string>
+    <string name="press_to_exit">Toca otra vez para salir</string>
 
     <!-- Products screen -->
     <string name="quantity">Cantidad</string>

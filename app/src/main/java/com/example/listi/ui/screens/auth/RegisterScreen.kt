@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -49,13 +50,30 @@ fun RegisterScreen(authViewModel: AuthViewModel,
             }
         }
     }
-    LaunchedEffect(uiState.errorMessage) {
-        uiState.errorMessage?.let { msg ->
-            scope.launch {
-                snackbarHostState.showSnackbar(msg)
+
+    val configuration = LocalConfiguration.current
+
+    val isLoading by authViewModel.isLoading.collectAsState()
+
+    val errorMessage by authViewModel.errorMessage.collectAsState()
+    val connectionError = stringResource(R.string.error_connection)
+    val credentialsError = stringResource(R.string.error_credentials_invalid)
+    val codeError = stringResource(R.string.error_could_not_resend)
+    val mailError = stringResource(R.string.error_mail)
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let { error ->
+            val message = when (error) {
+                "1" -> credentialsError
+                "400" -> mailError
+                "401" -> credentialsError
+                "2" -> codeError
+                else -> connectionError
             }
 
-            authViewModel.clearErrorMessage()
+            snackbarHostState.showSnackbar(message)
+
+            authViewModel.clearError()
         }
     }
 

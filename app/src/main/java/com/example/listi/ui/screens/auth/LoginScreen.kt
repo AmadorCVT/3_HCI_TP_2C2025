@@ -49,7 +49,6 @@ fun LoginScreen(
     val uiState = authViewModel.uiState
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
     val configuration = LocalConfiguration.current
 
