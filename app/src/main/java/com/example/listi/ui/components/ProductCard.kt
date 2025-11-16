@@ -74,26 +74,31 @@ fun ProductCard(
                 color = backColor,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                maxLines = 1,
+                maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f)
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Selección de categoría
             Box {
                 OutlinedButton(
                     onClick = { expanded = true },
-                    modifier = Modifier.height(28.dp).fillMaxWidth(0.4f)    ,
+                    modifier = Modifier
+                        .height(28.dp)
+                        .wrapContentWidth(),
                     contentPadding = PaddingValues(4.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = backColor
                     ),
                     border = BorderStroke(2.dp, backColor)
                 ) {
-
-                    Text(selectedCategory?.name ?: "-", fontSize = 18.sp)
+                    Text(
+                        selectedCategory?.name ?: "-",
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
 
                 DropdownMenu(
@@ -114,10 +119,6 @@ fun ProductCard(
             }
 
 
-
-            Spacer(Modifier.weight(1f))
-
-            // --- Botón de opciones ---
             Box {
                 IconButton(onClick = { menuExpanded = true }) {
                     Icon(

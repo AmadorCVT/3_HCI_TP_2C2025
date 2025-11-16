@@ -2,13 +2,18 @@ package com.example.listi.ui.screens.products
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.R
@@ -21,6 +26,7 @@ import com.example.listi.ui.components.DeleteDialog
 import com.example.listi.ui.components.GreenAddButton
 import com.example.listi.ui.components.ProductDialog
 import com.example.listi.ui.screens.shoppingLists.ShoppingListsCards
+import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ProductRequest
 import com.example.listi.ui.types.ShoppingList
@@ -153,9 +159,15 @@ fun ProductsScreen(
                             products.filter { it.category?.name == selectedCategory }
                         else products
 
-                        LazyColumn(
+                        val screenWidth = maxWidthDp()
+                        val columns = calculateColumns(screenWidth)
+
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(columns),
                             modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            contentPadding = PaddingValues(12.dp)
                         ) {
                             items(filteredProducts) { product ->
                                 ProductCard(
@@ -187,4 +199,14 @@ fun ProductsScreen(
         }
     }
 
+}
+
+@Composable
+fun maxWidthDp(): Int {
+    return LocalConfiguration.current.screenWidthDp
+}
+
+fun calculateColumns(screenWidthDp: Int): Int {
+    val minCardWidth = 240 // igual que Friends
+    return maxOf(1, screenWidthDp / minCardWidth)
 }
