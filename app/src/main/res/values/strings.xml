@@ -93,10 +93,19 @@
     <string name="email_label">Email</string>
     <string name="password_label">Password</string>
     <string name="forgot_password">Forgot your password?</string>
+    <string name="password_recovery">Password recovery</string>
+    <string name="password_recovery_steps">Follow the steps to recover your password</string>
+    <string name="send_instructions">Send instructions</string>
+    <string name="password_updated">Password updated succesfully</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="error_email">Invalid email</string>
-
+    <string name="fill_fields">Fill the form</string>
+    <string name="sent_instruction">Instructions sent</string>
+    <string name="register">Register before you start</string>
+    <string name="signin">Signin</string>
+    <string name="got_an_acount">Got an acount? Signin</string>
+    <string name="verify">Already registered? Verify your account</string>
 
     <string name="profile_image_too_large_title">Image too large</string>
     <string name="profile_image_too_large_message">The selected image exceeds the 2 MB limit. Please choose a smaller file.</string>
