@@ -105,70 +105,75 @@ fun ListiApp(
 
                 // Tablet horizontal
                 if (isTablet && !isLandscape) {
-                    if (currentRoute in noBarsRoutes)
-                    Row(modifier = Modifier.fillMaxSize()) {
+                    if (currentRoute in noBarsRoutes) {
+                        Row(modifier = Modifier.fillMaxSize()) {
 
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(80.dp),
-                            tonalElevation = 2.dp,
-                            color = MaterialTheme.colorScheme.surface
-                        ) {
-                            NavigationRailBar(
-                                currentRoute = currentRoute,
-                                onNavigateToRoute = { navController.navigate(it) }
-                            )
-                        }
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .width(80.dp),
+                                tonalElevation = 2.dp,
+                                color = MaterialTheme.colorScheme.surface
+                            ) {
+                                NavigationRailBar(
+                                    currentRoute = currentRoute,
+                                    onNavigateToRoute = { navController.navigate(it) }
+                                )
+                            }
 
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                        ) {
-                            AppNavGraph(
-                                navController = navController,
-                                authViewModel = authViewModel,
-                                modifier = Modifier.fillMaxSize()
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxSize()
+                                    .padding(innerPadding)
+                            ) {
+                                AppNavGraph(
+                                    navController = navController,
+                                    authViewModel = authViewModel,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
                         }
+                        return@Scaffold
                     }
-                    return@Scaffold
                 }
 
                 // Tablet vertical
+                // Tablet horizontal
                 if (isTablet && isLandscape) {
-                    if (currentRoute in noBarsRoutes)
-                    Row(modifier = Modifier.fillMaxSize()) {
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(240.dp),
-                            tonalElevation = 2.dp,
-                            color = MaterialTheme.colorScheme.surface
-                        ) {
-                            NavigationDrawerBar(
-                                currentRoute = currentRoute,
-                                onNavigateToRoute = { navController.navigate(it) }
-                            )
-                        }
+                    if (currentRoute in noBarsRoutes) {
+                        Row(modifier = Modifier.fillMaxSize()) {
 
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                        ) {
-                            AppNavGraph(
-                                navController = navController,
-                                authViewModel = authViewModel,
-                                modifier = Modifier.fillMaxSize()
-                            )
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .width(240.dp),
+                                tonalElevation = 2.dp,
+                                color = MaterialTheme.colorScheme.surface
+                            ) {
+                                NavigationDrawerBar(
+                                    currentRoute = currentRoute,
+                                    onNavigateToRoute = { navController.navigate(it) }
+                                )
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxSize()
+                                    .padding(innerPadding)
+                            ) {
+                                AppNavGraph(
+                                    navController = navController,
+                                    authViewModel = authViewModel,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
                         }
+                        return@Scaffold
                     }
-                    return@Scaffold
                 }
+
 
                 // Celular
                 Box(modifier = Modifier
