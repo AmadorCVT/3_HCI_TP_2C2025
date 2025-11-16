@@ -2,13 +2,12 @@ package com.example.listi.ui.screens.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -70,31 +69,26 @@ fun RegisterScreen(authViewModel: AuthViewModel,
 
         Text(
             text = "Listi",
-            style = TextStyle(
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                color = DarkGreen,
-                textAlign = TextAlign.Center
-            ),
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
         Text(
-            text = "Registrate para arrancar a gestionar tus listas de compras",
-            style = TextStyle(
-                fontSize = 16.sp,
-                color = DarkGreen.copy(alpha = 0.8f),
-                textAlign = TextAlign.Center
-            ),
+            text = stringResource(R.string.register),
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
         OutlinedTextField(
             value = firstName,
             onValueChange = { firstName = it },
-            label = { Text("Nombre") },
+            label = { Text(stringResource(R.string.name)) },
             singleLine = true,
-            leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Nombre") },
+            leadingIcon = { Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.person_foreground),
+                contentDescription = "Nombre",
+                modifier = Modifier.size(24.dp)
+            ) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth()
         )
@@ -104,7 +98,7 @@ fun RegisterScreen(authViewModel: AuthViewModel,
         OutlinedTextField(
             value = lastName,
             onValueChange = { lastName = it },
-            label = { Text("Apellido") },
+            label = { Text(stringResource(R.string.profile_surname_label)) },
             singleLine = true,
             leadingIcon = {
                 Icon(
@@ -123,7 +117,10 @@ fun RegisterScreen(authViewModel: AuthViewModel,
             onValueChange = { email = it },
             label = { Text("Email") },
             singleLine = true,
-            leadingIcon = { Icon(Icons.Default.Email, contentDescription = "Email") },
+            leadingIcon = { Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.mail_foreground),
+                contentDescription = "Email",
+                modifier = Modifier.size(24.dp)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier.fillMaxWidth()
         )
@@ -133,9 +130,12 @@ fun RegisterScreen(authViewModel: AuthViewModel,
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Contraseña") },
+            label = { Text(stringResource(R.string.password)) },
             singleLine = true,
-            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = "Contraseña") },
+            leadingIcon = { Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.lock_foreground),
+                contentDescription = "Con",
+                modifier = Modifier.size(24.dp)) },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
@@ -145,7 +145,7 @@ fun RegisterScreen(authViewModel: AuthViewModel,
         OutlinedTextField(
             value = repeatPassword,
             onValueChange = { repeatPassword = it },
-            label = { Text("Repetir Contraseña") },
+            label = { Text(stringResource(R.string.profile_confirm_password)) },
             singleLine = true,
             leadingIcon = {
                 Icon(
@@ -185,9 +185,9 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                 )
             } else {
                 Text(
-                    text = "Crear cuenta",
+                    text = stringResource(R.string.signin),
                     color = if (isCreateEnabled) White else DarkGray,
-                    fontSize = 18.sp,
+                    style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -195,9 +195,9 @@ fun RegisterScreen(authViewModel: AuthViewModel,
 
         TextButton(onClick = { goLogin?.invoke() }) {
             Text(
-                text = "¿Ya tienes cuenta? Iniciar sesión",
+                text = stringResource(R.string.got_an_acount),
                 color = DarkGreen,
-                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium
             )
         }
@@ -206,9 +206,9 @@ fun RegisterScreen(authViewModel: AuthViewModel,
 
         TextButton(onClick = { goVerifyAccount?.invoke() }) {
             Text(
-                text = "¿Ya te registraste? Verificar",
+                text = stringResource(R.string.verify),
                 color = DarkGreen,
-                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium
             )
         }

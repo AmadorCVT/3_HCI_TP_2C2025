@@ -7,12 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -29,10 +29,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.DarkGrey
 import com.example.listi.ui.theme.LightGreen
@@ -50,9 +54,13 @@ fun RecoverPasswordScreenCode(
     var email by remember { mutableStateOf("") }
 
 
+    val invalidMailMessage = stringResource(R.string.error_mail)
+    val instructionsSentMessage = stringResource(R.string.sent_instruction)
+    val fillFieldsMessage = stringResource(R.string.fill_fields)
+
     LaunchedEffect(uiState.forgotCodeSent) {
         if (uiState.forgotCodeSent) {
-            snackbarHostState.showSnackbar("Instrucciones enviadas a tu email")
+            snackbarHostState.showSnackbar(instructionsSentMessage)
             goRestorePassword?.invoke()
         }
     }
@@ -81,8 +89,8 @@ fun RecoverPasswordScreenCode(
 
             // Título
             Text(
-                text = "Recuperar contraseña",
-                fontSize = 20.sp,
+                text = stringResource(R.string.password_recovery),
+                style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = DarkGreen,
                 textAlign = TextAlign.Start,
@@ -93,8 +101,8 @@ fun RecoverPasswordScreenCode(
 
             // Subtítulo
             Text(
-                text = "Seguí los pasos para restablecer tu contraseña.",
-                fontSize = 14.sp,
+                text = stringResource(R.string.password_recovery_steps),
+                style = MaterialTheme.typography.bodyLarge,
                 color = DarkGrey,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -107,7 +115,12 @@ fun RecoverPasswordScreenCode(
                 onValueChange = { email = it },
                 placeholder = { Text("Email") },
                 leadingIcon = {
-                    Icon(Icons.Default.Email, contentDescription = null, tint = DarkGreen)
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.mail_foreground),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = DarkGreen,
+                    )
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -129,7 +142,7 @@ fun RecoverPasswordScreenCode(
                         authViewModel.sendForgotPasswordCode(email)
                     } else {
                         scope.launch {
-                            snackbarHostState.showSnackbar("Ingresá un email válido")
+                            snackbarHostState.showSnackbar(invalidMailMessage)
                         }
                     }
                 },
@@ -143,8 +156,8 @@ fun RecoverPasswordScreenCode(
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Text(
-                    text = "ENVIAR INSTRUCCIONES",
-                    fontSize = 14.sp,
+                    text = stringResource(R.string.send_instructions),
+                    style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium,
                     letterSpacing = 1.sp
                 )

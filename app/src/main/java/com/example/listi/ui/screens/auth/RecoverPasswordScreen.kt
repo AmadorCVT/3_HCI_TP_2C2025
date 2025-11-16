@@ -40,6 +40,9 @@ import com.example.listi.ui.theme.LightGreen
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Password
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.res.stringResource
+import com.example.listi.R
 
 
 @Composable
@@ -54,10 +57,13 @@ fun ResetPasswordScreen(
     var code by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
 
+    val passwordUpdatedMessage = stringResource(R.string.password_updated)
+    val fillFieldsMessage = stringResource(R.string.fill_fields)
+
     // Cuando la contraseña fue cambiada exitosamente → volver al login
     LaunchedEffect(uiState.passwordChanged) {
         if (uiState.passwordChanged) {
-            snackbarHostState.showSnackbar("Contraseña actualizada correctamente")
+            snackbarHostState.showSnackbar(passwordUpdatedMessage)
             goLogin?.invoke()
         }
     }
@@ -85,8 +91,8 @@ fun ResetPasswordScreen(
             Spacer(modifier = Modifier.height(40.dp))
 
             Text(
-                text = "Restablecer contraseña",
-                fontSize = 20.sp,
+                text = stringResource(R.string.password_recovery),
+                style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = DarkGreen,
                 modifier = Modifier.fillMaxWidth()
@@ -95,8 +101,8 @@ fun ResetPasswordScreen(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Ingresá el código recibido y tu nueva contraseña.",
-                fontSize = 14.sp,
+                text = stringResource(R.string.password_recovery_steps),
+                style = MaterialTheme.typography.bodyLarge,
                 color = DarkGrey,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -107,7 +113,7 @@ fun ResetPasswordScreen(
             OutlinedTextField(
                 value = code,
                 onValueChange = { code = it },
-                placeholder = { Text("Código de recuperación") },
+                placeholder = { Text(stringResource(R.string.change_password_verification_code_label)) },
                 leadingIcon = {
                     Icon(Icons.Default.Lock, contentDescription = null, tint = DarkGreen)
                 },
@@ -126,7 +132,7 @@ fun ResetPasswordScreen(
             OutlinedTextField(
                 value = newPassword,
                 onValueChange = { newPassword = it },
-                placeholder = { Text("Nueva contraseña") },
+                placeholder = { Text(stringResource(R.string.profile_new_password)) },
                 leadingIcon = {
                     Icon(Icons.Default.Password, contentDescription = null, tint = DarkGreen)
                 },
@@ -147,7 +153,7 @@ fun ResetPasswordScreen(
                         authViewModel.resetPassword(code, newPassword)
                     } else {
                         scope.launch {
-                            snackbarHostState.showSnackbar("Completá todos los campos")
+                            snackbarHostState.showSnackbar(fillFieldsMessage)
                         }
                     }
                 },
@@ -161,8 +167,8 @@ fun ResetPasswordScreen(
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Text(
-                    text = "CAMBIAR CONTRASEÑA",
-                    fontSize = 14.sp,
+                    text = stringResource(R.string.profile_new_password),
+                    style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium,
                     letterSpacing = 1.sp
                 )

@@ -99,6 +99,16 @@
     <string name="email_label">Email</string>
     <string name="password_label">Contraseña</string>
     <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="password_recovery">Recuperar contraseña</string>
+    <string name="password_recovery_steps">Seguí los pasos para restablecer tu contraseña.</string>
+    <string name="send_instructions">Enviar instrucciones</string>
+    <string name="password_updated">Contraseña actualizada correctamente</string>
+    <string name="fill_fields">Completá todos los campos</string>
+    <string name="sent_instruction">Instrucciones enviadas a tu mail</string>
+    <string name="register">Registrate para arrancar a gestionar tus listas de compras</string>
+    <string name="signin">Crear cuenta</string>
+    <string name="got_an_acount">¿Ya tienes cuenta? Iniciar sesión</string>
+    <string name="verify">¿Ya te registraste? Verificar</string>
 
     <!-- Change password dialog -->
     <string name="profile_change_password">Cambiar contraseña</string>
