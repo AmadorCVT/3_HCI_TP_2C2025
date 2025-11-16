@@ -256,7 +256,10 @@ fun ShoppingListDetailsScreen(
 
                         Spacer(modifier = Modifier.height(12.dp))
 
-                        // Importante el boton de completar
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
                         Button(
                             onClick = {
                                 shoppingListViewModel.purchaseShoppingLists(listId)
@@ -275,14 +278,14 @@ fun ShoppingListDetailsScreen(
                             Text(
                                 text = stringResource(R.string.purchase),
                                 color = White,
-                                fontSize = 18.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
                         }
 
                         Spacer(modifier = Modifier.height(12.dp))
 
-                        // Importante el boton de reinciar
+
                         Button(
                             onClick = {
                                 shoppingListViewModel.resetShoppingLists(listId)
@@ -306,6 +309,7 @@ fun ShoppingListDetailsScreen(
                             )
                         }
                     }
+                        }
 
                     GreenAddButton(
                         {
