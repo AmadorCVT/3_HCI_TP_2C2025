@@ -47,7 +47,7 @@ import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-
+import com.example.listi.ui.navigation.Constants
 
 
 @Composable
@@ -82,14 +82,17 @@ fun ListiApp(
 
         Scaffold(
             topBar = {
-                if (!isTablet) {   // celular -> topbar
-                    if (currentRoute in noBarsRoutes)
-                        AppTopBar(currentRoute)
+                if (!isTablet) {
+                    if (currentRoute in noBarsRoutes) {
+                        val topBarTitle = if (currentRoute.startsWith("list_details"))
+                        {"Shopping List"} else {currentRoute }
+                        AppTopBar(topBarTitle)
+                    }
                 }
             },
             bottomBar = {
                 if (!isTablet) {   // celular -> bottombar
-                    if (currentRoute in noBarsRoutes)
+                    if (currentRoute in noBarsRoutes &&  currentRoute != "${Constants.ROUTE_LIST_DETAILS}/{${Constants.LIST_ID_ARG}}")
                         BottomBar(
                             currentRoute = currentRoute,
                             onNavigateToRoute = { route ->
@@ -184,7 +187,7 @@ fun ListiApp(
 }
 
 private val noBarsRoutes = listOf(
-    ROUTE_LISTS, ROUTE_PRODUCTS, ROUTE_FRIENDS, ROUTE_PROFILE
+    ROUTE_LISTS, ROUTE_PRODUCTS, ROUTE_FRIENDS, ROUTE_PROFILE, "${Constants.ROUTE_LIST_DETAILS}/{${Constants.LIST_ID_ARG}}"
 )
 
 
