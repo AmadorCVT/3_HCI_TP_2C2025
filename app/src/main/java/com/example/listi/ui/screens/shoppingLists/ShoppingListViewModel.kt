@@ -150,6 +150,8 @@ class ShoppingListsViewModel(
                 val request = ShareShoppingListRequest(userMail)
                 shoppingListsRespository.shareShoppingList(id, request)
             } catch (e: Exception) {
+                println("jklashdkjashdkjdhkjashdkjhasjkdh")
+                println(e.localizedMessage)
                 _errorMessage.value = e.localizedMessage
             }
         }
@@ -161,6 +163,8 @@ class ShoppingListsViewModel(
             try {
                 shoppingListsRespository.removeShareShoppingList(id, userId)
             } catch (e: Exception) {
+                println("jklashdkjashdkjdhkjashdkjhasjkdh")
+                println(e.localizedMessage)
                 _errorMessage.value = e.localizedMessage
             }
         }

@@ -58,13 +58,13 @@ interface ShoppingListService {
     suspend fun shareShoppingList(
         @Path("id") id: Int,
         @Body request: ShareShoppingListRequest
-    ): Response<ShoppingListResponse>
+    ): Response<Unit>
 
     @DELETE("/api/shopping-lists/{id}/share/{user_id}")
     suspend fun removeShareShoppingList(
         @Path("id") id: Int,
         @Path("user_id") userId: Int
-    ): Response<ShoppingListResponse>
+    ): Response<Unit>
 
 
 }

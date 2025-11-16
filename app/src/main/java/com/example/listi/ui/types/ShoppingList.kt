@@ -43,6 +43,11 @@ data class ShoppingListResponse(
 )
 
 @Serializable
+data class ShoppingListSharedResponse(
+    val data: ShoppingList?
+)
+
+@Serializable
 data class ShoppingListListResponse(
     val data: List<ShoppingList>,
     val pagination: Pagination

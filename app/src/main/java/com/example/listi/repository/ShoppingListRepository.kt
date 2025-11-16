@@ -8,6 +8,7 @@ import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.ShoppingListRequest
 import com.example.listi.ui.types.ShareShoppingListRequest
 import com.example.listi.ui.types.ShoppingListResponse
+import com.example.listi.ui.types.ShoppingListSharedResponse
 import com.example.listi.ui.types.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -169,40 +170,20 @@ class ShoppingListRepository (private val api: ShoppingListService) {
         }
     }
 
-    suspend fun shareShoppingList(id: Int, request: ShareShoppingListRequest): ShoppingListResponse {
+    suspend fun shareShoppingList(id: Int, request: ShareShoppingListRequest) {
         return withContext(Dispatchers.IO) {
             val response = api.shareShoppingList(id, request)
-            if (response.isSuccessful) {
-                val result = response.body()!!
-                val updated = result
-
-                // Actualiza caché
-                cachedShoppingList = cachedShoppingList?.map {
-                    (if (it.id == id) updated else it) as ShoppingList
-                }
-
-                updated
-            } else {
-                throw Exception(response.code().toString())
+            if (!response.isSuccessful) {
+                throw Exception(response.message())
             }
         }
     }
 
-    suspend fun removeShareShoppingList(id: Int, userId: Int): ShoppingListResponse {
+    suspend fun removeShareShoppingList(id: Int, userId: Int){
         return withContext(Dispatchers.IO) {
             val response = api.removeShareShoppingList(id, userId)
-            if (response.isSuccessful) {
-                val result = response.body()!!
-                val updated = result
-
-                // Actualiza caché
-                cachedShoppingList = cachedShoppingList?.map {
-                    (if (it.id == id) updated else it) as ShoppingList
-                }
-
-                updated
-            } else {
-                throw Exception(response.code().toString())
+            if (!response.isSuccessful) {
+                throw Exception(response.message())
             }
         }
     }
