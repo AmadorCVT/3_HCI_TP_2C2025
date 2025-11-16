@@ -19,6 +19,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -57,7 +59,9 @@ import com.example.listi.ui.components.WhiteBoxWithText
 import com.example.listi.ui.screens.friends.FriendsViewModel
 import com.example.listi.ui.screens.friends.FriendsViewModelFactory
 import com.example.listi.ui.screens.products.ProductViewModel
+import com.example.listi.ui.theme.LightGreen
 import com.example.listi.ui.theme.ListiTheme
+import com.example.listi.ui.theme.White
 import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ShoppingList
@@ -115,6 +119,8 @@ fun ShoppingListDetailsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val errorColor = MaterialTheme.colorScheme.error
     val connectionError = stringResource(R.string.error_connection)
+    val pruchaseError = stringResource(R.string.error_purchase)
+    val addError = stringResource(R.string.error_item)
 
     val openCreateDialog = remember { mutableStateOf(false) }
     val openDeleteDialog = remember { mutableStateOf(false) }
@@ -129,11 +135,15 @@ fun ShoppingListDetailsScreen(
     val itemsRefreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
     val productRefreshTrigger  by productViewModel.refreshTrigger.collectAsState()
 
+    val shoppingListError by shoppingListViewModel.errorMessage.collectAsState()
     val shoppingListItemsError by shoppingListItemsViewModel.errorMessage.collectAsState()
+
+    // Para notificar al usuario
+    val purchasedMessage = stringResource(R.string.purchased)
+    val resetedMessage = stringResource(R.string.reseted)
 
     // Apenas se abre o cambie el refreshTrigger quiero que se haga fetch
     LaunchedEffect(itemsRefreshTrigger) {
-        println("REFRESHHHHH")
         shoppingListItemsViewModel.loadShoppingListItems(listId)
     }
 
@@ -148,13 +158,39 @@ fun ShoppingListDetailsScreen(
     // Si sale un mensaje de error, mostrarlo
     LaunchedEffect(shoppingListItemsError) {
         shoppingListItemsError?.let {
+            var message = ""
+            
+            when(shoppingListItemsError) {
+                "409" ->  message = addError
+                else -> connectionError
+            }
+
             scope.launch {
                 snackbarHostState.showSnackbar(
-                    message = shoppingListItemsError.toString()
+                    message = message
                 )
             }
         }
         shoppingListItemsViewModel.clearError()
+    }
+
+    LaunchedEffect(shoppingListError) {
+        shoppingListError?.let {
+            var message = ""
+
+            when(shoppingListError) {
+                "400" ->  message = pruchaseError
+                "409" ->  message = addError
+                else -> connectionError
+            }
+
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = message
+                )
+            }
+        }
+        shoppingListViewModel.clearError()
     }
 
     when {
@@ -207,6 +243,58 @@ fun ShoppingListDetailsScreen(
                         openDeleteDialog.value = true
                     }
                 )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Importante el boton de completar
+                Button(
+                    onClick = {
+                        shoppingListViewModel.purchaseShoppingLists(listId)
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = purchasedMessage
+                            )
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Text(
+                        text = stringResource(R.string.purchase),
+                        color = White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Importante el boton de reinciar
+                Button(
+                    onClick = {
+                        shoppingListViewModel.resetShoppingLists(listId)
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = resetedMessage
+                            )
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Text(
+                        text = stringResource(R.string.reset),
+                        color = White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
 
             GreenAddButton(

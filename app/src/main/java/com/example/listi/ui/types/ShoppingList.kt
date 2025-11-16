@@ -52,3 +52,7 @@ data class ShoppingListListResponse(
 data class ShareShoppingListRequest(
     val userMail: String
 )
+@Serializable
+data class PurchaseShoppingListRequest(
+    val metadata: String?
+)

@@ -31,6 +31,25 @@ interface ShoppingListService {
         @Body request: ShoppingListRequest
     ): Response<ShoppingListResponse>
 
+    // Comprar ShoppingList
+    @POST("/api/shopping-lists/{id}/purchase")
+    suspend fun purchaseShoppingList(
+        @Path("id") id: Int,
+        @Body request: PurchaseShoppingListRequest
+    ): Response<ShoppingList>
+
+    // Resetear ShoppingList
+    @POST("/api/shopping-lists/{id}/reset")
+    suspend fun resetShoppingList(
+        @Path("id") id: Int,
+    ): Response<ShoppingList>
+
+    // Obtener usuarios compartidos ShoppingList
+    @POST("/api/shopping-lists/{id}/shared-users")
+    suspend fun getSharedShoppingList(
+        @Path("id") id: Int,
+    ): Response<List<User>>
+
     // Eliminar ShoppingList
     @DELETE("/api/shopping-lists/{id}")
     suspend fun deleteShoppingList(@Path("id") id: Int): Response<Unit>

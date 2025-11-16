@@ -58,6 +58,7 @@ import java.util.Date
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.LocalConfiguration
 import com.example.listi.ui.components.DeleteDialog
 
@@ -177,7 +178,11 @@ fun ShoppingListsCards(
     var selectedButton by remember { mutableStateOf("all") }
 
     val filteredLists = shoppingLists.filter {
-        if (selectedButton == "all") true else it.recurring
+        when (selectedButton) {
+            "all" -> true
+            "history" -> it.lastPurchasedAt != null
+            else -> it.recurring
+        }
     }
 
     var listToShare by remember { mutableStateOf<ShoppingList?>(null) }
@@ -194,7 +199,7 @@ fun ShoppingListsCards(
             Button(
                 onClick = { selectedButton = "all" },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedButton == "all") Color(0xFF006400) else Color.Transparent,
+                    containerColor = if (selectedButton == "all") MaterialTheme.colorScheme.surfaceVariant  else Color.Transparent,
                     contentColor = if (selectedButton == "all") Color.White else Color.Black
                 )
             ) {
@@ -204,11 +209,21 @@ fun ShoppingListsCards(
             Button(
                 onClick = { selectedButton = "recurring" },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedButton == "recurring") Color(0xFF006400) else Color.Transparent,
+                    containerColor = if (selectedButton == "recurring") MaterialTheme.colorScheme.surfaceVariant  else Color.Transparent,
                     contentColor = if (selectedButton == "recurring") Color.White else Color.Black
                 )
             ) {
                 Text(stringResource(R.string.recurring))
+            }
+
+            Button(
+                onClick = { selectedButton = "history" },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (selectedButton == "history") MaterialTheme.colorScheme.surfaceVariant else Color.Transparent,
+                    contentColor = if (selectedButton == "history") Color.White else Color.Black
+                )
+            ) {
+                Text(stringResource(R.string.history))
             }
         }
 

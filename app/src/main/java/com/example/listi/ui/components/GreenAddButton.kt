@@ -36,13 +36,13 @@ fun GreenAddButton(
             contentColor = MaterialTheme.colorScheme.onPrimary,     // ícono oscuro
             shape = RoundedCornerShape(24.dp),
             modifier = Modifier
-                .padding(24.dp) // distancia de los bordes
+                .padding(horizontal = 24.dp) // distancia de los bordes
                 .shadow(6.dp, RoundedCornerShape(24.dp))
                 .then(modifier)
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.add),
-                contentDescription = "Agregar lista",
+                contentDescription = "Agregar",
                 modifier
             )
         }

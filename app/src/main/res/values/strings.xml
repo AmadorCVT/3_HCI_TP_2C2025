@@ -25,7 +25,18 @@
     <string name="edit_list">Edit list</string>
     <string name="recurring">Recurring</string>
     <string name="all">All</string>
+    <string name="history">History</string>
     <string name="add_lists_item">Add list item</string>
+    <string name="recently">Recently</string>
+    <string name="day_ago">day ago</string>
+    <string name="days_ago">days ago</string>
+    <string name="last_purchased">Last purchased</string>
+    <string name="purchase">Mark as purchased</string>
+    <string name="reset">Reset</string>
+    <string name="purchased">List marked as purchased</string>
+    <string name="reseted">List reseted</string>
+    <string name="error_purchase">No items purchased in the shopping list</string>
+    <string name="error_item">Item already exists</string>
 
     <!-- Products screen -->
     <string name="quantity">Quantity</string>

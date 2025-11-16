@@ -30,7 +30,9 @@ import com.example.listi.R
 import com.example.listi.ui.theme.*
 
 import com.example.listi.ui.types.ShoppingList
-
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 @Composable
@@ -98,8 +100,6 @@ fun ShoppingListCard(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-
-                    //TODO: mostrar mas de 3 letras
                     val count = shoppingList.sharedWith.size
                     val usersText = when {
                         count == 0 -> "Sin usuarios"
@@ -117,25 +117,34 @@ fun ShoppingListCard(
                         maxLines = 1,
                         style = Typography.labelMedium,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(2f)
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    val dateText = shoppingList.createdAt.take(10)
-                        .replace("-", "/")
-
                     Text(
-                        text = dateText,
+                        text = prettyDate(shoppingList.createdAt.take(10)),
                         maxLines = 1,
                         style = Typography.labelMedium,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                if (shoppingList.lastPurchasedAt != null) {
+
+                    Text(
+                        text = prettyDate(shoppingList.lastPurchasedAt.take(10)),
+                        maxLines = 1,
+                        style = Typography.labelMedium,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
 
 
-            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.weight(0.1f))
 
             // --- Botón de opciones ---
             Box { // Necesario para posicionar el dropdown en el lugar exacto
@@ -155,6 +164,24 @@ fun ShoppingListCard(
         }
     }
 }
+
+@Composable
+fun prettyDate(dateString: String): String {
+    // Formatear dependiendo de cuanto tiempo paso
+    val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+    val date = LocalDate.parse(dateString.take(10), formatter)
+    val today = LocalDate.now()
+
+    val days = ChronoUnit.DAYS.between(date, today)
+
+    return when {
+        days < 1 -> stringResource(R.string.recently)
+        days == 1L -> "1 ${stringResource(R.string.day_ago)}"
+        days in 2..6 -> "$days ${stringResource(R.string.days_ago)}"
+        else -> date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+    }
+}
+
 
 
 

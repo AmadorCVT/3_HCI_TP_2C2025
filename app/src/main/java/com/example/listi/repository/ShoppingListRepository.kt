@@ -3,6 +3,7 @@ package com.example.listi.repository
 import android.util.Log
 import android.util.Log.e
 import com.example.listi.network.ShoppingListService
+import com.example.listi.ui.types.PurchaseShoppingListRequest
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.ShoppingListRequest
 import com.example.listi.ui.types.ShareShoppingListRequest
@@ -34,7 +35,7 @@ class ShoppingListRepository (private val api: ShoppingListService) {
                 cachedShoppingList = shoppingLists
                 return@withContext shoppingLists
             } else {
-                throw Exception("Error al obtener listas de compras: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -61,7 +62,7 @@ class ShoppingListRepository (private val api: ShoppingListService) {
                 cachedShoppingList = (cachedShoppingList ?: emptyList()) + created
                 created
             } else {
-                throw Exception("Error al crear lista de compras: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -85,7 +86,43 @@ class ShoppingListRepository (private val api: ShoppingListService) {
                     updatedAt = Date().toString()
                 )
             } else {
-                throw Exception("Error al obtener lista de compras: ${response.code()}")
+                throw Exception(response.code().toString())
+            }
+        }
+    }
+
+    suspend fun purchaseShoppingList(id: Int): ShoppingList {
+        return withContext(Dispatchers.IO) {
+            val response = api.purchaseShoppingList(id, PurchaseShoppingListRequest(""))
+            if (response.isSuccessful) {
+                val result = response.body()!!
+                result
+            } else {
+                throw Exception(response.code().toString())
+            }
+        }
+    }
+
+    suspend fun resetShoppingList(id: Int): ShoppingList {
+        return withContext(Dispatchers.IO) {
+            val response = api.resetShoppingList(id)
+            if (response.isSuccessful) {
+                val result = response.body()!!
+                result
+            } else {
+                throw Exception(response.code().toString())
+            }
+        }
+    }
+
+    suspend fun getSharedShoppingList(id: Int): List<User> {
+        return withContext(Dispatchers.IO) {
+            val response = api.getSharedShoppingList(id)
+            if (response.isSuccessful) {
+                val result = response.body()!!
+                result
+            } else {
+                throw Exception(response.message())
             }
         }
     }
@@ -115,7 +152,7 @@ class ShoppingListRepository (private val api: ShoppingListService) {
 
                 updated
             } else {
-                throw Exception("Error al actualizar lista de compras: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -126,7 +163,7 @@ class ShoppingListRepository (private val api: ShoppingListService) {
             if (response.isSuccessful) {
                 cachedShoppingList = cachedShoppingList?.filterNot { it.id == id }
             } else {
-                throw Exception("Error al eliminar lista de compras: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -157,7 +194,7 @@ class ShoppingListRepository (private val api: ShoppingListService) {
 
                 updated
             } else {
-                throw Exception("Error al actualizar lista de compras: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }

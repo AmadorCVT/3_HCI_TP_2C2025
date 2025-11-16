@@ -25,7 +25,18 @@
     <string name="edit_list">Editar lista</string>
     <string name="recurring">Recurrente</string>
     <string name="all">Todas</string>
+    <string name="history">Historial</string>
     <string name="add_lists_item">Añadir item</string>
+    <string name="recently">Recientemente</string>
+    <string name="day_ago">día</string>
+    <string name="days_ago">días</string>
+    <string name="last_purchased">Ultima compra</string>
+    <string name="purchase">Marcar como comprada</string>
+    <string name="reset">Reiniciar</string>
+    <string name="purchased">Lista comprada</string>
+    <string name="reseted">Lista reiniciada</string>
+    <string name="error_purchase">No se compro ningún item de la lista</string>
+    <string name="error_item">El item que se quiere agregar ya existe</string>
 
     <!-- Products screen -->
     <string name="quantity">Cantidad</string>

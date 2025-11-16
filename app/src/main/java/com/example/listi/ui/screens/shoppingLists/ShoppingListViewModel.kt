@@ -8,6 +8,7 @@ import com.example.listi.repository.ShoppingListRepository
 import com.example.listi.ui.types.ShareShoppingListRequest
 import com.example.listi.ui.types.ShoppingListRequest
 import com.example.listi.ui.types.ShoppingList
+import com.example.listi.ui.types.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -64,7 +65,9 @@ class ShoppingListsViewModel(
                     request = shoppingList
                 )
                 loadShoppingLists()
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
         }
         _refreshTrigger.value++
     }
@@ -81,9 +84,50 @@ class ShoppingListsViewModel(
                     )
                 )
                 loadShoppingLists()
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
         }
         _refreshTrigger.value++
+    }
+
+    fun purchaseShoppingLists(listId: Int) {
+        viewModelScope.launch {
+            try {
+                shoppingListsRespository.purchaseShoppingList(listId)
+                loadShoppingLists()
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
+        }
+        _refreshTrigger.value++
+    }
+
+    fun resetShoppingLists(listId: Int) {
+        viewModelScope.launch {
+            try {
+                shoppingListsRespository.resetShoppingList(listId)
+                loadShoppingLists()
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
+        }
+        _refreshTrigger.value++
+    }
+
+    fun getSharedShoppingLists(listId: Int): List<User> {
+        var users: List<User> = emptyList()
+        viewModelScope.launch {
+            try {
+                users = shoppingListsRespository.getSharedShoppingList(listId)
+                loadShoppingLists()
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
+        }
+        _refreshTrigger.value++
+
+        return users
     }
 
     fun deleteShoppingLists(id: Int) {
@@ -91,7 +135,9 @@ class ShoppingListsViewModel(
             try {
                 shoppingListsRespository.deleteShoppingList(id)
                 loadShoppingLists()
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
         }
         _refreshTrigger.value++
     }
@@ -102,7 +148,9 @@ class ShoppingListsViewModel(
             try {
                 val request = ShareShoppingListRequest(userMail)
                 shoppingListsRespository.shareShoppingList(id, request)
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
         }
         _refreshTrigger.value++
     }

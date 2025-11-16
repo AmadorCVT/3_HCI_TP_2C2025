@@ -28,7 +28,7 @@ class ShoppingListItemRepository(private val api: ShoppingListItemService) {
                 cachedItems[listId] = items
                 items
             } else {
-                throw Exception("Error al obtener items: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -46,7 +46,7 @@ class ShoppingListItemRepository(private val api: ShoppingListItemService) {
                 cachedItems[listId] = oldList + created
                 created
             } else {
-                throw Exception(response.message().toString())
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -58,7 +58,7 @@ class ShoppingListItemRepository(private val api: ShoppingListItemService) {
                 val r = response.body()!!
                 r.item
             } else {
-                throw Exception("Error al obtener item: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -78,7 +78,7 @@ class ShoppingListItemRepository(private val api: ShoppingListItemService) {
                 } ?: emptyList()
                 updated
             } else {
-                throw Exception("Error al actualizar item: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -89,7 +89,7 @@ class ShoppingListItemRepository(private val api: ShoppingListItemService) {
             if (response.isSuccessful) {
                 cachedItems[listId] = cachedItems[listId]?.filterNot { it.id == itemId } ?: emptyList()
             } else {
-                throw Exception("Error al eliminar item: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -110,7 +110,7 @@ class ShoppingListItemRepository(private val api: ShoppingListItemService) {
                 } ?: emptyList()
                 updated
             } else {
-                throw Exception(response.message().toString())
+                throw Exception(response.code().toString())
             }
         }
     }
