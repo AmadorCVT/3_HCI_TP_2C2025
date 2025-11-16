@@ -260,58 +260,56 @@ fun ShoppingListDetailsScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                        Button(
-                            onClick = {
-                                shoppingListViewModel.purchaseShoppingLists(listId)
-                                scope.launch {
-                                    snackbarHostState.showSnackbar(
-                                        message = purchasedMessage
-                                    )
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp),
-                            shape = MaterialTheme.shapes.medium
-                        ) {
-                            Text(
-                                text = stringResource(R.string.purchase),
-                                color = White,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                            Button(
+                                onClick = {
+                                    shoppingListViewModel.purchaseShoppingLists(listId)
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = purchasedMessage
+                                        )
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(50.dp),
+                                shape = MaterialTheme.shapes.medium
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.purchase),
+                                    color = White,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
 
-
-                        Button(
-                            onClick = {
-                                shoppingListViewModel.resetShoppingLists(listId)
-                                scope.launch {
-                                    snackbarHostState.showSnackbar(
-                                        message = resetedMessage
-                                    )
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp),
-                            shape = MaterialTheme.shapes.medium
-                        ) {
-                            Text(
-                                text = stringResource(R.string.reset),
-                                color = White,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
+                            Button(
+                                onClick = {
+                                    shoppingListViewModel.resetShoppingLists(listId)
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = resetedMessage
+                                        )
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(50.dp),
+                                shape = MaterialTheme.shapes.medium
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.reset),
+                                    color = White,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
                         }
                     }
-                        }
 
-                    GreenAddButton(
+                        GreenAddButton(
                         {
                             openCreateDialog.value = true
                         }
