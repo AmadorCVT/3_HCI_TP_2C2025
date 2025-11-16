@@ -60,12 +60,6 @@ fun ShareListDialog(
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Ingresá el email de la persona con la que querés compartir esta lista.",
-                    fontSize = 13.sp,
-                    color = DarkGrey
-                )
             }
         },
         confirmButton = {

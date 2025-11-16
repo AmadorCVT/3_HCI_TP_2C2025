@@ -156,4 +156,15 @@ class ShoppingListsViewModel(
         _refreshTrigger.value++
     }
 
+    fun removeShareShoppingList(id: Int, userId: Int) {
+        viewModelScope.launch {
+            try {
+                shoppingListsRespository.removeShareShoppingList(id, userId)
+            } catch (e: Exception) {
+                _errorMessage.value = e.localizedMessage
+            }
+        }
+        _refreshTrigger.value++
+    }
+
 }

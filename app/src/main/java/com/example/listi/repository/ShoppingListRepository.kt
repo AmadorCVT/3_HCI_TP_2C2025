@@ -7,6 +7,7 @@ import com.example.listi.ui.types.PurchaseShoppingListRequest
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.ShoppingListRequest
 import com.example.listi.ui.types.ShareShoppingListRequest
+import com.example.listi.ui.types.ShoppingListResponse
 import com.example.listi.ui.types.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -168,28 +169,35 @@ class ShoppingListRepository (private val api: ShoppingListService) {
         }
     }
 
-    //TODO: dudosa
-    suspend fun shareShoppingList(id: Int, request: ShareShoppingListRequest): ShoppingList {
+    suspend fun shareShoppingList(id: Int, request: ShareShoppingListRequest): ShoppingListResponse {
         return withContext(Dispatchers.IO) {
             val response = api.shareShoppingList(id, request)
             if (response.isSuccessful) {
                 val result = response.body()!!
-                val updated = ShoppingList(
-                    id = result.id,
-                    name = result.name,
-                    description = result.description,
-                    metadata = "",
-                    recurring = result.recurring,
-                    owner = result.owner,
-                    sharedWith = result.sharedWith,
-                    lastPurchasedAt = result.lastPurchasedAt,
-                    createdAt = Date().toString(),
-                    updatedAt = Date().toString()
-                )
+                val updated = result
 
                 // Actualiza caché
                 cachedShoppingList = cachedShoppingList?.map {
-                    if (it.id == id) updated else it
+                    (if (it.id == id) updated else it) as ShoppingList
+                }
+
+                updated
+            } else {
+                throw Exception(response.code().toString())
+            }
+        }
+    }
+
+    suspend fun removeShareShoppingList(id: Int, userId: Int): ShoppingListResponse {
+        return withContext(Dispatchers.IO) {
+            val response = api.removeShareShoppingList(id, userId)
+            if (response.isSuccessful) {
+                val result = response.body()!!
+                val updated = result
+
+                // Actualiza caché
+                cachedShoppingList = cachedShoppingList?.map {
+                    (if (it.id == id) updated else it) as ShoppingList
                 }
 
                 updated

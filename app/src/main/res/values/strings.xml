@@ -37,8 +37,11 @@
     <string name="reseted">List reseted</string>
     <string name="error_purchase">No items purchased in the shopping list</string>
     <string name="error_item">Item already exists</string>
+    <string name="error_delete_shared">Only the owner can delete this list</string>
     <string name="error_mail">Invalid mail</string>
     <string name="send">Send</string>
+    <string name="remove_share">Remove collaborator</string>
+    <string name="select_user">Select user</string>
 
     <!-- Products screen -->
     <string name="quantity">Quantity</string>

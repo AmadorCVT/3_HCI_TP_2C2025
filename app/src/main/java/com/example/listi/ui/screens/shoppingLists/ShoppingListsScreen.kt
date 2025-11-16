@@ -63,6 +63,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalConfiguration
 import com.example.listi.ui.components.DeleteDialog
+import com.example.listi.ui.components.RemoveShareListDialog
 
 
 private val user1 = User(1, "Ama", "Doe", "ama@mail.com", null, null);
@@ -111,6 +112,7 @@ fun ShoppingListsScreen(
     val connectionError = stringResource(R.string.error_connection)
     val itemError = stringResource(R.string.error_item)
     val mailError = stringResource(R.string.error_mail)
+    val sharedError = stringResource(R.string.error_delete_shared)
 
     val isLoading by shoppingListViewModel.isLoading.collectAsState()
     val refreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
@@ -122,8 +124,6 @@ fun ShoppingListsScreen(
         shoppingListViewModel.loadShoppingLists()
     }
 
-
-
     LaunchedEffect(shoppingListsError) {
         shoppingListsError?.let {
             var message = connectionError
@@ -131,6 +131,7 @@ fun ShoppingListsScreen(
             when(shoppingListsError) {
                 "409" ->  message = itemError
                 "400" -> message = mailError
+                "404" -> message = sharedError
                 else -> connectionError
             }
 
@@ -172,6 +173,9 @@ fun ShoppingListsScreen(
                         shoppingListViewModel = shoppingListViewModel,
                         onShareList = { list, email ->
                             shoppingListViewModel.shareShoppingList(list.id, email)
+                        },
+                        onRemoveShareList = { list, userId ->
+                            shoppingListViewModel.removeShareShoppingList(list.id, userId)
                         }
                     )
                     GreenAddButton(
@@ -191,7 +195,8 @@ fun ShoppingListsCards(
     shoppingLists: List<ShoppingList>,
     onShoppingListDetails: (Int) -> Unit,
     shoppingListViewModel: ShoppingListsViewModel,
-    onShareList: (ShoppingList, String) -> Unit = { _, _ -> }
+    onShareList: (ShoppingList, String) -> Unit = { _, _ -> },
+    onRemoveShareList: (ShoppingList, Int) -> Unit = { _, _ -> }
 ) {
 
     val padding = dimensionResource(R.dimen.medium_padding)
@@ -208,6 +213,7 @@ fun ShoppingListsCards(
     var listToShare by remember { mutableStateOf<ShoppingList?>(null) }
     var listToEdit by remember { mutableStateOf<ShoppingList?>(null) }
     var listToDelete by remember { mutableStateOf<ShoppingList?>(null) }
+    var listToRemoveShare by remember { mutableStateOf<ShoppingList?>(null) }
 
     Column(modifier = modifier.fillMaxSize()) {
         Row(
@@ -269,7 +275,8 @@ fun ShoppingListsCards(
                         .clickable { onShoppingListDetails(item.id) },
                     onEditClick = { listToEdit = item },
                     onShareClick = { listToShare = item },
-                    onDeleteClick = { listToDelete = item }
+                    onDeleteClick = { listToDelete = item },
+                    onRemoveShareClick = { listToRemoveShare = item }
                 )
             }
         }
@@ -287,6 +294,17 @@ fun ShoppingListsCards(
         )
     }
 
+    if (listToRemoveShare != null) {
+        RemoveShareListDialog(
+            listName = listToRemoveShare!!.name,
+            sharedWith = listToRemoveShare!!.sharedWith,
+            onDismiss = { listToRemoveShare = null },
+            onSend = { id ->
+                onRemoveShareList(listToRemoveShare!!, id)
+                listToRemoveShare = null
+            }
+        )
+    }
 
     if (listToEdit != null) {
         ShoppingListDialog(

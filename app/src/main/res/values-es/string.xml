@@ -38,7 +38,10 @@
     <string name="error_purchase">No se compro ningún objeto de la lista</string>
     <string name="error_item">El objeto que se quiere agregar ya existe</string>
     <string name="error_mail">Mail invalido</string>
+    <string name="error_delete_shared">Solo el dueño puede eliminar la lista</string>
     <string name="send">Enviar</string>
+    <string name="remove_share">Remover colaborador</string>
+    <string name="select_user">Seleccionar usuario</string>
 
     <!-- Products screen -->
     <string name="quantity">Cantidad</string>

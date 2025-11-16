@@ -37,6 +37,7 @@ fun ShoppingListCard(
     modifier: Modifier = Modifier,
     onEditClick: (ShoppingList) -> Unit,
     onShareClick: (ShoppingList)-> Unit,
+    onRemoveShareClick: (ShoppingList)-> Unit,
     onDeleteClick: (ShoppingList)-> Unit
 ) {
 
@@ -55,6 +56,10 @@ fun ShoppingListCard(
         ActionItem(
             label = stringResource(R.string.delete),
             onClick = { onDeleteClick(shoppingList) }
+        ),
+        ActionItem(
+            label = stringResource(R.string.remove_share),
+            onClick = { onRemoveShareClick(shoppingList) }
         )
     )
 
