@@ -4,6 +4,7 @@ import android.R.attr.contentDescription
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -19,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.listi.R
 import com.example.listi.ui.theme.ListiTheme
+import com.example.listi.ui.theme.backColor
 
 @Composable
 fun GreenAddButton(
@@ -27,23 +30,23 @@ fun GreenAddButton(
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize(), // ocupa toda la pantalla para posicionar dentro
-        contentAlignment = Alignment.BottomEnd // abajo a la derecha
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
     ) {
         FloatingActionButton(
             onClick = onClick,
-            containerColor = MaterialTheme.colorScheme.primary,    // verde claro
-            contentColor = MaterialTheme.colorScheme.onPrimary,     // ícono oscuro
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            contentColor = MaterialTheme.colorScheme.background,
             shape = RoundedCornerShape(24.dp),
             modifier = Modifier
-                .padding(horizontal = 24.dp) // distancia de los bordes
+                .padding(horizontal = 24.dp)
                 .shadow(6.dp, RoundedCornerShape(24.dp))
-                .then(modifier)
+                .size(72.dp)
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.add),
                 contentDescription = "Agregar",
-                modifier
+                modifier = Modifier.size(36.dp)
             )
         }
     }

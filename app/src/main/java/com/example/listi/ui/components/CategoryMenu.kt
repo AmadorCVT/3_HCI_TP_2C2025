@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.example.listi.R
 import com.example.listi.ui.theme.DarkGreen
 import com.example.listi.ui.theme.DarkGrey
+import com.example.listi.ui.theme.Green
 import com.example.listi.ui.theme.White
 
 @Composable
@@ -46,14 +47,14 @@ fun ScrollableFilterMenu(
             modifier = Modifier
                 .size(40.dp)
                 .background(
-                    color = Color(0xFFF5F5F5),
+                    color = Green,
                     shape = CircleShape
                 )
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "Agregar categoría",
-                tint = Color.Black
+                tint = White
             )
         }
 
@@ -85,8 +86,8 @@ fun FilterChip(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (isSelected) DarkGreen else Color.Transparent
-    val borderColor = if (isSelected) DarkGreen else DarkGrey
+    val backgroundColor = if (isSelected) Green else Color.Transparent
+    val borderColor = if (isSelected) Green else DarkGrey
     val textColor = if (isSelected) White else DarkGrey
 
     Surface(
