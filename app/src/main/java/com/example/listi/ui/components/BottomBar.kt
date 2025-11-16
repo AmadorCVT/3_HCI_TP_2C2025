@@ -29,6 +29,9 @@ fun BottomBar(
                             contentDescription = stringResource(item.contentDescription)
                         )
                     },
+                     colors = NavigationBarItemDefaults.colors(
+                         indicatorColor = MaterialTheme.colorScheme.surfaceVariant
+                     ),
                     label = { Text(text = stringResource(item.label)) },
                     alwaysShowLabel = true,
                     selected = currentRoute == item.route,
