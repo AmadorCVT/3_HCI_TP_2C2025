@@ -4,6 +4,7 @@ import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +49,7 @@ object Constants {
 fun AppNavGraph(
     navController: NavHostController,
     authViewModel: AuthViewModel,
+    startDestination: String,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -69,16 +71,9 @@ fun AppNavGraph(
     val shoppingListItemsViewModel: ShoppingListItemsViewModel =
         viewModel(factory = ShoppingListItemsViewModelFactory())
 
-    val destination =
-        if(authViewModel.uiState.isLogged) {
-            ROUTE_LISTS
-        } else {
-            ROUTE_LOGIN
-        }
-
     NavHost(
         navController = navController,
-        startDestination = destination,
+        startDestination = startDestination,
         modifier = modifier
     ) {
 
@@ -127,6 +122,16 @@ fun AppNavGraph(
         }
 
         composable(ROUTE_LOGIN) {
+            val uiState = authViewModel.uiState
+
+            LaunchedEffect(uiState.isLogged) {
+                if (uiState.isLogged) {
+                    navController.navigate(ROUTE_LISTS) {
+                        popUpTo(ROUTE_LOGIN) { inclusive = true }
+                    }
+                }
+            }
+
             LoginScreen(
                 authViewModel = authViewModel,
                 onCreateAccountClick = { navController.navigate(ROUTE_REGISTER) },
