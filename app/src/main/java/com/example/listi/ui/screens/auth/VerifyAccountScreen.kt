@@ -29,12 +29,14 @@ fun VerifyAccountScreen(
 
     val isVerified by authViewModel.isVerified.collectAsState()
     val isLoading by authViewModel.isLoading.collectAsState()
+    val forgotCodeSent by authViewModel.forgotCodeSent.collectAsState()
     val errorMessage by authViewModel.errorMessage.collectAsState()
     val currentUser by authViewModel.currentUser.collectAsState()
 
     var code by remember { mutableStateOf("") }
     var email by remember { mutableStateOf(currentUser?.email ?: "") }
 
+    val verificationCodeSentMessage = stringResource(R.string.verification_code_sent)
     val verifySuccessMessage = stringResource(R.string.verification_sucess)
 
     LaunchedEffect(isVerified) {
@@ -44,12 +46,29 @@ fun VerifyAccountScreen(
         }
     }
 
+    LaunchedEffect(forgotCodeSent) {
+        if (forgotCodeSent) {
+            scope.launch {
+                snackbarHostState.showSnackbar(verificationCodeSentMessage)
+            }
+        }
+    }
+
+    val connectionError = stringResource(R.string.error_connection)
+    val notFoundError = stringResource(R.string.error_mail)
 
     LaunchedEffect(errorMessage) {
-        errorMessage?.let {
-            scope.launch { snackbarHostState.showSnackbar(it) }
-            authViewModel.clearErrorMessage()
+
+        errorMessage?.let { error ->
+            val message = when (error) {
+                "400" -> notFoundError
+                "404" -> notFoundError
+                else -> connectionError
+            }
+
+            snackbarHostState.showSnackbar(message)
         }
+        authViewModel.clearErrorMessage()
     }
 
     Scaffold(
@@ -98,16 +117,12 @@ fun VerifyAccountScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            val verificationCodeSentMessage = stringResource(R.string.verification_code_sent)
             val enterValidEmailMessage = stringResource(R.string.enter_valid_email)
 
             Button(
                 onClick = {
                     if (email.isNotBlank()) {
                         authViewModel.resendVerificationCode(email)
-                        scope.launch {
-                            snackbarHostState.showSnackbar("$verificationCodeSentMessage $email")
-                        }
                     } else {
                         scope.launch {
                             snackbarHostState.showSnackbar(enterValidEmailMessage)

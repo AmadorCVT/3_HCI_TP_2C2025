@@ -22,10 +22,12 @@
     <string name="verification_sucess">Cuenta verificada correctamente</string>
     <string name="verify_account">Verificar cuenta</string>
     <string name="email_for_verification">Ingresá tu correo y enviá el código de verificación</string>
-    <string name="verification_code_sent">Codigo de verificacion enviado a</string>
+    <string name="verification_code_sent">Codigo de verificacion enviado</string>
     <string name="enter_valid_email">Ingresá un email válido</string>
     <string name="send_code">Enviar codigo</string>
-    <string name="input_code">Ingresá el código enviado</string>
+    <string name="input_code">Ingresá el código enviado</string>>
+    <string name="password_length">Las contraseña deben tener 6 o mas caracteres</string>
+    <string name="account_not_verified">Cuenta no verificada o invalida</string>
 
     <!-- Shopping lists screen -->
     <string name="active_lists">Activo</string>

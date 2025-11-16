@@ -137,6 +137,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 authRepository.sendVerificationCode(email)
+                _forgotCodeSent.value = true
             } catch (e: Exception) {
                 _errorMessage.value = e.localizedMessage
             }
