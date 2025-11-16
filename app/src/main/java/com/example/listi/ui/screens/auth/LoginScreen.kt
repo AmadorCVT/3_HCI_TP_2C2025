@@ -59,7 +59,7 @@ fun LoginScreen(
     ) {
         Image(
             painter = painterResource(id = R.drawable.logo),
-            size = ,
+
             contentDescription = "Logo"
         )
         Text(
