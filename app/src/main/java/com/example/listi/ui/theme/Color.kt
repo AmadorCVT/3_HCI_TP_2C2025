@@ -11,3 +11,6 @@ val White = Color(0xFFf5f3de)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val backColor = Color(0xFFF0F4C3)
+
+val ListiGreen =  Color(0xFF43A047)
+val DarkGray = Color(0xFF212121)
