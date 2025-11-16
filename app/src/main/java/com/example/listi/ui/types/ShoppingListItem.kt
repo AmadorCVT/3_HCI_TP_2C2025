@@ -13,7 +13,7 @@ data class ShoppingListItem(
     val lastPurchasedAt: String? = null,
     val createdAt: String,
     val updatedAt: String,
-    val product: Product
+    val product: Product? = null
 )
 
 @Serializable

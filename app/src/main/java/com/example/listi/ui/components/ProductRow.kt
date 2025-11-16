@@ -92,7 +92,7 @@ fun ProductRow(
 
                 // Texto producto
                 Text(
-                    text = item.product.name,
+                    text = item.product?.name ?: "",
                     color = Color.Black,
                     style = MaterialTheme.typography.bodyMedium
                 )

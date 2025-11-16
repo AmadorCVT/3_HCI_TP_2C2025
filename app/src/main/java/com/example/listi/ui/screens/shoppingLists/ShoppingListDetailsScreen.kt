@@ -158,7 +158,7 @@ fun ShoppingListDetailsScreen(
     LaunchedEffect(shoppingListItemsError) {
         shoppingListItemsError?.let {
             val msg = if (it == "409") addError else connectionError
-            scope.launch { snackbarHostState.showSnackbar(msg) }
+            scope.launch { snackbarHostState.showSnackbar(shoppingListItemsError.toString()) }
         }
         shoppingListItemsViewModel.clearError()
     }
@@ -170,7 +170,7 @@ fun ShoppingListDetailsScreen(
                 "409" -> addError
                 else -> connectionError
             }
-            scope.launch { snackbarHostState.showSnackbar(msg) }
+            scope.launch { snackbarHostState.showSnackbar(shoppingListError.toString()) }
         }
         shoppingListViewModel.clearError()
     }
@@ -343,12 +343,13 @@ fun AddedShoppingListItem(
         LazyColumn {
             item { HeaderRow() }
             items(items) { item ->
-                ProductRow(
-                    item = item,
-                    onCheckedChange = {
-                        onStatusToggle(item.id, !item.purchased)
-                    },
-                    onDelete = { onDelete(item) })
+                if (item.product != null)
+                    ProductRow(
+                        item = item,
+                        onCheckedChange = {
+                            onStatusToggle(item.id, !item.purchased)
+                        },
+                        onDelete = { onDelete(item) })
             }
         }
     }

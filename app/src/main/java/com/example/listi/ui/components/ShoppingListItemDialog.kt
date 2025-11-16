@@ -72,7 +72,7 @@ fun ShoppingListItemDialog(
     var quantity by remember { mutableStateOf("") }
 
     if (shoppingListItem != null) {
-        productId = shoppingListItem.product.id
+        productId = shoppingListItem.product?.id ?: -1
         unit = shoppingListItem.unit
         quantity = shoppingListItem.quantity.toString()
     }
