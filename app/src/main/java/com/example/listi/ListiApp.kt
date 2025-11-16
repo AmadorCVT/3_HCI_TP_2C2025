@@ -47,6 +47,8 @@ import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.Alignment
 import com.example.listi.ui.navigation.Constants
 
 
@@ -96,7 +98,7 @@ fun ListiApp(
         }
 
         if (startDestination == null) {
-            Box(modifier = Modifier.fillMaxSize())
+            Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
             return@ListiTheme
         }
 

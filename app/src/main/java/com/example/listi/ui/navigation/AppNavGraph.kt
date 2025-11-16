@@ -3,6 +3,8 @@ package com.example.listi.ui.navigation
 import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -124,12 +126,16 @@ fun AppNavGraph(
         composable(ROUTE_LOGIN) {
             val uiState = authViewModel.uiState
 
-            LaunchedEffect(uiState.isLogged) {
-                if (uiState.isLogged) {
+            if (uiState.isLogged) {
+                LaunchedEffect(Unit) {
                     navController.navigate(ROUTE_LISTS) {
                         popUpTo(ROUTE_LOGIN) { inclusive = true }
                     }
                 }
+
+                Box(modifier = Modifier.fillMaxSize())
+
+                return@composable
             }
 
             LoginScreen(
