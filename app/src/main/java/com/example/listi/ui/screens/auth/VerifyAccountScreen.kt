@@ -37,7 +37,7 @@ fun VerifyAccountScreen(
     val currentUser by authViewModel.currentUser.collectAsState()
 
     var code by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf(uiState.currentUser?.email ?: "") }
+    var email by remember { mutableStateOf(currentUser?.email ?: "") }
 
     val verifySuccessMessage = stringResource(R.string.verification_sucess)
 
@@ -71,7 +71,7 @@ fun VerifyAccountScreen(
 
 
             Text(
-                text = "Verificar cuenta",
+                text = stringResource(R.string.verify_account),
                 fontWeight = FontWeight.Bold,
                 fontSize = 26.sp,
                 color = DarkGreen,
@@ -79,7 +79,7 @@ fun VerifyAccountScreen(
             )
 
             Text(
-                text = "Ingresá tu correo y enviá el código de verificación.",
+                text = stringResource(R.string.email_for_verification),
                 fontSize = 15.sp,
                 color = DarkGrey,
                 modifier = Modifier.padding(bottom = 32.dp)
@@ -99,16 +99,19 @@ fun VerifyAccountScreen(
 
             Spacer(Modifier.height(16.dp))
 
+            val verificationCodeSentMessage = stringResource(R.string.verification_code_sent)
+            val enterValidEmailMessage = stringResource(R.string.enter_valid_email)
+
             Button(
                 onClick = {
                     if (email.isNotBlank()) {
                         authViewModel.resendVerificationCode(email)
                         scope.launch {
-                            snackbarHostState.showSnackbar("Código enviado a $email")
+                            snackbarHostState.showSnackbar("$verificationCodeSentMessage $email")
                         }
                     } else {
                         scope.launch {
-                            snackbarHostState.showSnackbar("Ingresá un email válido")
+                            snackbarHostState.showSnackbar(enterValidEmailMessage)
                         }
                     }
                 },
@@ -121,7 +124,7 @@ fun VerifyAccountScreen(
                     .height(48.dp),
                 shape = MaterialTheme.shapes.medium
             ) {
-                Text("ENVIAR CÓDIGO")
+                Text(stringResource(R.string.send_code))
             }
 
             Spacer(Modifier.height(24.dp))
@@ -130,7 +133,7 @@ fun VerifyAccountScreen(
             OutlinedTextField(
                 value = code,
                 onValueChange = { code = it },
-                placeholder = { Text("Código de verificación") },
+                placeholder = { Text(stringResource(R.string.profile_verification_code)) },
                 singleLine = true,
                 leadingIcon = {
                     Icon(
@@ -144,44 +147,42 @@ fun VerifyAccountScreen(
 
             Spacer(Modifier.height(24.dp))
 
-
-                        Button(
-                            onClick = {
-                                if (code.isNotBlank()) {
-                                    authViewModel.verifyAccount(code)
-                                } else {
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar("Ingresá el código enviado.")
-                                    }
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = LightGreen,
-                                contentColor = DarkGreen
-                            ),
-                            shape = RoundedCornerShape(10.dp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp)
-                        ) {
-                            if (isLoading) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(20.dp),
-                                    color = DarkGreen,
-                                    strokeWidth = 2.dp
-                                )
-                            } else {
-                                Text(
-                                    text = "VERIFICAR CUENTA",
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
+            Button(
+                onClick = {
+                    if (code.isNotBlank()) {
+                        authViewModel.verifyAccount(code)
+                    } else {
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Ingresá el código enviado.")
                         }
                     }
+                          },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ListiGreen,
+                    contentColor = DarkGreen
+                ),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = DarkGreen,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Text(
+                        text = "VERIFICAR CUENTA",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         }
     }
 }
+
+
 

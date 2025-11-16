@@ -20,6 +20,11 @@
     <string name="mail_already_registered">El mail ya esta registrado en otra cuenta</string>
     <string name="same_password">Las contraseñas deben ser iguales</string>
     <string name="verification_sucess">Cuenta verificada correctamente</string>
+    <string name="verify_account">Verificar cuenta</string>
+    <string name="email_for_verification">Ingresá tu correo y enviá el código de verificación</string>
+    <string name="verification_code_sent">Codigo de verificacion enviado a</string>
+    <string name="enter_valid_email">Ingresá un email válido</string>
+    <string name="send_code">Enviar codigo</string>
 
     <!-- Shopping lists screen -->
     <string name="active_lists">Activo</string>
