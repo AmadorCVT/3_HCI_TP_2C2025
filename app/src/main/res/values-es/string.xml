@@ -35,8 +35,8 @@
     <string name="reset">Reiniciar</string>
     <string name="purchased">Lista comprada</string>
     <string name="reseted">Lista reiniciada</string>
-    <string name="error_purchase">No se compro ningún item de la lista</string>
-    <string name="error_item">El item que se quiere agregar ya existe</string>
+    <string name="error_purchase">No se compro ningún objeto de la lista</string>
+    <string name="error_item">El objeto que se quiere agregar ya existe</string>
 
     <!-- Products screen -->
     <string name="quantity">Cantidad</string>

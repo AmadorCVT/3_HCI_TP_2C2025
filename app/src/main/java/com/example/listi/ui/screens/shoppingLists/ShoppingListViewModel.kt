@@ -66,6 +66,7 @@ class ShoppingListsViewModel(
                 )
                 loadShoppingLists()
             } catch (e: Exception) {
+                println(e.localizedMessage)
                 _errorMessage.value = e.localizedMessage
             }
         }

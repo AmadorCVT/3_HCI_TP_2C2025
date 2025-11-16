@@ -58,7 +58,9 @@ import java.util.Date
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalConfiguration
 import com.example.listi.ui.components.DeleteDialog
 
@@ -107,7 +109,9 @@ fun ShoppingListsScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val connectionError = stringResource(R.string.error_connection)
+    val itemError = stringResource(R.string.error_item)
 
+    val isLoading by shoppingListViewModel.isLoading.collectAsState()
     val refreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
     val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
     val shoppingListsError by shoppingListViewModel.errorMessage.collectAsState()
@@ -118,10 +122,20 @@ fun ShoppingListsScreen(
     }
 
 
+
     LaunchedEffect(shoppingListsError) {
         shoppingListsError?.let {
+            var message = connectionError
+
+            when(shoppingListsError) {
+                "409" ->  message = itemError
+                else -> connectionError
+            }
+
             scope.launch {
-                snackbarHostState.showSnackbar(connectionError)
+                snackbarHostState.showSnackbar(
+                    message = message
+                )
             }
         }
         shoppingListViewModel.clearError()
@@ -141,27 +155,31 @@ fun ShoppingListsScreen(
         }
     }
 
+    when {
+        isLoading -> Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost( snackbarHostState) }
-    ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues)) {
-            ShoppingListsCards(
-                modifier = modifier,
-                shoppingLists = shoppingLists,
-                onShoppingListDetails = onNavigateToDetails,
-                shoppingListViewModel = shoppingListViewModel,
-                onShareList = { list, email ->
-                    shoppingListViewModel.shareShoppingList(list.id, email)
+        else -> {
+            Scaffold(
+                snackbarHost = { SnackbarHost(snackbarHostState) }
+            ) { paddingValues ->
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    ShoppingListsCards(
+                        modifier = modifier,
+                        shoppingLists = shoppingLists,
+                        onShoppingListDetails = onNavigateToDetails,
+                        shoppingListViewModel = shoppingListViewModel,
+                        onShareList = { list, email ->
+                            shoppingListViewModel.shareShoppingList(list.id, email)
+                        }
+                    )
+                    GreenAddButton(
+                        { openCreateDialog.value = true },
+                        modifier
+                    )
                 }
-            )
-            GreenAddButton(
-                { openCreateDialog.value = true },
-                modifier
-            )
+            }
         }
     }
-
 }
 
 @SuppressLint("ConfigurationScreenWidthHeight")

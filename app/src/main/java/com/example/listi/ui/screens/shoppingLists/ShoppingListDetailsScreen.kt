@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -131,6 +132,7 @@ fun ShoppingListDetailsScreen(
     val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
     val products by productViewModel.products.collectAsState()
 
+    val isLoading by shoppingListItemsViewModel.isLoading.collectAsState()
     val listsRefreshTrigger by shoppingListItemsViewModel.refreshTrigger.collectAsState()
     val itemsRefreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
     val productRefreshTrigger  by productViewModel.refreshTrigger.collectAsState()
@@ -158,8 +160,8 @@ fun ShoppingListDetailsScreen(
     // Si sale un mensaje de error, mostrarlo
     LaunchedEffect(shoppingListItemsError) {
         shoppingListItemsError?.let {
-            var message = ""
-            
+            var message = "Error"
+
             when(shoppingListItemsError) {
                 "409" ->  message = addError
                 else -> connectionError
@@ -176,7 +178,7 @@ fun ShoppingListDetailsScreen(
 
     LaunchedEffect(shoppingListError) {
         shoppingListError?.let {
-            var message = ""
+            var message = connectionError
 
             when(shoppingListError) {
                 "400" ->  message = pruchaseError
@@ -220,88 +222,98 @@ fun ShoppingListDetailsScreen(
         }
     }
 
-    // Scaffold para el snackbar
-    Scaffold(
-        snackbarHost = { SnackbarHost( snackbarHostState) }
-    ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues)) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top
-            ) {
-                ShoppingListItemsHeader(modifier, shoppingLists.first { it.id == listId })
-                AddedShoppingListItem(
-                    modifier,
-                    shoppingListItems,
-                    onStatusToggle = { itemId, purchased ->
-                        shoppingListItemsViewModel.toggleStatusShoppingListItem(listId, itemId, purchased)
-                    },
-                    onDelete = { item ->
-                        itemToDelete.value = item
-                        openDeleteDialog.value = true
+    when {
+        isLoading -> Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
+
+        else -> {
+            // Scaffold para el snackbar
+            Scaffold(
+                snackbarHost = { SnackbarHost(snackbarHostState) }
+            ) { paddingValues ->
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        ShoppingListItemsHeader(modifier, shoppingLists.first { it.id == listId })
+                        AddedShoppingListItem(
+                            modifier,
+                            shoppingListItems,
+                            onStatusToggle = { itemId, purchased ->
+                                shoppingListItemsViewModel.toggleStatusShoppingListItem(
+                                    listId,
+                                    itemId,
+                                    purchased
+                                )
+                            },
+                            onDelete = { item ->
+                                itemToDelete.value = item
+                                openDeleteDialog.value = true
+                            }
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // Importante el boton de completar
+                        Button(
+                            onClick = {
+                                shoppingListViewModel.purchaseShoppingLists(listId)
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = purchasedMessage
+                                    )
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp),
+                            shape = MaterialTheme.shapes.medium
+                        ) {
+                            Text(
+                                text = stringResource(R.string.purchase),
+                                color = White,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // Importante el boton de reinciar
+                        Button(
+                            onClick = {
+                                shoppingListViewModel.resetShoppingLists(listId)
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = resetedMessage
+                                    )
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp),
+                            shape = MaterialTheme.shapes.medium
+                        ) {
+                            Text(
+                                text = stringResource(R.string.reset),
+                                color = White,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     }
-                )
 
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // Importante el boton de completar
-                Button(
-                    onClick = {
-                        shoppingListViewModel.purchaseShoppingLists(listId)
-                        scope.launch {
-                            snackbarHostState.showSnackbar(
-                                message = purchasedMessage
-                            )
+                    GreenAddButton(
+                        {
+                            openCreateDialog.value = true
                         }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Text(
-                        text = stringResource(R.string.purchase),
-                        color = White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // Importante el boton de reinciar
-                Button(
-                    onClick = {
-                        shoppingListViewModel.resetShoppingLists(listId)
-                        scope.launch {
-                            snackbarHostState.showSnackbar(
-                                message = resetedMessage
-                            )
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = LightGreen),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Text(
-                        text = stringResource(R.string.reset),
-                        color = White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold
                     )
                 }
             }
-
-            GreenAddButton(
-                {
-                    openCreateDialog.value = true
-                }
-            )
         }
     }
 }

@@ -2,8 +2,6 @@ package com.example.listi.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -13,10 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -91,7 +87,7 @@ fun ShoppingListCard(
                 Text(
                     text = shoppingList.name,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, //TODO: no me anda el color
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -131,16 +127,17 @@ fun ShoppingListCard(
                     )
                 }
 
-                if (shoppingList.lastPurchasedAt != null) {
-
-                    Text(
-                        text = prettyDate(shoppingList.lastPurchasedAt.take(10)),
-                        maxLines = 1,
-                        style = Typography.labelMedium,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
+                Text(
+                    text = "${stringResource(R.string.last_purchased)}: ${
+                        prettyDate(
+                            shoppingList.lastPurchasedAt
+                        )}",
+                    maxLines = 1,
+                    style = Typography.labelMedium,
+                    overflow = TextOverflow.Ellipsis,
                     )
-                }
+
+
             }
 
 
@@ -166,7 +163,11 @@ fun ShoppingListCard(
 }
 
 @Composable
-fun prettyDate(dateString: String): String {
+fun prettyDate(dateString: String?): String {
+
+    if (dateString == null)
+        return "-"
+
     // Formatear dependiendo de cuanto tiempo paso
     val formatter = DateTimeFormatter.ISO_LOCAL_DATE
     val date = LocalDate.parse(dateString.take(10), formatter)

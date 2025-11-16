@@ -17,7 +17,7 @@ data class ShoppingList(
     val recurring: Boolean,
     val owner: User,
     val sharedWith: Array<User>,
-    val lastPurchasedAt: String?,
+    val lastPurchasedAt: String? = null,
     val createdAt: String,
     val updatedAt: String,
 )
@@ -37,7 +37,7 @@ data class ShoppingListResponse(
     val recurring: Boolean,
     val owner: User,
     val sharedWith: Array<User>,
-    val lastPurchasedAt: String = "",
+    val lastPurchasedAt: String? = null,
     val createdAt: String,
     val updatedAt: String,
 )
