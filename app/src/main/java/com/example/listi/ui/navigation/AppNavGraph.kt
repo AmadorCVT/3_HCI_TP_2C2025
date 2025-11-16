@@ -144,7 +144,8 @@ fun AppNavGraph(
             LoginScreen(
                 authViewModel = authViewModel,
                 onCreateAccountClick = { navController.navigate(ROUTE_REGISTER) },
-                onForgotPasswordClick = { navController.navigate(ROUTE_PASSWORD_CODE) }
+                onForgotPasswordClick = { navController.navigate(ROUTE_PASSWORD_CODE) },
+                onVerifyAccount = {navController.navigate(ROUTE_VERIFY)}
             )
         }
         composable(ROUTE_REGISTER) {

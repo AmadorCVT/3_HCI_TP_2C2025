@@ -41,6 +41,7 @@ fun LoginScreen(
     authViewModel: AuthViewModel,
     onLoginClick: ((String, String) -> Unit)? = null,
     onCreateAccountClick: (() -> Unit)? = null,
+    onVerifyAccount: (() -> Unit)? = null,
     onForgotPasswordClick: (() -> Unit)? = null
 ) {
     var email by remember { mutableStateOf("") }
@@ -56,13 +57,14 @@ fun LoginScreen(
     val credentialsError = stringResource(R.string.error_credentials_invalid)
     val codeError = stringResource(R.string.error_could_not_resend)
     val mailError = stringResource(R.string.error_mail)
+    val verificationError = stringResource(R.string.account_not_verified)
 
     LaunchedEffect(errorMessage) {
         errorMessage?.let { error ->
             val message = when (error) {
                 "1" -> credentialsError
                 "400" -> mailError
-                "401" -> credentialsError
+                "401" -> verificationError
                 "2" -> codeError
                 else -> connectionError
             }
@@ -258,6 +260,14 @@ fun LoginScreen(
                                 text = stringResource(R.string.forgot_password),
                                 color = DarkGreen,
                                 fontSize = if (isLandscape) 12.sp else 14.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                        TextButton(onClick = { onVerifyAccount?.invoke() }) {
+                            Text(
+                                text = stringResource(R.string.verify),
+                                color = DarkGreen,
+                                style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Medium
                             )
                         }

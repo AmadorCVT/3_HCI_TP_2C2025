@@ -54,18 +54,27 @@ class AuthRepository(private val context: Context) {
 
 
     suspend fun verifyAccount(code: String): Response<VerifyAccountResponse> {
-        val request = VerifyAccountRequest(code = code)
-        return service.verifyAccount(request)
+        return withContext(Dispatchers.IO) {
+            val request = VerifyAccountRequest(code = code)
+            val response = service.verifyAccount(request)
+            if (response.isSuccessful) {
+                response
+            } else {
+                throw Exception(response.code().toString())
+            }
+        }
     }
-
 
     suspend fun sendVerificationCode(email: String): Response<SendVerificationResponse> {
-        return service.sendVerificationCode(email)
+        return withContext(Dispatchers.IO) {
+            val response = service.sendVerificationCode(email)
+            if (response.isSuccessful) {
+                response
+            } else {
+                throw Exception(response.code().toString())
+            }
+        }
     }
-
-
-
-
 
     suspend fun forgotPassword(email: String): Response<Unit> {
         return service.forgotPassword(email)

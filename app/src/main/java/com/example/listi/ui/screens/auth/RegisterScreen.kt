@@ -199,6 +199,13 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium
                     )
+                else if(password.length < 6)
+                    Text(
+                        text = stringResource(R.string.password_length),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium
+                    )
 
                 val isCreateEnabled =
                     firstName.isNotBlank() && lastName.isNotBlank() && email.isNotBlank() && password.isNotBlank() && (password == repeatPassword)
@@ -234,7 +241,7 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                     }
                 }
 
-                TextButton(onClick = { goVerifyAccount?.invoke() }) {
+                TextButton(onClick = { goLogin?.invoke() }) {
                     Text(
                         text = stringResource(R.string.got_an_acount),
                         color = DarkGreen,
