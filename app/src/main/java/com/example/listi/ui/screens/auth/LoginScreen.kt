@@ -52,7 +52,6 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
 
     val configuration = LocalConfiguration.current
-
     val isLoading by authViewModel.isLoading.collectAsState()
 
     val errorMessage by authViewModel.errorMessage.collectAsState()
@@ -60,7 +59,6 @@ fun LoginScreen(
     val credentialsError = stringResource(R.string.error_credentials_invalid)
     val codeError = stringResource(R.string.error_could_not_resend)
     val mailError = stringResource(R.string.error_mail)
-
 
     LaunchedEffect(errorMessage) {
         errorMessage?.let { error ->
@@ -73,7 +71,6 @@ fun LoginScreen(
             }
 
             snackbarHostState.showSnackbar(message)
-
             authViewModel.clearError()
         }
     }
@@ -85,42 +82,72 @@ fun LoginScreen(
             Scaffold(
                 snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
             ) { padding ->
-                // Use a Box as root so the circle+logo can be drawn as an overlay (no layout space consumed)
-                Box(modifier = Modifier.fillMaxSize()) {
-                    // Overlay: large green circle and logo positioned at top center and offset so they protrude from top
-                    // Mostrar el overlay sólo cuando NO estamos en orientación horizontal
-                    if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                ) {
+                    val isLandscape =
+                        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+                    val screenWidth = configuration.screenWidthDp.dp
+                    val circleSize = screenWidth * 1.6f
+                    val logoSize = (screenWidth * 0.35f).coerceIn(96.dp, 140.dp)
+                    val topContentPadding = if (!isLandscape) circleSize * 0.25f else 0.dp
+
+
+                    if (!isLandscape) {
                         Box(
                             modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .wrapContentSize(), contentAlignment = Alignment.TopCenter
+                                .fillMaxWidth()
+                                .height(circleSize * 0.75f)
+                                .align(Alignment.TopCenter),
+                            contentAlignment = Alignment.TopCenter
                         ) {
-                            // Circle (kept as you had it, big and moved upwards)
                             Box(
                                 modifier = Modifier
-                                    .size(520.dp)
-                                    .offset(y = (-300).dp)
+                                    .size(circleSize)
+                                    .offset(y = -circleSize * 0.4f)
                                     .background(
                                         color = ListiGreen,
                                         shape = CircleShape
                                     )
                             )
 
-                            // Logo drawn on top and shifted to sit into the green area
-                            Image(
-                                painter = painterResource(id = R.drawable.logo),
-                                contentDescription = "Logo",
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
                                 modifier = Modifier
-                                    .size(140.dp)
-                                    .offset(y = 18.dp)
-                            )
+                                    .fillMaxWidth()
+                                    .padding(top = circleSize * 0.05f)
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.logo),
+                                    contentDescription = "Logo",
+                                    modifier = Modifier.size(logoSize)
+                                )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Surface(
+                                    color = ListiGreen,
+                                    shape = RoundedCornerShape(8.dp)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.app_name),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = White,
+                                        fontSize = 20.sp,
+                                        modifier = Modifier.padding(
+                                            horizontal = 12.dp,
+                                            vertical = 6.dp
+                                        )
+                                    )
+                                }
+                            }
                         }
                     }
 
-                    // Main content: form and buttons — stays centered and is not pushed down by the overlay
-                    // Ajustes para orientar en horizontal: menos padding, espaciados más pequeños y botones más cortos
-                    val isLandscape =
-                        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
                     val horizontalPadding = if (isLandscape) 12.dp else 32.dp
                     val verticalPadding = if (isLandscape) 8.dp else 28.dp
                     val spacerSmall = if (isLandscape) 6.dp else 16.dp
@@ -129,32 +156,42 @@ fun LoginScreen(
                     val titleFontSize = if (isLandscape) 22.sp else 28.sp
                     val iconSize = if (isLandscape) 20.dp else 24.dp
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = horizontalPadding, vertical = verticalPadding)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = if (isLandscape) Arrangement.SpaceEvenly else Arrangement.Center
-        ) {
-            Surface(
-                color = ListiGreen,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.padding(bottom = spacerSmall)
-            ) {
-                Text(
-                    text = stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = White,
-                    fontSize = titleFontSize,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                )
-            }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                start = horizontalPadding,
+                                end = horizontalPadding,
+                                top = verticalPadding + topContentPadding,
+                                bottom = verticalPadding
+                            )
+                            .verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = if (isLandscape) Arrangement.SpaceEvenly else Arrangement.Center
+                    ) {
+                        if (isLandscape) {
+                            Surface(
+                                color = ListiGreen,
+                                shape = RoundedCornerShape(8.dp),
+                                modifier = Modifier.padding(bottom = spacerSmall)
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.app_name),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = White,
+                                    fontSize = titleFontSize,
+                                    modifier = Modifier.padding(
+                                        horizontal = 12.dp,
+                                        vertical = 6.dp
+                                    )
+                                )
+                            }
 
-                        if (!isLandscape) {
+                            Spacer(modifier = Modifier.height(spacerMedium))
+                        } else {
+
                             Spacer(modifier = Modifier.height(spacerMedium))
                         }
-
 
                         OutlinedTextField(
                             value = email,
@@ -192,29 +229,32 @@ fun LoginScreen(
 
                         Spacer(modifier = Modifier.height(spacerMedium))
 
-
                         val isLoginEnabled = email.isNotBlank() && password.isNotBlank()
 
-            Button(
-                onClick = { if (isLoginEnabled) (onLoginClick?.invoke(email, password) ?: authViewModel.login(email, password)) },
-                enabled = isLoginEnabled,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isLoginEnabled) ListiGreen else LightGreen,
-                    contentColor = White
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(buttonHeight),
-                shape = MaterialTheme.shapes.medium
-            ) {
-                Text(
-                    text = stringResource(R.string.login),
-                    color = if (isLoginEnabled) White else DarkGray,
-                    fontSize = if (isLandscape) 16.sp else 18.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-
+                        Button(
+                            onClick = {
+                                if (isLoginEnabled) {
+                                    onLoginClick?.invoke(email, password)
+                                        ?: authViewModel.login(email, password)
+                                }
+                            },
+                            enabled = isLoginEnabled,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = if (isLoginEnabled) ListiGreen else LightGreen,
+                                contentColor = White
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(buttonHeight),
+                            shape = MaterialTheme.shapes.medium
+                        ) {
+                            Text(
+                                text = stringResource(R.string.login),
+                                color = if (isLoginEnabled) White else DarkGray,
+                                fontSize = if (isLandscape) 16.sp else 18.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
 
                         TextButton(onClick = { onForgotPasswordClick?.invoke() }) {
                             Text(
@@ -247,6 +287,7 @@ fun LoginScreen(
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
