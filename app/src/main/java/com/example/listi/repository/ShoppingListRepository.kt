@@ -171,7 +171,7 @@ class ShoppingListRepository (private val api: ShoppingListService) {
     //TODO: dudosa
     suspend fun shareShoppingList(id: Int, request: ShareShoppingListRequest): ShoppingList {
         return withContext(Dispatchers.IO) {
-            val response = api.shareShoppingList(request)
+            val response = api.shareShoppingList(id, request)
             if (response.isSuccessful) {
                 val result = response.body()!!
                 val updated = ShoppingList(

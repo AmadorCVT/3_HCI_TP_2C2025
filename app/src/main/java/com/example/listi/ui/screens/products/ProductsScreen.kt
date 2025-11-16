@@ -50,6 +50,7 @@ fun ProductsScreen(
     val errorMessage by viewModel.errorMessage.collectAsState()
     val productRefreshTrigger  by viewModel.refreshTrigger.collectAsState()
     val connectionError = stringResource(R.string.error_connection)
+    val itemError = stringResource(R.string.error_item)
 
     val categories by categoryViewModel.categories.collectAsState()
     val categoryError by categoryViewModel.errorMessage.collectAsState()
@@ -74,8 +75,17 @@ fun ProductsScreen(
 
     LaunchedEffect(errorMessage) {
         errorMessage?.let {
+            var message = connectionError
+
+            when(errorMessage) {
+                "409" ->  message = itemError
+                else -> connectionError
+            }
+
             scope.launch {
-                snackbarHostState.showSnackbar(errorMessage.toString())
+                snackbarHostState.showSnackbar(
+                    message = message
+                )
             }
         }
         viewModel.clearError()
@@ -83,8 +93,17 @@ fun ProductsScreen(
 
     LaunchedEffect(categoryError) {
         categoryError?.let {
+            var message = connectionError
+
+            when(categoryError) {
+                "409" ->  message = itemError
+                else -> connectionError
+            }
+
             scope.launch {
-                snackbarHostState.showSnackbar(errorMessage.toString())
+                snackbarHostState.showSnackbar(
+                    message = message
+                )
             }
         }
         categoryViewModel.clearError()

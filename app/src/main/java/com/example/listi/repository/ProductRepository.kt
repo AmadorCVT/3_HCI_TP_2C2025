@@ -25,7 +25,7 @@ class ProductRepository(private val api: ProductService) {
                 cachedProducts = products
                 products
             } else {
-                throw Exception("Error al obtener productos: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -39,7 +39,7 @@ class ProductRepository(private val api: ProductService) {
                 cachedProducts = (cachedProducts ?: emptyList()) + product
                 product
             } else {
-                throw Exception("Error al crear producto: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -54,7 +54,7 @@ class ProductRepository(private val api: ProductService) {
                 }
                 updated
             } else {
-                throw Exception("Error al actualizar producto: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -65,7 +65,7 @@ class ProductRepository(private val api: ProductService) {
             if (response.isSuccessful) {
                 cachedProducts = cachedProducts?.filterNot { it.id == id }
             } else {
-                throw Exception("Error al eliminar producto: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }

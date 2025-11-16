@@ -50,7 +50,7 @@ data class ShoppingListListResponse(
 
 @Serializable
 data class ShareShoppingListRequest(
-    val userMail: String
+    val email: String
 )
 @Serializable
 data class PurchaseShoppingListRequest(

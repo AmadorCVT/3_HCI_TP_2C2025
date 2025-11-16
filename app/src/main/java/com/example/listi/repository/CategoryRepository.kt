@@ -26,7 +26,7 @@ class CategoryRepository(private val api: CategoryService) {
                 cachedCategories = categories
                 categories
             } else {
-                throw Exception("Error al obtener categorías: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -47,7 +47,7 @@ class CategoryRepository(private val api: CategoryService) {
                 cachedCategories = (cachedCategories ?: emptyList()) + created
                 created
             } else {
-                throw Exception("Error al crear categoría: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -65,7 +65,7 @@ class CategoryRepository(private val api: CategoryService) {
                     updatedAt = dateFormat.format(Date())
                 )
             } else {
-                throw Exception("Error al obtener categoría: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -87,7 +87,7 @@ class CategoryRepository(private val api: CategoryService) {
                 }
                 updated
             } else {
-                throw Exception("Error al actualizar categoría: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }
@@ -98,7 +98,7 @@ class CategoryRepository(private val api: CategoryService) {
             if (response.isSuccessful) {
                 cachedCategories = cachedCategories?.filterNot { it.id == id }
             } else {
-                throw Exception("Error al eliminar categoría: ${response.code()}")
+                throw Exception(response.code().toString())
             }
         }
     }

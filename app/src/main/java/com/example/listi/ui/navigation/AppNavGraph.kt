@@ -108,7 +108,8 @@ fun AppNavGraph(
 
         composable(ROUTE_FRIENDS) {
             FriendsScreen(
-                authViewModel = authViewModel
+                authViewModel = authViewModel,
+                shoppingListViewModel = shoppingListsViewModel
         ) }
 
         // Perfil: pasar el authViewModel y el onChangePhoto que lanza el selector

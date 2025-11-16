@@ -36,9 +36,8 @@ fun ShoppingListCard(
     shoppingList: ShoppingList,
     modifier: Modifier = Modifier,
     onEditClick: (ShoppingList) -> Unit,
-    onShareClick:(ShoppingList)->Unit,
-    onDeleteClick:(ShoppingList)->Unit
-
+    onShareClick: (ShoppingList)-> Unit,
+    onDeleteClick: (ShoppingList)-> Unit
 ) {
 
     var menuExpanded by remember { mutableStateOf(false) }

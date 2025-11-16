@@ -266,8 +266,8 @@ fun ShoppingListsCards(
                         .fillMaxWidth()
                         .clickable { onShoppingListDetails(item.id) },
                     onEditClick = { listToEdit = item },
-                    onShareClick = { listToShare = it },
-                    onDeleteClick = { listToDelete = it }
+                    onShareClick = { listToShare = item },
+                    onDeleteClick = { listToDelete = item }
                 )
             }
         }

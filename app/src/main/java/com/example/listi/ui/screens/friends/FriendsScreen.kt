@@ -29,6 +29,8 @@ import com.example.listi.repository.CategoryRepository
 import com.example.listi.ui.screens.auth.AuthViewModel
 import com.example.listi.ui.screens.products.CategoryViewModel
 import com.example.listi.ui.screens.products.CategoryViewModelFactory
+import com.example.listi.ui.screens.shoppingLists.ShoppingListsViewModel
+import com.example.listi.ui.types.User
 import kotlinx.coroutines.flow.filter
 import kotlin.collections.filter
 
@@ -47,23 +49,37 @@ private val friendListPreview = listOf(
 fun FriendsScreen(
     modifier: Modifier = Modifier,
     authViewModel: AuthViewModel,
-    friendViewModel: FriendsViewModel = viewModel(factory = FriendsViewModelFactory(authViewModel)),
+    shoppingListViewModel: ShoppingListsViewModel
 ) {
-    // Para que sea reactivo uso referencia
-    val friendList by friendViewModel.friends.collectAsState()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val connectionError = stringResource(R.string.error_connection)
+    val itemError = stringResource(R.string.error_item)
 
-    // Fetch friends
-    LaunchedEffect(Unit) {
-        friendViewModel.loadFriends()
+    val isLoading by shoppingListViewModel.isLoading.collectAsState()
+    val refreshTrigger by shoppingListViewModel.refreshTrigger.collectAsState()
+    val shoppingLists by shoppingListViewModel.shoppingLists.collectAsState()
+    val shoppingListsError by shoppingListViewModel.errorMessage.collectAsState()
+
+    LaunchedEffect(refreshTrigger) {
+        shoppingListViewModel.loadShoppingLists()
     }
 
-    FriendsCardList(modifier, friendList)
+    val userId = authViewModel.uiState.currentUser?.id
+    val friends: List<Friend> = remember(shoppingLists) {
+        shoppingLists
+            .flatMap { it.sharedWith.toList() }
+            .filter { it.id != userId }
+            .map { Friend(it.name) }
+    }
+
+    FriendsCardList(modifier, friends)
 }
 
 @Composable
 fun FriendsCardList(
     modifier: Modifier = Modifier,
-    friendList: MutableList<Friend>
+    friendList: List<Friend>
 ) {
     var searchQuery by remember { mutableStateOf("") }
 

@@ -67,21 +67,21 @@ fun FriendCard(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Botón menú de tres puntos
-        Box {
-            IconButton(onClick = { menuExpanded = true }) {
-                Image(Icons.Default.MoreVert, contentDescription = "Más opciones")
-            }
-
-            ReusedDropdownMenu(
-                expanded = menuExpanded,
-                onDismiss = { menuExpanded = false },
-                actions = listOf(
-                    ActionItem("Editar") { /* TODO */ },
-                    ActionItem("Eliminar") { /* TODO */ }
-                )
-            )
-        }
+//        // Botón menú de tres puntos
+//        Box {
+//            IconButton(onClick = { menuExpanded = true }) {
+//                Image(Icons.Default.MoreVert, contentDescription = "Más opciones")
+//            }
+//
+//            ReusedDropdownMenu(
+//                expanded = menuExpanded,
+//                onDismiss = { menuExpanded = false },
+//                actions = listOf(
+//                    ActionItem("Editar") { /* TODO */ },
+//                    ActionItem("Eliminar") { /* TODO */ }
+//                )
+//            )
+//        }
     }
 }
 

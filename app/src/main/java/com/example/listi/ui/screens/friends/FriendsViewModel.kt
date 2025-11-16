@@ -51,6 +51,8 @@ class FriendsViewModel(
                 val user = authViewModel.uiState.currentUser
 
                 for (item in shoppingLists) {
+                    println("ljkashdkjlahsdkjhsad")
+                    println(item.sharedWith)
                     for (friend in item.sharedWith) {
                         if (friend.id != user?.id)
                             _friends.value.add(Friend(friend.name))
