@@ -23,10 +23,13 @@ fun DeleteDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(text = stringResource(R.string.delete),
+                color = MaterialTheme.colorScheme.secondary,
             style = MaterialTheme.typography.headlineMedium)
         },
         text = {
-            Text(text = "$delete_confirm \"$name\"?")
+            Text(
+                color = MaterialTheme.colorScheme.secondary,
+                text = "$delete_confirm \"$name\"?")
         },
         confirmButton = {
             Button(

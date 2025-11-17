@@ -8,14 +8,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
+import com.example.listi.R
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,7 +56,12 @@ fun ScrollableFilterMenu(
                     .size(40.dp)
                     .background(color = Green, shape = CircleShape)
             ) {
-                Icon(Icons.Default.Add, "Agregar categoría", tint = White)
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.add),
+                    modifier = Modifier.size(24.dp),
+                    tint = White,
+                    contentDescription = "Agregar categoría"
+                )
             }
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -72,9 +77,13 @@ fun ScrollableFilterMenu(
                     )
             ) {
                 Icon(
-                    Icons.Default.Delete,
-                    "Borrar categoría",
-                    tint = if (deleteMode) Color.Red else DarkGrey
+                    imageVector = ImageVector.vectorResource(R.drawable.delete_foreground),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = "Borrar categoría",
+                    tint = if (deleteMode)
+                        MaterialTheme.colorScheme.error
+                    else
+                        MaterialTheme.colorScheme.secondary
                 )
             }
 
@@ -146,7 +155,7 @@ private fun FilterChipWithDeleteBehavior(
     val textColor = when {
         deleteMode -> if (isSelected) Color.Red else DarkGrey
         isSelected -> White
-        else -> DarkGrey
+        else -> MaterialTheme.colorScheme.secondary
     }
 
     Surface(

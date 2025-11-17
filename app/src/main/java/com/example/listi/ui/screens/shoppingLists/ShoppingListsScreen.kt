@@ -226,7 +226,7 @@ fun ShoppingListsCards(
                 onClick = { selectedButton = "all" },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selectedButton == "all")
-                        MaterialTheme.colorScheme.surfaceVariant
+                        MaterialTheme.colorScheme.surface
                     else
                         Color.Transparent,
                     contentColor = if (selectedButton == "all")
@@ -242,7 +242,10 @@ fun ShoppingListsCards(
                 onClick = { selectedButton = "recurring" },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selectedButton == "recurring") MaterialTheme.colorScheme.surfaceVariant  else Color.Transparent,
-                    contentColor = if (selectedButton == "recurring") Color.White else Color.Black
+                    contentColor = if (selectedButton == "recurring")
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    else
+                        MaterialTheme.colorScheme.onBackground
                 )
             ) {
                 Text(stringResource(R.string.recurring))
@@ -252,7 +255,10 @@ fun ShoppingListsCards(
                 onClick = { selectedButton = "history" },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selectedButton == "history") MaterialTheme.colorScheme.surfaceVariant else Color.Transparent,
-                    contentColor = if (selectedButton == "history") Color.White else Color.Black
+                    contentColor = if (selectedButton == "history")
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    else
+                        MaterialTheme.colorScheme.onBackground
                 )
             ) {
                 Text(stringResource(R.string.history))

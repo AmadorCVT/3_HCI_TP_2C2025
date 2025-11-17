@@ -93,7 +93,7 @@ fun ProductRow(
                 // Texto producto
                 Text(
                     text = item.product?.name ?: "",
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -101,13 +101,13 @@ fun ProductRow(
             Text(
                 item.quantity.toString(),
                 modifier = Modifier.weight(0.5f),
-                color = Color.DarkGray
+                color = MaterialTheme.colorScheme.surfaceVariant
             )
 
             Text(
                 item.unit,
                 modifier = Modifier.weight(0.5f),
-                color = Color.DarkGray
+                color = MaterialTheme.colorScheme.surfaceVariant
             )
 
             IconButton(onClick = { onDelete() }) {

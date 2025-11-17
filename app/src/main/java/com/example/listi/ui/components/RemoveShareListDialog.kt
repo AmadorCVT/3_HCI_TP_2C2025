@@ -73,7 +73,8 @@ fun RemoveShareListDialog(
                     ) {
                         sharedWith.forEach { user ->
                             DropdownMenuItem(
-                                text = { Text(user.name) },
+                                text = { Text(user.name,
+                                    color = MaterialTheme.colorScheme.secondary,) },
                                 onClick = {
                                     selectedUserName = user.name
                                     userId = user.id

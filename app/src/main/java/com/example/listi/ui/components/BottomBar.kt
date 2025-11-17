@@ -30,11 +30,11 @@ fun BottomBar(
                         )
                     },
                      colors = NavigationBarItemDefaults.colors(
-                         selectedIconColor = MaterialTheme.colorScheme.surface,
+                         selectedIconColor = MaterialTheme.colorScheme.onSurface,
                          selectedTextColor = MaterialTheme.colorScheme.surface,
                          indicatorColor = MaterialTheme.colorScheme.surfaceVariant,
-                         unselectedIconColor = MaterialTheme.colorScheme.secondary,
-                         unselectedTextColor = MaterialTheme.colorScheme.secondary
+                         unselectedIconColor = MaterialTheme.colorScheme.surface,
+                         unselectedTextColor = MaterialTheme.colorScheme.surface
                      ),
 
                      label = { Text(text = stringResource(item.label)) },

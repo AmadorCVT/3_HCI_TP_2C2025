@@ -13,11 +13,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExposedDropdownMenuDefaults.outlinedTextFieldColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,8 +61,7 @@ fun ShoppingListDialog(
     Dialog(
         onDismissRequest = {
             onDismissRequest()
-        },
-
+        }
     ) {
         Card(
             modifier = Modifier
@@ -67,6 +69,9 @@ fun ShoppingListDialog(
                 .height(450.dp)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.onSurface
+            )
         ) {
             Column(
                 modifier = Modifier
@@ -76,6 +81,7 @@ fun ShoppingListDialog(
             ) {
                 Text(
                     text = title,
+                    color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.padding(16.dp),
                 )
@@ -86,7 +92,15 @@ fun ShoppingListDialog(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     modifier = Modifier.fillMaxWidth()
-                        .padding(dimensionResource(R.dimen.medium_padding))
+                        .padding(dimensionResource(R.dimen.medium_padding)),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                    )
                 )
                 OutlinedTextField(
                     value = description,
@@ -95,7 +109,15 @@ fun ShoppingListDialog(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     modifier = Modifier.fillMaxWidth()
-                        .padding(dimensionResource(R.dimen.medium_padding))
+                        .padding(dimensionResource(R.dimen.medium_padding)),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                    )
                 )
 
                 Row (
@@ -104,7 +126,8 @@ fun ShoppingListDialog(
                     modifier = Modifier.clickable { recurring = !recurring }.fillMaxWidth().padding(16.dp)
                 ) {
                     Checkbox(checked = recurring, onCheckedChange = { recurring = !recurring })
-                    Text(stringResource(R.string.recurring))
+                    Text(stringResource(R.string.recurring),
+                        color = MaterialTheme.colorScheme.secondary,)
                 }
                 Row(
                     modifier = Modifier

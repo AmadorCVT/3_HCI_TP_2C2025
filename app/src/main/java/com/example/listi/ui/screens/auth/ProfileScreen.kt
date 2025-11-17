@@ -234,7 +234,7 @@ fun ProfileScreen(
                                 ElevatedButton(
                                     onClick = { showChangePasswordDialog = true },
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                        containerColor = MaterialTheme.colorScheme.primary,
                                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                                     ),
                                     shape = RoundedCornerShape(20.dp),
@@ -251,7 +251,7 @@ fun ProfileScreen(
                                     onClick = { isEditing = true },
                                     modifier = Modifier.align(Alignment.TopEnd),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                        containerColor = MaterialTheme.colorScheme.primary,
                                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                                     ),
                                     shape = RoundedCornerShape(20.dp),
@@ -396,7 +396,7 @@ fun ProfileScreen(
                                     .fillMaxWidth()
                                     .height(48.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                    containerColor = MaterialTheme.colorScheme.primary,
                                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                                 ),
                                 shape = RoundedCornerShape(12.dp)
@@ -587,42 +587,6 @@ fun ProfileScreen(
 }
 
 @Composable
-private fun LanguageSelectorField(
-    selectedLanguage: String,
-    onLanguageChange: (String) -> Unit,
-    spanishLabel: String,
-    englishLabel: String,
-    profileLanguageLabel: String
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = profileLanguageLabel,
-            modifier = Modifier.width(100.dp),
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            LanguageButton(
-                text = spanishLabel,
-                isSelected = selectedLanguage == spanishLabel,
-                onClick = { onLanguageChange(spanishLabel) }
-            )
-            LanguageButton(
-                text = englishLabel,
-                isSelected = selectedLanguage == englishLabel,
-                onClick = { onLanguageChange(englishLabel) }
-            )
-        }
-    }
-}
-
-@Composable
 private fun LanguageButton(
     text: String,
     isSelected: Boolean,
@@ -630,7 +594,7 @@ private fun LanguageButton(
 ) {
     val shape = RoundedCornerShape(16.dp)
     val colors = ButtonDefaults.buttonColors(
-        containerColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+        containerColor = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariant,
         contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
     )
 

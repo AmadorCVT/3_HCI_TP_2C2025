@@ -116,6 +116,7 @@ fun ShoppingListCard(
                         text = usersText,
                         maxLines = 1,
                         style = Typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(2f)
                     )
@@ -126,6 +127,7 @@ fun ShoppingListCard(
                         text = prettyDate(shoppingList.createdAt.take(10)),
                         maxLines = 1,
                         style = Typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f)
                     )
@@ -138,6 +140,7 @@ fun ShoppingListCard(
                         )}",
                     maxLines = 1,
                     style = Typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     overflow = TextOverflow.Ellipsis,
                     )
 
@@ -151,8 +154,9 @@ fun ShoppingListCard(
             Box { // Necesario para posicionar el dropdown en el lugar exacto
                 IconButton(onClick = { menuExpanded = true }) {
                     Icon(
-                        ImageVector.vectorResource(R.drawable.more_vert_foreground),
-                        contentDescription = "Options"
+                        imageVector = ImageVector.vectorResource(R.drawable.more_vert_foreground),
+                        contentDescription = "Options",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
 
