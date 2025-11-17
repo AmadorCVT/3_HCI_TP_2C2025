@@ -8,6 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.example.listi.R
 
 @Composable
 fun DeleteCategoryDialog(
@@ -15,16 +17,17 @@ fun DeleteCategoryDialog(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ) {
+    val delete_text = stringResource(R.string.delete_category_dialog)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "Eliminar categoría",
+                text = stringResource(R.string.delete_category_dialog_title),
                 style = MaterialTheme.typography.headlineMedium
             )
         },
         text = {
-            Text(text = "¿Está seguro que quiere borrar la categoría \"$categoryName\"?")
+            Text(text = "$delete_text \"$categoryName\"?")
         },
         confirmButton = {
             Button(
@@ -34,12 +37,12 @@ fun DeleteCategoryDialog(
                     contentColor = Color.White
                 )
             ) {
-                Text("Confirmar")
+                Text(stringResource(R.string.confirm))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
