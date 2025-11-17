@@ -67,24 +67,6 @@ fun FriendCard(
             style = MaterialTheme.typography.headlineSmall,
             )
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        // Botón menú de tres puntos
-        //TODO: hacer que funcione lo de elminar
-        Box {
-            IconButton(onClick = { menuExpanded = true }) {
-                Image(Icons.Default.MoreVert, contentDescription = "Más opciones")
-            }
-
-            ReusedDropdownMenu(
-                expanded = menuExpanded,
-                onDismiss = { menuExpanded = false },
-                actions = listOf(
-
-                    ActionItem("Eliminar") { /* TODO */ }
-                )
-            )
-        }
     }
 }
 
