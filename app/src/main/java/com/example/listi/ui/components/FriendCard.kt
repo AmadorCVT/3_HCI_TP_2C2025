@@ -44,7 +44,7 @@ fun FriendCard(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Icono / avatar
+        // Icono avatar
         Box(
             modifier = Modifier
                 .size(40.dp)

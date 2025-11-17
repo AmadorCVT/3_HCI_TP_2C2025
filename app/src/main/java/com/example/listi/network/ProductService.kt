@@ -9,13 +9,13 @@ import retrofit2.http.*
 
 interface ProductService {
 
-    // ---- Crear un producto ----
+    // Crear un producto
     @POST("api/products")
     fun createProduct(
         @Body body: ProductRequest
     ): Call<Product>
 
-    // ---- Obtener lista de productos con filtros opcionales ----
+    // Obtener lista de productos con filtros opcionales
     @GET("api/products")
     fun getProducts(
         @Query("name") name: String? = null,
@@ -26,20 +26,20 @@ interface ProductService {
         @Query("order") order: String = "ASC"
     ): Call<ProductListResponse>
 
-    // ---- Obtener un producto por ID ----
+    // Obtener un producto por ID
     @GET("api/products/{id}")
     fun getProductById(
         @Path("id") id: Int
     ): Call<Product>
 
-    // ---- Actualizar un producto ----
+    // Actualizar un producto
     @PUT("api/products/{id}")
     fun updateProduct(
         @Path("id") id: Int,
         @Body body: ProductRequest
     ): Call<ProductResponse>
 
-    // ---- Eliminar un producto ----
+    // Eliminar un producto
     @DELETE("api/products/{id}")
     fun deleteProduct(
         @Path("id") id: Int

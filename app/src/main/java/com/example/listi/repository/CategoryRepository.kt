@@ -36,7 +36,6 @@ class CategoryRepository(private val api: CategoryService) {
             val response = api.createCategory(request)
             if (response.isSuccessful) {
                 val createdResponse = response.body()!!
-                // convertimos el CategoryResponse a Category manualmente
                 val created = Category(
                     id = createdResponse.id,
                     name = createdResponse.name,

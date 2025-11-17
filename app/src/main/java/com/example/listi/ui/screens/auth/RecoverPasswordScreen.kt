@@ -62,7 +62,7 @@ fun ResetPasswordScreen(
     val passwordChanged by authViewModel.passwordChanged.collectAsState()
     val errorMessage by authViewModel.errorMessage.collectAsState()
 
-    // Cuando la contraseña fue cambiada exitosamente → volver al login
+    // Cuando la contraseña fue cambiada exitosamente, volver al login
     LaunchedEffect(passwordChanged) {
         if (passwordChanged) {
             snackbarHostState.showSnackbar(passwordUpdatedMessage)

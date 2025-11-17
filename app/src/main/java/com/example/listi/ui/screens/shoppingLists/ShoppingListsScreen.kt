@@ -7,21 +7,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,12 +40,7 @@ import com.example.listi.ui.components.GreenAddButton
 import com.example.listi.ui.components.ShareListDialog
 import com.example.listi.ui.components.ShoppingListCard
 import com.example.listi.ui.components.ShoppingListDialog
-import com.example.listi.ui.screens.products.CategoryViewModel
-import com.example.listi.ui.screens.products.CategoryViewModelFactory
-import com.example.listi.ui.screens.products.ProductViewModel
-import com.example.listi.ui.screens.products.ProductViewModelFactory
-import com.example.listi.ui.theme.ListiTheme
-import com.example.listi.ui.types.ShoppingListRequest
+
 import com.example.listi.ui.types.ShoppingList
 import com.example.listi.ui.types.User
 import kotlinx.coroutines.launch

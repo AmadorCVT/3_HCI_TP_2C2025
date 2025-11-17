@@ -26,7 +26,7 @@ enum class AppDestinations(
 ) {
     LISTS(R.string.lists, R.drawable.list_foreground, R.string.generic_description, ROUTE_LISTS),
     PRODUCTS(R.string.products, R.drawable.store_front_foreground, R.string.generic_description, ROUTE_PRODUCTS),
-    FRIENDS(R.string.friends, R.drawable.person_foreground, R.string.generic_description, ROUTE_FRIENDS),
+    FRIENDS(R.string.friends, R.drawable.baseline_groups_24, R.string.generic_description, ROUTE_FRIENDS),
     PROFILE(R.string.profile, R.drawable.person_foreground, R.string.generic_description, ROUTE_PROFILE),
     LOGIN(R.string.login, R.drawable.person_foreground, R.string.generic_description, ROUTE_LOGIN),
 }

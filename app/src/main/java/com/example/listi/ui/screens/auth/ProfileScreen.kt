@@ -224,7 +224,7 @@ fun ProfileScreen(
                             .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // Top-left: botón para cambiar contraseña
+                        //botón para cambiar contraseña
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -335,7 +335,6 @@ fun ProfileScreen(
 
                         Spacer(modifier = Modifier.height(12.dp))
 
-                        // Editable name and surname
                         if (isEditing) {
                             OutlinedTextField(
                                 value = editName,
@@ -353,11 +352,8 @@ fun ProfileScreen(
 
                             Spacer(modifier = Modifier.height(12.dp))
 
-                            // Save / Cancel
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 ElevatedButton(onClick = {
-                                    // Save changes
-                                    // Construir metadata nueva fusionando existente y foto pendiente
                                     val existing = user?.metadata?.toMutableMap() ?: mutableMapOf()
                                     if (pendingPhotoBase64 != null) {
                                         existing["profile_photo"] = pendingPhotoBase64!!
@@ -371,7 +367,6 @@ fun ProfileScreen(
                                 }
 
                                 TextButton(onClick = {
-                                    // Cancel edits, reset fields
                                     isEditing = false
                                     editName = user?.name ?: ""
                                     editSurname = user?.surname ?: ""
@@ -382,7 +377,6 @@ fun ProfileScreen(
                             Spacer(modifier = Modifier.height(12.dp))
 
                         } else {
-                            // Display fields read-only
                             ProfileField(label = stringResource(R.string.profile_name_label), value = if (name.isBlank()) stringResource(R.string.profile_placeholder_dash) else name)
                             Spacer(modifier = Modifier.height(10.dp))
 
@@ -422,7 +416,6 @@ fun ProfileScreen(
                         confirmButton = {
                             Button(
                                 onClick = {
-                                    // Ejecutar logout si el ViewModel está presente
                                     authViewModel?.logout()
                                     showLogoutDialog = false
                                 },
@@ -443,7 +436,7 @@ fun ProfileScreen(
                     )
                 }
 
-                // Dialogo cuando la imagen es demasiado grande (usa la variable showImageTooLargeDialog)
+                // Dialogo cuando la imagen es demasiado grande
                 if (showImageTooLargeDialog) {
                     AlertDialog(
                         onDismissRequest = { showImageTooLargeDialog = false },
@@ -561,7 +554,7 @@ fun ProfileScreen(
                                     } else if (newPass.length < 8) {
                                         changeError = changeErrorTooShortStr
                                     } else {
-                                        // Llamar a changePassword (actual -> nueva)
+                                        // Llamar a changePassword
                                         passwordOperationCompleted = true
                                         authViewModel?.changePassword(currentPassword.trim(), newPass.trim())
                                         // no cerrar el diálogo aquí; lo cerramos cuando recibamos la respuesta y mostremos el snackbar
@@ -586,7 +579,7 @@ fun ProfileScreen(
                     )
                 }
 
-                // Mostrar resultado (éxito / error) después de intentar cambiar la contraseña
+                // Mostrar resultado después de intentar cambiar la contraseña
                 val passwordChanged by authViewModel.passwordChanged.collectAsState()
                 val passwordErrorMessage by authViewModel.errorMessage.collectAsState()
 
@@ -652,10 +645,4 @@ private fun ProfileField(label: String, value: String) {
             color = MaterialTheme.colorScheme.onBackground
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewProfileScreen() {
-   //ProfileScreen()
 }

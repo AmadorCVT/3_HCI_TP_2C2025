@@ -20,7 +20,7 @@ fun BottomBar(
     ) {
         AppDestinations.entries.forEach { item ->
 
-            // Ignorar las secciones de autenticacion
+            // Ignora las secciones de autenticacion
             if (item.route != ROUTE_LOGIN)
                  NavigationBarItem(
                     icon = {
