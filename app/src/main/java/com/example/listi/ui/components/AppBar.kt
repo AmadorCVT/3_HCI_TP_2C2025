@@ -31,14 +31,6 @@ fun AppTopBar(title: String) {
                 style = MaterialTheme.typography.headlineMedium
             )
         },
-        navigationIcon = {
-            IconButton(onClick = { /* handle back */ }) {
-                Icon(
-                    painterResource(R.drawable.arrow_back_foreground),
-                    contentDescription = "Back"
-                )
-            }
-        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
