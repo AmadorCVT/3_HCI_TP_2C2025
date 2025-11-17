@@ -11,6 +11,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.example.listi.ui.theme.ListiGreen
 
 private val DarkColorScheme = darkColorScheme(
     primary = DarkPrimaryGreen,
@@ -21,14 +22,15 @@ private val DarkColorScheme = darkColorScheme(
 
     background = DarkBackground,
     surface = DarkSurface,
-    surfaceVariant = DarkGrey,
+    surfaceVariant = LightGreen,
 
     onPrimary = Color.Black,
     onSecondary = Color.Black,
     onTertiary = Color.Black,
 
     onBackground = White,
-    onSurface = White
+    onSurface = White ,
+    tertiaryFixed = ListiGreen,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -39,6 +41,7 @@ private val LightColorScheme = lightColorScheme(
     tertiary = Green,
     background = backColor,
     surface = White,
+    tertiaryFixed = ListiGreen,
     onPrimary = Green,
     onSecondary = White,
     onTertiary = White,

@@ -17,12 +17,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.listi.ui.theme.DarkGreen
-import com.example.listi.ui.theme.ListiGreen
-import com.example.listi.ui.theme.DarkGrey
-import com.example.listi.ui.theme.DarkGray
-import com.example.listi.ui.theme.White
+
 import com.example.listi.R
+import com.example.listi.ui.theme.DarkGrey
+import com.example.listi.ui.theme.ListiGreen
+import com.example.listi.ui.theme.ListiTheme
+import com.example.listi.ui.theme.White
 import kotlinx.coroutines.launch
 
 @Composable
@@ -218,8 +218,8 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                     },
                     enabled = isCreateEnabled,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isCreateEnabled) ListiGreen else DarkGrey,
-                        contentColor = if (isCreateEnabled) White else DarkGray
+                        containerColor = if (isCreateEnabled) MaterialTheme.colorScheme.tertiaryFixed else DarkGrey,
+                        contentColor = if (isCreateEnabled) White else DarkGrey
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
