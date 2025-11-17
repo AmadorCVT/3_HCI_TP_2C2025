@@ -225,8 +225,14 @@ fun ShoppingListsCards(
             Button(
                 onClick = { selectedButton = "all" },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedButton == "all") MaterialTheme.colorScheme.surfaceVariant  else Color.Transparent,
-                    contentColor = if (selectedButton == "all") Color.White else Color.Black
+                    containerColor = if (selectedButton == "all")
+                        MaterialTheme.colorScheme.surfaceVariant
+                    else
+                        Color.Transparent,
+                    contentColor = if (selectedButton == "all")
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    else
+                        MaterialTheme.colorScheme.onBackground
                 )
             ) {
                 Text(stringResource(R.string.all))
