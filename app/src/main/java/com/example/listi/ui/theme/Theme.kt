@@ -29,7 +29,7 @@ private val DarkColorScheme = darkColorScheme(
     onTertiary = Color.Black,
 
     onBackground = White,
-    onSurface = White ,
+    onSurface =DarkGrey ,
     tertiaryFixed = ListiGreen,
     error = Color.Red
 )

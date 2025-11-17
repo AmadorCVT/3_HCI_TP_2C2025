@@ -248,7 +248,7 @@ fun LoginScreen(
                             },
                             enabled = isLoginEnabled,
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = if (isLoginEnabled) MaterialTheme.colorScheme.tertiaryFixed else MaterialTheme.colorScheme.primary,
+                                containerColor = if (isLoginEnabled) MaterialTheme.colorScheme.tertiaryFixed else MaterialTheme.colorScheme.surface,
                                 contentColor = MaterialTheme.colorScheme.onSecondary
                             ),
                             modifier = Modifier
@@ -258,7 +258,7 @@ fun LoginScreen(
                         ) {
                             Text(
                                 text = stringResource(R.string.login),
-                                color = if (isLoginEnabled) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurface,
+                                color = if (isLoginEnabled) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.tertiaryFixed,
                                 fontSize = if (isLandscape) 16.sp else 18.sp,
                                 fontWeight = FontWeight.SemiBold
                             )

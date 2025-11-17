@@ -427,7 +427,8 @@ fun ProfileScreen(
                 if (showLogoutDialog) {
                     AlertDialog(
                         onDismissRequest = { showLogoutDialog = false },
-                        title = { Text(text = stringResource(R.string.logout_confirm_title)) },
+                        title = { Text(text = stringResource(R.string.logout_confirm_title),
+                            color = MaterialTheme.colorScheme.surfaceVariant) },
                         text = { Text(text = stringResource(R.string.logout_confirm_message),
                             color = MaterialTheme.colorScheme.surfaceVariant) },
 
