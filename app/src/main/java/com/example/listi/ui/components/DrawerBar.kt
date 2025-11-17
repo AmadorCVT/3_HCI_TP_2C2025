@@ -31,6 +31,11 @@ import androidx.compose.ui.unit.dp
 import com.example.listi.ui.navigation.AppDestinations
 import com.example.listi.ui.navigation.ROUTE_LISTS
 import com.example.listi.ui.navigation.ROUTE_LOGIN
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import com.example.listi.R
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DrawerBar(
@@ -51,17 +56,12 @@ fun DrawerBar(
                 modifier = Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "User Profile",
-                    modifier = Modifier.size(40.dp),
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "Username",
-                    color = MaterialTheme.colorScheme.secondary
-                )
+                val logoSize = 65.dp
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "Logo",
+                    modifier = Modifier.size(logoSize))
+
             }
             Spacer(Modifier.height(12.dp))
             AppDestinations.entries.forEach { item ->
