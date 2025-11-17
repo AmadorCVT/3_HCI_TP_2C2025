@@ -26,7 +26,9 @@ fun AppTopBar(title: String) {
             Text(
                 text = title,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.headlineMedium
             )
         },
         navigationIcon = {
