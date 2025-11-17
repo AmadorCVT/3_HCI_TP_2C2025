@@ -26,15 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listi.R
-import com.example.listi.ui.theme.DarkGreen
-import com.example.listi.ui.theme.ListiGreen
-import com.example.listi.ui.theme.DarkGrey
-import com.example.listi.ui.theme.DarkGray
 import com.example.listi.ui.theme.White
-import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalConfiguration
 import android.content.res.Configuration
-import com.example.listi.ui.theme.LightGreen
 
 @Composable
 fun LoginScreen(
@@ -108,7 +102,7 @@ fun LoginScreen(
                                     .size(circleSize)
                                     .offset(y = -circleSize * 0.4f)
                                     .background(
-                                        color = ListiGreen,
+                                        color = MaterialTheme.colorScheme.tertiaryFixed,
                                         shape = CircleShape
                                     )
                             )
@@ -129,7 +123,7 @@ fun LoginScreen(
                                 Spacer(modifier = Modifier.height(8.dp))
 
                                 Surface(
-                                    color = ListiGreen,
+                                    color = MaterialTheme.colorScheme.tertiaryFixed,
                                     shape = RoundedCornerShape(8.dp)
                                 ) {
                                     Text(
@@ -170,7 +164,7 @@ fun LoginScreen(
                     ) {
                         if (isLandscape) {
                             Surface(
-                                color = ListiGreen,
+                                color = MaterialTheme.colorScheme.onTertiaryFixed,
                                 shape = RoundedCornerShape(8.dp),
                                 modifier = Modifier.padding(bottom = spacerSmall)
                             ) {
@@ -239,7 +233,7 @@ fun LoginScreen(
                             },
                             enabled = isLoginEnabled,
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = if (isLoginEnabled) ListiGreen else LightGreen,
+                                containerColor = if (isLoginEnabled) MaterialTheme.colorScheme.onTertiaryFixed else MaterialTheme.colorScheme.primary,
                                 contentColor = White
                             ),
                             modifier = Modifier
@@ -249,7 +243,7 @@ fun LoginScreen(
                         ) {
                             Text(
                                 text = stringResource(R.string.login),
-                                color = if (isLoginEnabled) White else DarkGray,
+                                color = if (isLoginEnabled) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurface,
                                 fontSize = if (isLandscape) 16.sp else 18.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
@@ -258,7 +252,7 @@ fun LoginScreen(
                         TextButton(onClick = { onForgotPasswordClick?.invoke() }) {
                             Text(
                                 text = stringResource(R.string.forgot_password),
-                                color = DarkGreen,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                                 fontSize = if (isLandscape) 12.sp else 14.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -266,7 +260,7 @@ fun LoginScreen(
                         TextButton(onClick = { onVerifyAccount?.invoke() }) {
                             Text(
                                 text = stringResource(R.string.verify),
-                                color = DarkGreen,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Medium
                             )
@@ -276,11 +270,11 @@ fun LoginScreen(
 
                         OutlinedButton(
                             onClick = { onCreateAccountClick?.invoke() },
-                            border = BorderStroke(1.dp, DarkGreen),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.surfaceVariant),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(buttonHeight),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = DarkGreen)
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.surfaceVariant)
                         ) {
                             Text(
                                 text = stringResource(R.string.registration),
