@@ -39,6 +39,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
@@ -121,10 +122,13 @@ fun ResetPasswordScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = Color.LightGray,
-                    cursorColor = MaterialTheme.colorScheme.surfaceVariant
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 
@@ -140,10 +144,13 @@ fun ResetPasswordScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = Color.LightGray,
-                    cursorColor = MaterialTheme.colorScheme.surfaceVariant
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 

@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -127,12 +128,13 @@ fun RecoverPasswordScreenCode(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = LightGreen,
-                    unfocusedBorderColor = Color.LightGray,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    cursorColor = DarkGreen
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 

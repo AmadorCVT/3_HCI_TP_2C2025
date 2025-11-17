@@ -23,9 +23,12 @@ fun DeleteCategoryDialog(
         title = {
             Text(
                 text = stringResource(R.string.delete_category_dialog_title),
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.surfaceVariant
             )
         },
+
+        containerColor = MaterialTheme.colorScheme.onSurface,
         text = {
             Text(text = "$delete_text \"$categoryName\"?")
         },

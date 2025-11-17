@@ -340,14 +340,30 @@ fun ProfileScreen(
                                 value = editName,
                                 onValueChange = { editName = it },
                                 label = { Text(stringResource(R.string.profile_name_label)) },
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = TextFieldDefaults.colors(
+                                    focusedTextColor = MaterialTheme.colorScheme.secondary,
+                                    unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                                    unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                    focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                    unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                                )
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                             OutlinedTextField(
                                 value = editSurname,
                                 onValueChange = { editSurname = it },
                                 label = { Text(stringResource(R.string.profile_surname_label)) },
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = TextFieldDefaults.colors(
+                                    focusedTextColor = MaterialTheme.colorScheme.secondary,
+                                    unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                                    unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                    focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                    unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                                )
                             )
 
                             Spacer(modifier = Modifier.height(12.dp))
@@ -412,7 +428,10 @@ fun ProfileScreen(
                     AlertDialog(
                         onDismissRequest = { showLogoutDialog = false },
                         title = { Text(text = stringResource(R.string.logout_confirm_title)) },
-                        text = { Text(text = stringResource(R.string.logout_confirm_message)) },
+                        text = { Text(text = stringResource(R.string.logout_confirm_message),
+                            color = MaterialTheme.colorScheme.surfaceVariant) },
+
+                        containerColor = MaterialTheme.colorScheme.onSurface,
                         confirmButton = {
                             Button(
                                 onClick = {
@@ -441,12 +460,15 @@ fun ProfileScreen(
                     AlertDialog(
                         onDismissRequest = { showImageTooLargeDialog = false },
                         title = { Text(text = "Image too large") },
-                        text = { Text(text = "The selected image exceeds the 2 MB limit. Please choose a smaller file.") },
+                        text = { Text(text = "The selected image exceeds the 2 MB limit. Please choose a smaller file.",
+                            color = MaterialTheme.colorScheme.surfaceVariant) },
                         confirmButton = {
                             Button(onClick = { showImageTooLargeDialog = false }) {
                                 Text(text = "OK")
                             }
-                        }
+                        },
+
+                        containerColor = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 

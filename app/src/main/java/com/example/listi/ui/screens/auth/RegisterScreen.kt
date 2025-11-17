@@ -109,7 +109,15 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -126,7 +134,15 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -144,7 +160,15 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -162,7 +186,15 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                         )
                     },
                     visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -179,7 +211,15 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                         )
                     },
                     visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))

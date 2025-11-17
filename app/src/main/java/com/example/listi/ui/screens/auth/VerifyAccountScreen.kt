@@ -112,7 +112,15 @@ fun VerifyAccountScreen(
                         contentDescription = "Email",
                         modifier = Modifier.size(24.dp))
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                )
             )
 
             Spacer(Modifier.height(16.dp))
@@ -155,7 +163,15 @@ fun VerifyAccountScreen(
                         contentDescription = "check",
                         modifier = Modifier.size(24.dp))
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                )
             )
 
             Spacer(Modifier.height(24.dp))

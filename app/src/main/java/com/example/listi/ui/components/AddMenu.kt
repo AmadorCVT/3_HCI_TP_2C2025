@@ -16,6 +16,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -67,11 +68,13 @@ fun AddCategoryDialog(
                     onValueChange = { text = it },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = { Text(stringResource(R.string.category_name)) },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color(0xFF4CAF50),
-                        unfocusedBorderColor = Color(0xFF4CAF50),
-                        focusedLabelColor = Color(0xFF4CAF50),
-                        cursorColor = Color(0xFF4CAF50)
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
 
