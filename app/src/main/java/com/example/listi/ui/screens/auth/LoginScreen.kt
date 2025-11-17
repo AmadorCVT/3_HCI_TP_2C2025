@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listi.R
-import com.example.listi.ui.theme.White
 import androidx.compose.ui.platform.LocalConfiguration
 import android.content.res.Configuration
 
@@ -129,7 +128,7 @@ fun LoginScreen(
                                     Text(
                                         text = stringResource(R.string.app_name),
                                         style = MaterialTheme.typography.titleMedium,
-                                        color = White,
+                                        color = MaterialTheme.colorScheme.onSecondary,
                                         fontSize = 20.sp,
                                         modifier = Modifier.padding(
                                             horizontal = 12.dp,
@@ -171,7 +170,7 @@ fun LoginScreen(
                                 Text(
                                     text = stringResource(R.string.app_name),
                                     style = MaterialTheme.typography.titleMedium,
-                                    color = White,
+                                    color = MaterialTheme.colorScheme.onSecondary,
                                     fontSize = titleFontSize,
                                     modifier = Modifier.padding(
                                         horizontal = 12.dp,
@@ -233,8 +232,8 @@ fun LoginScreen(
                             },
                             enabled = isLoginEnabled,
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = if (isLoginEnabled) MaterialTheme.colorScheme.onTertiaryFixed else MaterialTheme.colorScheme.primary,
-                                contentColor = White
+                                containerColor = if (isLoginEnabled) MaterialTheme.colorScheme.tertiaryFixed else MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onSecondary
                             ),
                             modifier = Modifier
                                 .fillMaxWidth()

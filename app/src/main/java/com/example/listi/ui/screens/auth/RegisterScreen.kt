@@ -2,6 +2,8 @@ package com.example.listi.ui.screens.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -10,21 +12,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-
 import com.example.listi.R
-import com.example.listi.ui.theme.DarkGrey
-import com.example.listi.ui.theme.ListiGreen
-import com.example.listi.ui.theme.ListiTheme
-import com.example.listi.ui.theme.White
-import kotlinx.coroutines.launch
-
 @Composable
 fun RegisterScreen(authViewModel: AuthViewModel,
                    goLogin: (() -> Unit)? = null,
@@ -86,6 +78,7 @@ fun RegisterScreen(authViewModel: AuthViewModel,
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 32.dp, vertical = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -218,8 +211,8 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                     },
                     enabled = isCreateEnabled,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isCreateEnabled) MaterialTheme.colorScheme.tertiaryFixed else DarkGrey,
-                        contentColor = if (isCreateEnabled) White else DarkGrey
+                        containerColor = if (isCreateEnabled) MaterialTheme.colorScheme.tertiaryFixed else MaterialTheme.colorScheme.primary,
+                        contentColor = if (isCreateEnabled) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.primary
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
