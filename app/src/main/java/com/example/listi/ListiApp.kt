@@ -11,10 +11,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.navOptions
 import com.example.listi.network.RetrofitInstance
 import com.example.listi.repository.AuthRepository
 import com.example.listi.ui.components.AppTopBar
@@ -25,19 +23,15 @@ import com.example.listi.ui.navigation.AppNavGraph
 import com.example.listi.ui.navigation.ROUTE_FRIENDS
 import com.example.listi.ui.navigation.ROUTE_LISTS
 import com.example.listi.ui.navigation.ROUTE_LOGIN
-import com.example.listi.ui.navigation.ROUTE_PASSWORD
-import com.example.listi.ui.navigation.ROUTE_PASSWORD_CODE
+
 import com.example.listi.ui.navigation.ROUTE_PRODUCTS
 import com.example.listi.ui.navigation.ROUTE_PROFILE
-import com.example.listi.ui.navigation.ROUTE_REGISTER
-import com.example.listi.ui.navigation.ROUTE_VERIFY
+
 import com.example.listi.ui.theme.ListiTheme
 import com.example.listi.ui.screens.auth.AuthViewModel
 import com.example.listi.ui.screens.auth.AuthViewModelFactory
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
@@ -46,15 +40,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.Alignment
 import com.example.listi.ui.components.routeToTitle
 import com.example.listi.ui.navigation.Constants
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -214,67 +203,16 @@ fun ListiApp(
                 }
 
 
-                // Solo funciona el swipe para celulares
-                val pagerRoutes = listOf(
-                    ROUTE_LISTS,
-                    ROUTE_PRODUCTS,
-                    ROUTE_FRIENDS,
-                    ROUTE_PROFILE
-                )
-
-                val usePager = !isTablet && currentRoute in pagerRoutes
-                var pagerState: PagerState? = null
-
-                if (usePager) {
-                    val initialIndex = pagerRoutes.indexOf(currentRoute)
-                    val state = rememberPagerState(
-                        initialPage = initialIndex,
-                        pageCount = { pagerRoutes.size }
-                    )
-                    pagerState = state
-
-                    val coroutine = rememberCoroutineScope()
-
-                    LaunchedEffect(state.currentPage) {
-                        val newRoute = pagerRoutes[state.currentPage]
-                        if (newRoute != currentRoute) {
-                            navController.navigate(newRoute)
-                        }
-                    }
-
-                    LaunchedEffect(currentRoute) {
-                        val targetIndex = pagerRoutes.indexOf(currentRoute)
-                        if (targetIndex != state.currentPage) {
-                            coroutine.launch { state.scrollToPage(targetIndex) }
-                        }
-                    }
-                }
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
                 ) {
-                    if (usePager) {
-                        HorizontalPager(
-                            state = pagerState!!,
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            AppNavGraph(
-                                navController = navController,
-                                authViewModel = authViewModel,
-                                startDestination = startDestination!!,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
-                    } else {
-                        AppNavGraph(
-                            navController = navController,
-                            authViewModel = authViewModel,
-                            startDestination = startDestination!!,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
+                    AppNavGraph(
+                        navController = navController,
+                        authViewModel = authViewModel,
+                        startDestination = startDestination!!,
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
         )
