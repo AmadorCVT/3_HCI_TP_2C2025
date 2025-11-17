@@ -234,7 +234,7 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                     } else {
                         Text(
                             text = stringResource(R.string.signin),
-                            color = if (isCreateEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
+                            color = if (isCreateEnabled) White else MaterialTheme.colorScheme.secondary,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.SemiBold
                         )

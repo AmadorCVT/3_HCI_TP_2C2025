@@ -13,15 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.listi.ui.theme.DarkGreen
-import com.example.listi.ui.theme.DarkGrey
-import com.example.listi.ui.theme.LightGreen
+
 
 @Composable
 fun ShareListDialog(
@@ -37,7 +35,7 @@ fun ShareListDialog(
             Text(
                 text = "${stringResource(R.string.share)} \"$listName\"",
                 style = MaterialTheme.typography.headlineMedium,
-                color = DarkGreen
+                color = MaterialTheme.colorScheme.surfaceVariant
             )
         },
         text = {
@@ -49,7 +47,7 @@ fun ShareListDialog(
                     leadingIcon = {
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.mail_foreground),
-                            tint = DarkGreen,
+                            tint = MaterialTheme.colorScheme.surfaceVariant,
                             contentDescription = "mail",
                             modifier = Modifier.size(24.dp)
                         )
@@ -78,7 +76,7 @@ fun ShareListDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(text =stringResource(R.string.cancel), color = DarkGrey)
+                Text(text =stringResource(R.string.cancel), color = MaterialTheme.colorScheme.secondary)
             }
         },
         shape = RoundedCornerShape(12.dp)

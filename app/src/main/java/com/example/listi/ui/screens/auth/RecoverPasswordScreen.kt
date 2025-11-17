@@ -34,9 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.listi.ui.theme.DarkGreen
-import com.example.listi.ui.theme.DarkGrey
-import com.example.listi.ui.theme.LightGreen
+
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Password
@@ -86,7 +84,7 @@ fun ResetPasswordScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFF3F8D6))
+                .background(MaterialTheme.colorScheme.background)
                 .padding(padding)
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -98,7 +96,7 @@ fun ResetPasswordScreen(
                 text = stringResource(R.string.password_recovery),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                color = DarkGreen,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -107,7 +105,7 @@ fun ResetPasswordScreen(
             Text(
                 text = stringResource(R.string.password_recovery_steps),
                 style = MaterialTheme.typography.bodyLarge,
-                color = DarkGrey,
+                color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -119,14 +117,14 @@ fun ResetPasswordScreen(
                 onValueChange = { code = it },
                 placeholder = { Text(stringResource(R.string.change_password_verification_code_label)) },
                 leadingIcon = {
-                    Icon(Icons.Default.Lock, contentDescription = null, tint = DarkGreen)
+                    Icon(Icons.Default.Lock, contentDescription = null, tint = MaterialTheme.colorScheme.surfaceVariant)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = LightGreen,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = Color.LightGray,
-                    cursorColor = DarkGreen
+                    cursorColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             )
 
@@ -138,14 +136,14 @@ fun ResetPasswordScreen(
                 onValueChange = { newPassword = it },
                 placeholder = { Text(stringResource(R.string.profile_new_password)) },
                 leadingIcon = {
-                    Icon(Icons.Default.Password, contentDescription = null, tint = DarkGreen)
+                    Icon(Icons.Default.Password, contentDescription = null, tint = MaterialTheme.colorScheme.surfaceVariant)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = LightGreen,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = Color.LightGray,
-                    cursorColor = DarkGreen
+                    cursorColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             )
 
@@ -162,8 +160,8 @@ fun ResetPasswordScreen(
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = LightGreen,
-                    contentColor = DarkGreen
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.surfaceVariant
                 ),
                 modifier = Modifier
                     .fillMaxWidth()

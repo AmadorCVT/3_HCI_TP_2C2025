@@ -25,9 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.listi.ui.theme.DarkGreen
-import com.example.listi.ui.theme.DarkGrey
-import com.example.listi.ui.theme.LightGreen
+
 import com.example.listi.ui.types.User
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +46,7 @@ fun RemoveShareListDialog(
             Text(
                 text = "${stringResource(R.string.remove_share)} - \"$listName\"",
                 style = MaterialTheme.typography.headlineMedium,
-                color = DarkGreen
+                color = MaterialTheme.colorScheme.surfaceVariant
             )
         },
         text = {
@@ -103,7 +101,7 @@ fun RemoveShareListDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(text =stringResource(R.string.cancel), color = DarkGrey)
+                Text(text =stringResource(R.string.cancel), color = MaterialTheme.colorScheme.secondary)
             }
         },
         shape = RoundedCornerShape(12.dp)

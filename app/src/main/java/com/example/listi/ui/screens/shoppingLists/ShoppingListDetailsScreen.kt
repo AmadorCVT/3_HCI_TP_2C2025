@@ -475,7 +475,7 @@ fun ShoppingListDetailsPreview() {
                         Text(
                             text = stringResource(R.string.purchase),
                             color = White,
-                            fontSize = 15.sp,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
