@@ -463,6 +463,8 @@ fun ProfileScreen(
                         onDismissRequest = { showChangePasswordDialog = false },
                         title = { Text(text = stringResource(R.string.change_password_dialog_title),
                             color = MaterialTheme.colorScheme.surfaceVariant) },
+
+                        containerColor = MaterialTheme.colorScheme.onSurface,
                         text = {
                             Column {
                                 OutlinedTextField(
