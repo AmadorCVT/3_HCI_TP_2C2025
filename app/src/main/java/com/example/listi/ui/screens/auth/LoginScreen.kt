@@ -198,7 +198,15 @@ fun LoginScreen(
                                 )
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = TextFieldDefaults.colors(
+                                focusedTextColor = MaterialTheme.colorScheme.secondary,
+                                unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                                unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                            )
                         )
 
                         Spacer(modifier = Modifier.height(spacerSmall))
@@ -216,7 +224,15 @@ fun LoginScreen(
                                 )
                             },
                             visualTransformation = PasswordVisualTransformation(),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = TextFieldDefaults.colors(
+                                focusedTextColor = MaterialTheme.colorScheme.secondary,
+                                unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                                unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                            )
                         )
 
                         Spacer(modifier = Modifier.height(spacerMedium))

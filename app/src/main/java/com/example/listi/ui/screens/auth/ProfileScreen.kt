@@ -58,6 +58,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -430,7 +431,8 @@ fun ProfileScreen(
                                     contentColor = MaterialTheme.colorScheme.onError
                                 )
                             ) {
-                                Text(text = stringResource(R.string.logout_confirm_confirm))
+                                Text(text = stringResource(R.string.logout_confirm_confirm),
+                                    color = MaterialTheme.colorScheme.surfaceVariant)
                             }
                         },
                         dismissButton = {
@@ -459,7 +461,8 @@ fun ProfileScreen(
                 if (showChangePasswordDialog) {
                     AlertDialog(
                         onDismissRequest = { showChangePasswordDialog = false },
-                        title = { Text(text = stringResource(R.string.change_password_dialog_title)) },
+                        title = { Text(text = stringResource(R.string.change_password_dialog_title),
+                            color = MaterialTheme.colorScheme.surfaceVariant) },
                         text = {
                             Column {
                                 OutlinedTextField(
@@ -474,7 +477,15 @@ fun ProfileScreen(
                                             val icon = if (showCurrentPassword) ImageVector.vectorResource(R.drawable.visibility_off_foreground) else ImageVector.vectorResource(R.drawable.visibility_foreground)
                                             Icon(imageVector = icon, contentDescription = null)
                                         }
-                                    }
+                                    },
+                                    colors = TextFieldDefaults.colors(
+                                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                                    )
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
@@ -491,7 +502,15 @@ fun ProfileScreen(
                                             val icon = if (showNewPassword) ImageVector.vectorResource(R.drawable.visibility_off_foreground) else ImageVector.vectorResource(R.drawable.visibility_foreground)
                                             Icon(imageVector = icon, contentDescription = null)
                                         }
-                                    }
+                                    },
+                                    colors = TextFieldDefaults.colors(
+                                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                                    )
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
@@ -508,7 +527,15 @@ fun ProfileScreen(
                                             val icon = if (showConfirmPassword) ImageVector.vectorResource(R.drawable.visibility_off_foreground) else ImageVector.vectorResource(R.drawable.visibility_foreground)
                                             Icon(imageVector = icon, contentDescription = null)
                                         }
-                                    }
+                                    },
+                                    colors = TextFieldDefaults.colors(
+                                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                                        unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                                        focusedContainerColor = MaterialTheme.colorScheme.onSurface,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.onSurface
+                                    )
                                 )
 
                                 changeError?.let { errorMessage ->
