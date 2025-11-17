@@ -35,7 +35,6 @@ class ProductRepository(private val api: ProductService) {
             val response = api.createProduct(request).awaitResponse()
             if (response.isSuccessful) {
                 val product = response.body()!!
-                // Actualizo cache local
                 cachedProducts = (cachedProducts ?: emptyList()) + product
                 product
             } else {

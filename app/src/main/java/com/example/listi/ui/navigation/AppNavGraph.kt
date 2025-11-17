@@ -61,7 +61,7 @@ fun AppNavGraph(
     var lastBackPressed by remember { mutableStateOf(0L) }
     val exitRoutes = listOf(ROUTE_LISTS, ROUTE_PRODUCTS, ROUTE_FRIENDS, ROUTE_PROFILE)
 
-    // Crear los viewModels asi se pueden pasar entre las vistas que los requieren
+    // Crear los viewModels asi se pueden pasar entre las vistas que los necesitan
     val productViewModel: ProductViewModel =
         viewModel(factory = ProductViewModelFactory())
 
@@ -122,7 +122,7 @@ fun AppNavGraph(
                 shoppingListViewModel = shoppingListsViewModel
         ) }
 
-        // Perfil: pasar el authViewModel y el onChangePhoto que lanza el selector
+        // Pasar el authViewModel y el onChangePhoto que lanza el selector
         composable(ROUTE_PROFILE) {
             ProfileScreen(authViewModel = authViewModel)
         }

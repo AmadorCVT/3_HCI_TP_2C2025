@@ -10,7 +10,7 @@ interface ShoppingListService {
     @POST("/api/shopping-lists")
     suspend fun createShoppingList(@Body request: ShoppingListRequest): Response<ShoppingListResponse>
 
-    // Obtener lista de ShoppingList (con filtros opcionales)
+    // Obtener lista de ShoppingList
     @GET("/api/shopping-lists")
     suspend fun getShoppingLists(
         @Query("name") name: String? = null,

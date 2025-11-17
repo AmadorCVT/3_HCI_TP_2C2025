@@ -48,7 +48,6 @@ class ShoppingListRepository (private val api: ShoppingListService) {
             val response = api.createShoppingList(request)
             if (response.isSuccessful) {
                 val createdResponse = response.body()!!
-                // convertimos el CategoryResponse a Category manualmente
                 val created = ShoppingList(
                     id = createdResponse.id,
                     name = createdResponse.name,

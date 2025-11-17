@@ -19,7 +19,7 @@ class AuthInterceptor(
             return chain.proceed(originalRequest)
         }
 
-        // Si hay token → lo agregamos al header
+        // Si hay token, lo agregamos al header
         val newRequest = originalRequest.newBuilder()
             .addHeader("Authorization", "Bearer $token")
             .build()

@@ -89,11 +89,9 @@ class AuthRepository(private val context: Context) {
     suspend fun changePassword(currentPassword: String, newPassword: String): Response<Unit> {
         val request = ChangePasswordRequest(currentPassword = currentPassword, newPassword = newPassword)
         try {
-            // Log the serialized JSON so we can inspect the exact payload sent
             val json = Json.encodeToString(request)
             Log.d("AuthRepository", "changePassword request json: $json")
         } catch (_: Exception) {
-            // ignore logging errors
         }
         return service.changePassword(request)
     }

@@ -443,14 +443,12 @@ fun ShoppingListDetailsPreview() {
                     .padding(16.dp)
             ) {
 
-                // Simula encabezado
                 Text(
-                    text = "Shopping list example",
+                    text = "Shopping list",
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
 
-                // 🟩 EXACTO COMO EN TU PANTALLA REAL
                 AddedShoppingListItem(
                     items = ShoppingListItemsPreview,
                     onStatusToggle = { _, _ -> },

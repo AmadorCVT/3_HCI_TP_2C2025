@@ -227,6 +227,6 @@ fun maxWidthDp(): Int {
 }
 
 fun calculateColumns(screenWidthDp: Int): Int {
-    val minCardWidth = 240 // igual que Friends
+    val minCardWidth = 240
     return maxOf(1, screenWidthDp / minCardWidth)
 }

@@ -202,7 +202,7 @@ fun ListiApp(
                     }
                 }
 
-
+                //celular
                 Box(modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)

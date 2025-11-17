@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextOverflow
 
 
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.listi.R
 import com.example.listi.ui.theme.*
 
@@ -90,7 +89,7 @@ fun ShoppingListCard(
 
                 Text(
                     text = shoppingList.name,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant, //TODO: no me anda el color
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -150,8 +149,8 @@ fun ShoppingListCard(
 
             Spacer(Modifier.weight(0.1f))
 
-            // --- Botón de opciones ---
-            Box { // Necesario para posicionar el dropdown en el lugar exacto
+
+            Box {
                 IconButton(onClick = { menuExpanded = true }) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.more_vert_foreground),

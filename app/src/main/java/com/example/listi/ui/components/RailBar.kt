@@ -22,7 +22,6 @@ import com.example.listi.R
 import com.example.listi.ui.navigation.AppDestinations
 import com.example.listi.ui.navigation.ROUTE_LOGIN
 
-//TODO: cuando seleccionas un lugar es lila, como el predeterminado de MD3
 @Composable
 fun RailBar(
     currentRoute: String,

@@ -38,7 +38,7 @@ fun AppTopBar(title: String) {
         scrollBehavior = scrollBehavior
     )
 }
-
+//Sirve para el titulo de la topbar dentro de un shopping list y que su idioma sea el correcto
 @Composable
 fun routeToTitle(route: String): String {
     val ctx = LocalContext.current
@@ -54,10 +54,9 @@ fun routeToTitle(route: String): String {
         ROUTE_PASSWORD_CODE -> ctx.getString(R.string.route_password_code_title)
         ROUTE_PASSWORD -> ctx.getString(R.string.route_password_title)
 
-        // Rutas que tienen argumentos dinámicos
         else -> {
             if (route.startsWith(Constants.ROUTE_LIST_DETAILS))
-                ctx.getString(R.string.route_lists_title) // título especial
+                ctx.getString(R.string.route_lists_title)
             else route
         }
     }

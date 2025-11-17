@@ -1,9 +1,6 @@
 package com.example.listi.ui.screens.auth
 
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -190,7 +187,6 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
             } catch (_: Exception) {
 
             } finally {
-                // Resetear todo
                 _isLogged.value = false
                 _isVerified.value = false
                 _passwordChanged.value = false

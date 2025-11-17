@@ -10,7 +10,7 @@ interface CategoryService {
     @POST("/api/categories")
     suspend fun createCategory(@Body request: CreateCategoryRequest): Response<CategoryResponse>
 
-    // Obtener lista de categorías (con filtros opcionales)
+    // Obtener lista de categorías
     @GET("/api/categories")
     suspend fun getCategories(
         @Query("name") name: String? = null,

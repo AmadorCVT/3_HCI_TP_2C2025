@@ -78,11 +78,11 @@ fun RecoverPasswordScreenCode(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
 
-        // Fondo verde pastel como en la imagen
+        // Fondo verde como en la imagen
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFF3F8D6)) // mismo tono pastel claro
+                .background(Color(0xFFF3F8D6))
                 .padding(padding)
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
