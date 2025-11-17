@@ -24,10 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.listi.R
 
 @Composable
 fun AddCategoryDialog(
@@ -49,9 +51,9 @@ fun AddCategoryDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                // TÍTULO VERDE
+
                 Text(
-                    text = "Agregar categoría",
+                    text = stringResource(R.string.add_category_title),
                     color = Color(0xFF4CAF50),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
@@ -59,12 +61,12 @@ fun AddCategoryDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // CAMPO DE TEXTO CON BORDE VERDE
+
                 OutlinedTextField(
                     value = text,
                     onValueChange = { text = it },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("Nombre de la categoría") },
+                    placeholder = { Text(stringResource(R.string.category_name)) },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF4CAF50),
                         unfocusedBorderColor = Color(0xFF4CAF50),
@@ -80,7 +82,7 @@ fun AddCategoryDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
 
-                    // BOTÓN CANCELAR
+
                     OutlinedButton(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
@@ -88,10 +90,10 @@ fun AddCategoryDialog(
                             contentColor = Color.Gray
                         )
                     ) {
-                        Text("Cancelar")
+                        Text(stringResource(R.string.cancel))
                     }
 
-                    // BOTÓN AGREGAR
+
                     Button(
                         onClick = { if (text.isNotBlank()) onConfirm(text) },
                         modifier = Modifier.weight(1f),
@@ -100,7 +102,7 @@ fun AddCategoryDialog(
                             contentColor = Color.White
                         )
                     ) {
-                        Text("Agregar")
+                        Text(stringResource(R.string.add))
                     }
                 }
             }
@@ -111,7 +113,7 @@ fun AddCategoryDialog(
 @Preview(showBackground = true)
 @Composable
 fun AddCategoryDialogPreview() {
-    MaterialTheme { // o ListiTheme si tenés uno propio
+    MaterialTheme {
         AddCategoryDialog(
             onDismiss = {},
             onConfirm = {}
