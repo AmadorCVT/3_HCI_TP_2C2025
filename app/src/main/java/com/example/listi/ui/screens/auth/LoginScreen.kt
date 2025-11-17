@@ -164,7 +164,7 @@ fun LoginScreen(
                     ) {
                         if (isLandscape) {
                             Surface(
-                                color = MaterialTheme.colorScheme.onTertiaryFixed,
+                                color = MaterialTheme.colorScheme.tertiaryFixed,
                                 shape = RoundedCornerShape(8.dp),
                                 modifier = Modifier.padding(bottom = spacerSmall)
                             ) {
