@@ -58,7 +58,7 @@ fun ProductCard(
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
-        color = Green,
+        color = MaterialTheme.colorScheme.surface,
         shadowElevation = 2.dp
     ) {
 
@@ -72,7 +72,7 @@ fun ProductCard(
             Text(
                 text = product.name,
                 style = MaterialTheme.typography.bodyLarge,
-                color = backColor,
+                color = MaterialTheme.colorScheme.secondary,
                 fontWeight = FontWeight.Bold,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -89,9 +89,9 @@ fun ProductCard(
                         .wrapContentWidth(),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = backColor
+                        contentColor = MaterialTheme.colorScheme.secondary
                     ),
-                    border = BorderStroke(2.dp, backColor)
+                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
                 ) {
                     Text(
                         selectedCategory?.name ?: "-",
@@ -125,7 +125,7 @@ fun ProductCard(
                     Icon(
                         ImageVector.vectorResource(R.drawable.more_vert_foreground),
                         contentDescription = "Options",
-                        tint = backColor
+                        tint = MaterialTheme.colorScheme.secondary
                     )
                 }
 

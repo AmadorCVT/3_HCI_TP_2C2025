@@ -151,4 +151,9 @@
     <string name="route_verify_title">Verify</string>
     <string name="route_password_code_title">Password code</string>
     <string name="route_password_title">Restore password</string>
+    <string name="delete_category_dialog_title">Delete category</string>
+    <string name="delete_category_dialog">Are you sure you want to delete</string>
+    <string name="add_category_title">Add category</string>
+    <string name="category_name">Categories name</string>
+    <string name="add">Add</string>
 </resources>

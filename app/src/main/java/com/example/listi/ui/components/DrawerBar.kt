@@ -13,8 +13,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -53,12 +55,12 @@ fun DrawerBar(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "User Profile",
                     modifier = Modifier.size(40.dp),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    tint = MaterialTheme.colorScheme.secondary
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     text = "Username",
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
             Spacer(Modifier.height(12.dp))
@@ -71,6 +73,12 @@ fun DrawerBar(
                                 contentDescription = stringResource(item.contentDescription)
                             )
                         },
+                        colors = NavigationDrawerItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.surface,
+                            selectedTextColor = MaterialTheme.colorScheme.surface,
+                            selectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            unselectedTextColor = MaterialTheme.colorScheme.secondary
+                        ),
                         label = {
                             Text(text = stringResource(item.label))
                         },

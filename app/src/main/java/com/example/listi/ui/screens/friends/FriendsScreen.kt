@@ -115,9 +115,9 @@ fun FriendsCardList(
 
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
-                disabledContainerColor = Color.Gray,
-                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                disabledContainerColor = MaterialTheme.colorScheme.tertiary,
+                focusedTextColor = MaterialTheme.colorScheme.surface,
                 focusedLabelColor = MaterialTheme.colorScheme.surface,
                 unfocusedLabelColor = MaterialTheme.colorScheme.surface,
                 focusedLeadingIconColor = MaterialTheme.colorScheme.surface,
