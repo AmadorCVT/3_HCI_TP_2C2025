@@ -14,3 +14,8 @@ val backColor = Color(0xFFF0F4C3)
 
 val ListiGreen =  Color(0xFF43A047)
 val DarkGray = Color(0xFF212121)
+val DarkPrimaryGreen = Color(0xFF7BC379)
+val DarkPrimaryContainer = Color(0xFF3F6D3E)
+val DarkAccentGreen = Color(0xFF9ADFA4)
+val DarkBackground = Color(0xFF212121)
+val DarkSurface = Color(0xFF1A1A1A)

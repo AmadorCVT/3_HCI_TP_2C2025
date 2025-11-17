@@ -51,6 +51,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.listi.R
+import com.example.listi.network.RetrofitInstance
+import com.example.listi.repository.CategoryRepository
 import com.example.listi.ui.components.DeleteDialog
 import com.example.listi.ui.components.GreenAddButton
 import com.example.listi.ui.components.ProductRow
@@ -59,6 +61,8 @@ import com.example.listi.ui.components.ShoppingListItemDialog
 import com.example.listi.ui.components.WhiteBoxWithText
 import com.example.listi.ui.screens.friends.FriendsViewModel
 import com.example.listi.ui.screens.friends.FriendsViewModelFactory
+import com.example.listi.ui.screens.products.CategoryViewModel
+import com.example.listi.ui.screens.products.CategoryViewModelFactory
 import com.example.listi.ui.screens.products.ProductViewModel
 import com.example.listi.ui.theme.LightGreen
 import com.example.listi.ui.theme.ListiTheme
@@ -110,6 +114,7 @@ private val ShoppingListItemsPreview = listOf<ShoppingListItem>(item1, item2)
 fun ShoppingListDetailsScreen(
     modifier: Modifier = Modifier,
     productViewModel: ProductViewModel,
+    categoryViewModel: CategoryViewModel,
     shoppingListViewModel: ShoppingListsViewModel,
     shoppingListItemsViewModel: ShoppingListItemsViewModel = viewModel(factory = ShoppingListItemsViewModelFactory()),
     listId: Int
@@ -117,6 +122,10 @@ fun ShoppingListDetailsScreen(
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    val categories by categoryViewModel.categories.collectAsState()
+    val categoryError by categoryViewModel.errorMessage.collectAsState()
+    val categoryRefreshTrigger  by categoryViewModel.refreshTrigger.collectAsState()
 
     val openCreateDialog = remember { mutableStateOf(false) }
     val openDeleteDialog = remember { mutableStateOf(false) }
@@ -140,7 +149,7 @@ fun ShoppingListDetailsScreen(
     val purchaseError = stringResource(R.string.error_purchase)
     val purchasedMessage = stringResource(R.string.purchased)
     val resetMessage = stringResource(R.string.reseted)
-
+    val itemError = stringResource(R.string.error_item)
 
     LaunchedEffect(itemsRefreshTrigger) {
         shoppingListItemsViewModel.loadShoppingListItems(listId)
@@ -154,6 +163,27 @@ fun ShoppingListDetailsScreen(
         productViewModel.loadProducts()
     }
 
+    LaunchedEffect(categoryRefreshTrigger) {
+        categoryViewModel.loadCategories()
+    }
+
+    LaunchedEffect(categoryError) {
+        categoryError?.let {
+            var message = connectionError
+
+            when(categoryError) {
+                "409" ->  message = itemError
+                else -> connectionError
+            }
+
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = message
+                )
+            }
+        }
+        categoryViewModel.clearError()
+    }
 
     LaunchedEffect(shoppingListItemsError) {
         shoppingListItemsError?.let {
@@ -183,7 +213,11 @@ fun ShoppingListDetailsScreen(
                 shoppingListItemsViewModel.createShoppingListsItem(listId, it)
                 openCreateDialog.value = false
             },
-            products = products
+            addProduct = {productRequest ->
+                productViewModel.createProduct(productRequest)
+                         },
+            products = products,
+            categories = categories
         )
 
         openDeleteDialog.value -> DeleteDialog(
