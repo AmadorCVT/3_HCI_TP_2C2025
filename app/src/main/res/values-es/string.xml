@@ -153,6 +153,9 @@
     <string name="route_password_title">Restorar Contraseña</string>
     <string name="delete_category_dialog_title">Borrar categoria</string>
     <string name="delete_category_dialog">¿Está seguro que quiere borrar la categoría</string>
+    <string name="add_category_title">"Añadir categoría "</string>
+    <string name="category_name">Nombre de la categoría</string>
+    <string name="add">Añadir</string>
 
 
 </resources>
