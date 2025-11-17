@@ -234,7 +234,7 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                     } else {
                         Text(
                             text = stringResource(R.string.signin),
-                            color = if (isCreateEnabled) White else DarkGray,
+                            color = if (isCreateEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -244,7 +244,7 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                 TextButton(onClick = { goLogin?.invoke() }) {
                     Text(
                         text = stringResource(R.string.got_an_acount),
-                        color = DarkGreen,
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium
                     )
@@ -255,7 +255,7 @@ fun RegisterScreen(authViewModel: AuthViewModel,
                 TextButton(onClick = { goVerifyAccount?.invoke() }) {
                     Text(
                         text = stringResource(R.string.verify),
-                        color = DarkGreen,
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium
                     )
