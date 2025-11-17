@@ -16,11 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.listi.ui.theme.DarkGreen
-import com.example.listi.ui.theme.DarkGrey
-import com.example.listi.ui.theme.Green
-import com.example.listi.ui.theme.LightGreen
-import com.example.listi.ui.theme.backColor
+
 import com.example.listi.ui.types.Category
 import com.example.listi.ui.types.Product
 import com.example.listi.ui.types.ShoppingList
