@@ -202,15 +202,10 @@ fun ProfileScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .then(if (needsScroll) Modifier.verticalScroll(scrollState) else Modifier)
-                    .padding(8.dp)
+                    .verticalScroll(rememberScrollState())
                     .padding(innerPadding)
-                    .onGloballyPositioned { coords ->
-                        contentHeightPx = coords.size.height.toFloat()
-                    },
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+                    .padding(8.dp)
+                    .background(MaterialTheme.colorScheme.background)
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
 
